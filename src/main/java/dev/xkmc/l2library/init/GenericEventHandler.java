@@ -2,10 +2,12 @@ package dev.xkmc.l2library.init;
 
 import dev.xkmc.l2library.menu.OverlayManager;
 import dev.xkmc.l2library.menu.SpriteManager;
+import dev.xkmc.l2library.network.PacketHandlerWithConfig;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @SuppressWarnings("unused")
@@ -17,6 +19,7 @@ public class GenericEventHandler {
 			SpriteManager.CACHE.clear();
 			SpriteManager.CACHE.putAll(map);
 		}));
+		PacketHandlerWithConfig.addReloadListeners(event);
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -29,6 +32,11 @@ public class GenericEventHandler {
 				OverlayManager.get(modid, path).reset(v);
 			});
 		}));
+	}
+
+	@SubscribeEvent
+	public static void onDatapackSync(OnDatapackSyncEvent event) {
+		PacketHandlerWithConfig.onDatapackSync(event);
 	}
 
 }
