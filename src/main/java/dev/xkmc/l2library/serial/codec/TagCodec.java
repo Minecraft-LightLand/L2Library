@@ -32,6 +32,10 @@ public class TagCodec {
 		return ExceptionHandler.get(() -> toTag(tag, obj.getClass(), obj, f -> true));
 	}
 
+	public static CompoundTag toTag(CompoundTag tag, Object obj, Class<?> cls) {
+		return ExceptionHandler.get(() -> toTag(tag, cls, obj, f -> true));
+	}
+
 	public static Object fromTag(CompoundTag tag, Class<?> cls, Object obj, Predicate<SerialClass.SerialField> pred)
 			throws Exception {
 		if (tag.contains("_class"))

@@ -1,5 +1,7 @@
 package dev.xkmc.l2library.init;
 
+import dev.xkmc.l2library.effects.EffectSyncEvents;
+import dev.xkmc.l2library.effects.EffectToClient;
 import dev.xkmc.l2library.network.PacketHandler;
 import dev.xkmc.l2library.network.SyncPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -19,12 +21,14 @@ public class L2Library {
 	public static final String MODID = "l2library";
 
 	public static final PacketHandler PACKET_HANDLER = new PacketHandler(new ResourceLocation(MODID, "main"), 1,
-			e->e.create(SyncPacket.class, PLAY_TO_CLIENT));
+			e -> e.create(SyncPacket.class, PLAY_TO_CLIENT),
+			e -> e.create(EffectToClient.class, PLAY_TO_CLIENT));
 
 	public L2Library() {
 		FMLJavaModLoadingContext ctx = FMLJavaModLoadingContext.get();
 		IEventBus bus = ctx.getModEventBus();
 		MinecraftForge.EVENT_BUS.register(GenericEventHandler.class);
+		MinecraftForge.EVENT_BUS.register(EffectSyncEvents.class);
 		bus.addListener(PacketHandler::setup);
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> L2Client.onCtorClient(bus, MinecraftForge.EVENT_BUS));
 	}

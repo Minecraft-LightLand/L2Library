@@ -221,6 +221,11 @@ public class DelegateBlockImpl extends DelegateBlock {
 		return impl.one(RenderShapeBlockMethod.class).map(e -> e.getRenderShape(state)).orElseGet(() -> super.getRenderShape(state));
 	}
 
+	@Override
+	public final void attack(BlockState state, Level level, BlockPos pos, Player player) {
+		impl.execute(AttackBlockMethod.class).filter(u -> u.attack(state, level, pos, player)).findFirst();
+	}
+
 	public final BlockImplementor getImpl() {
 		return impl;
 	}

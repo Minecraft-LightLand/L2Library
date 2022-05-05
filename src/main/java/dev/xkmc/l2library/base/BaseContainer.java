@@ -34,13 +34,18 @@ public class BaseContainer<T extends BaseContainer<T>> extends SimpleContainer i
 		return getThis();
 	}
 
-	public int countSpace() {
+	public boolean canAddWhileHaveSpace(ItemStack add, int space) {
 		int ans = 0;
 		for (ItemStack stack : items) {
 			if (stack.isEmpty())
 				ans++;
+			else if (ItemStack.isSameItemSameTags(stack, add) &&
+					stack.getCount() + add.getCount() <=
+							Math.min(stack.getMaxStackSize(), getMaxStackSize())) {
+				return true;
+			}
 		}
-		return ans;
+		return ans - 1 >= space;
 	}
 
 	@Override
@@ -51,6 +56,23 @@ public class BaseContainer<T extends BaseContainer<T>> extends SimpleContainer i
 	@Override
 	public boolean canAddItem(ItemStack stack) {
 		return predicate.test(stack) && super.canAddItem(stack);
+	}
+
+	public boolean canRecipeAddItem(ItemStack stack) {
+		stack = stack.copy();
+		for (ItemStack slot : this.items) {
+			if (slot.isEmpty() || ItemStack.isSameItemSameTags(slot, stack)) {
+				int cap = Math.min(getMaxStackSize(), slot.getMaxStackSize());
+				int amount = Math.min(stack.getCount(), cap - slot.getCount());
+				if (amount > 0) {
+					stack.shrink(amount);
+					if (stack.getCount() == 0) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override

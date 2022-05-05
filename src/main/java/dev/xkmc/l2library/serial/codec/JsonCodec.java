@@ -32,6 +32,10 @@ public class JsonCodec {
 		return ExceptionHandler.get(() -> toRaw(TypeInfo.of(obj.getClass()), obj));
 	}
 
+	public static <T extends R, R> JsonElement toJson(T obj, Class<R> cls) {
+		return ExceptionHandler.get(() -> toRaw(TypeInfo.of(cls), obj));
+	}
+
 	private static Object fromImpl(JsonObject obj, Class<?> cls, Object ans) throws Exception {
 		if (obj.has("_class")) {
 			cls = Class.forName(obj.get("_class").getAsString());
@@ -161,7 +165,7 @@ public class JsonCodec {
 			return JsonNull.INSTANCE;
 		}
 		if (obj.getClass() != cls.getAsClass() && obj.getClass().isAnnotationPresent(SerialClass.class)) {
-			return toImpl(obj.getClass(), obj);
+			return toImpl(cls.getAsClass(), obj);
 		}
 		if (cls.isArray()) {
 			int n = Array.getLength(obj);

@@ -3,7 +3,7 @@ loaderVersion="[40,)"
 license="All rights reserved"
 [[mods]]
 modId="l2library"
-version="0.0.3" #mandatory
+version="${file.jarVersion}" #mandatory
 displayName="LightLand Library" #mandatory
 logoFile="l2library.png" #optional
 credits="Thanks for this example mod goes to Java" #optional

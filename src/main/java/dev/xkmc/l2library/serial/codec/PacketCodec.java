@@ -23,6 +23,10 @@ public class PacketCodec {
 		ExceptionHandler.run(() -> toRaw(buf, TypeInfo.of(obj.getClass()), obj));
 	}
 
+	public static <T extends R, R> void to(FriendlyByteBuf buf, T obj, Class<R> r) {
+		ExceptionHandler.run(() -> toRaw(buf, TypeInfo.of(r), obj));
+	}
+
 	private static Object fromImpl(FriendlyByteBuf buf, Class<?> cls, Object ans) throws Exception {
 		if (cls.getAnnotation(SerialClass.class) == null)
 			throw new Exception("cannot deserialize " + cls);
