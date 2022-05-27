@@ -14,6 +14,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 
 /**
@@ -134,6 +135,18 @@ public class TagCodec {
 			}
 			return ans;
 		}
+		if (Set.class.isAssignableFrom(cls.getAsClass())) {
+			ListTag list = (ListTag) tag;
+			TypeInfo com = cls.getGenericType(0);
+			if (def == null)
+				def = cls.newInstance();
+			Set ans = (Set<?>) def;
+			ans.clear();
+			for (Tag iTag : list) {
+				ans.add(fromTagRaw(iTag, com, null, pred));
+			}
+			return ans;
+		}
 		if (Map.class.isAssignableFrom(cls.getAsClass())) {
 			if (def == null)
 				def = cls.newInstance();
@@ -185,6 +198,14 @@ public class TagCodec {
 			TypeInfo com = cls.getGenericType(0);
 			for (int i = 0; i < n; i++) {
 				list.add(toTagRaw(com, ((List<?>) obj).get(i), pred));
+			}
+			return list;
+		}
+		if (Set.class.isAssignableFrom(cls.getAsClass())) {
+			ListTag list = new ListTag();
+			TypeInfo com = cls.getGenericType(0);
+			for (Object val : (Set<?>) obj) {
+				list.add(toTagRaw(com, val, pred));
 			}
 			return list;
 		}
