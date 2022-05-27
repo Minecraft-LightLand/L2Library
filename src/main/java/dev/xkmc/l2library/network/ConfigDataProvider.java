@@ -40,25 +40,8 @@ public abstract class ConfigDataProvider implements DataProvider {
 		map.forEach((k, v) -> {
 			try {
 				JsonElement elem = JsonCodec.toJson(v, BaseConfig.class);
-				String str = GSON.toJson(elem);
-				String hash = SHA1.hashUnencodedChars(str).toString();
 				Path path = folder.resolve(folder_path + k + ".json");
-				if (!Objects.equals(cache.getHash(path), hash) || !Files.exists(path)) {
-					Files.createDirectories(path.getParent());
-					BufferedWriter writer = Files.newBufferedWriter(path);
-					try {
-						writer.write(str);
-					} catch (Throwable err) {
-						try {
-							writer.close();
-						} catch (Throwable throwable) {
-							err.addSuppressed(throwable);
-						}
-						throw err;
-					}
-					writer.close();
-				}
-				cache.putNew(path, hash);
+				DataProvider.save(GSON, cache, elem, path);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

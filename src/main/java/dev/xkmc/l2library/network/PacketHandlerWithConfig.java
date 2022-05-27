@@ -11,6 +11,7 @@ import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.OnDatapackSyncEvent;
+import net.minecraftforge.fml.ModList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,6 +69,11 @@ public class PacketHandlerWithConfig extends PacketHandler {
 		protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager manager, ProfilerFiller filler) {
 			listener_before.forEach(Runnable::run);
 			map.forEach((k, v) -> {
+				if (!k.getNamespace().startsWith("_")) {
+					if (!ModList.get().isLoaded(k.getNamespace())) {
+						return;
+					}
+				}
 				BaseConfig config = JsonCodec.from(v, BaseConfig.class, null);
 				if (config != null)
 					CONFIGS.put(k.toString(), config);

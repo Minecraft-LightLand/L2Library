@@ -8,6 +8,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
@@ -75,6 +76,7 @@ public class Handlers {
 		new RLClassHandler<>(Potion.class, () -> ForgeRegistries.POTIONS);
 		new RLClassHandler<>(Enchantment.class, () -> ForgeRegistries.ENCHANTMENTS);
 		new RLClassHandler<>(MobEffect.class, () -> ForgeRegistries.MOB_EFFECTS);
+		new RLClassHandler<>((Class<EntityType<?>>) (Class) EntityType.class, () -> ForgeRegistries.ENTITIES);
 
 		// partials
 

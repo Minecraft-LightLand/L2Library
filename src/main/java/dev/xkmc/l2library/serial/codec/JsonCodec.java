@@ -9,10 +9,7 @@ import dev.xkmc.l2library.serial.handler.Handlers;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Capable of serializing primitive type, Arrays, Item, ItemStacl, Ingredient
@@ -105,6 +102,17 @@ public class JsonCodec {
 			}
 			return ans;
 		}
+		if (Set.class.isAssignableFrom(cls.getAsClass())) {
+			JsonArray arr = e.getAsJsonArray();
+			TypeInfo com = cls.getGenericType(0);
+			int n = arr.size();
+			if (ans == null) ans = cls.newInstance();
+			Set list = (Set) ans;
+			for (int i = 0; i < n; i++) {
+				list.add(fromRaw(arr.get(i), com, null));
+			}
+			return ans;
+		}
 		if (Map.class.isAssignableFrom(cls.getAsClass())) {
 			if (ans == null)
 				ans = cls.newInstance();
@@ -187,6 +195,15 @@ public class JsonCodec {
 		}
 		if (List.class.isAssignableFrom(cls.getAsClass())) {
 			List<?> list = (List<?>) obj;
+			JsonArray ans = new JsonArray(list.size());
+			TypeInfo com = cls.getGenericType(0);
+			for (Object o : list) {
+				ans.add(toRaw(com, o));
+			}
+			return ans;
+		}
+		if (Set.class.isAssignableFrom(cls.getAsClass())) {
+			Set<?> list = (Set<?>) obj;
 			JsonArray ans = new JsonArray(list.size());
 			TypeInfo com = cls.getGenericType(0);
 			for (Object o : list) {
