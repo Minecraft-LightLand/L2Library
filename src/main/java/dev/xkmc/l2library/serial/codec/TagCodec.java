@@ -144,7 +144,8 @@ public class TagCodec {
 			map.clear();
 			for (String str : ctag.getAllKeys()) {
 				Object mkey = key.getAsClass() == String.class ? str :
-						Handlers.NBT_MAP.get(key.getAsClass()).fromTag(StringTag.valueOf(str));
+						key.getAsClass().isEnum() ? Enum.valueOf((Class) key.getAsClass(), str) :
+								Handlers.NBT_MAP.get(key.getAsClass()).fromTag(StringTag.valueOf(str));
 				map.put(mkey, fromTagRaw(ctag.get(str), val, null, pred));
 			}
 			return map;

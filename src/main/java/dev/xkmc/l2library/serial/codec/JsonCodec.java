@@ -128,7 +128,8 @@ public class JsonCodec {
 			if (e.isJsonObject()) {
 				for (Map.Entry<String, JsonElement> ent : e.getAsJsonObject().entrySet()) {
 					Object key = ckey.getAsClass() == String.class ? ent.getKey() :
-							Handlers.JSON_MAP.get(ckey.getAsClass()).fromJson(new JsonPrimitive(ent.getKey()));
+							ckey.getAsClass().isEnum() ? Enum.valueOf((Class) ckey.getAsClass(), ent.getKey()) :
+									Handlers.JSON_MAP.get(ckey.getAsClass()).fromJson(new JsonPrimitive(ent.getKey()));
 					((Map) ans).put(key, fromRaw(ent.getValue(), cval, null));
 				}
 				return ans;
