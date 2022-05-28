@@ -3,7 +3,9 @@ package dev.xkmc.l2library.network;
 import dev.xkmc.l2library.serial.SerialClass;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 @SerialClass
 public class BaseConfig {
@@ -28,12 +30,12 @@ public class BaseConfig {
 		});
 	}
 
-	public static <T, C, K> HashMap<K, T> collectMap(List<C> list, Function<C, Map<K, T>> getter) {
+	public static <T, C, K> HashMap<K, T> collectMap(List<C> list, Function<C, Map<K, T>> getter, Supplier<T> gen, BiConsumer<T, T> merger) {
 		return list.stream().reduce(new HashMap<>(), (a, c) -> {
-			a.putAll(getter.apply(c));
+			getter.apply(c).forEach((k, v) -> merger.accept(a.computeIfAbsent(k, e -> gen.get()), v));
 			return a;
 		}, (a, b) -> {
-			a.putAll(b);
+			b.forEach((k, v) -> merger.accept(a.computeIfAbsent(k, e -> gen.get()), v));
 			return a;
 		});
 	}
