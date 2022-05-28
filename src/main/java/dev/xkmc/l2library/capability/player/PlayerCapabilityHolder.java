@@ -8,6 +8,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 
 import java.util.Map;
@@ -49,8 +51,10 @@ public class PlayerCapabilityHolder<T extends PlayerCapabilityTemplate<T>> {
 		return player.getCapability(capability).isPresent();
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	private CompoundTag revive_cache;
 
+	@OnlyIn(Dist.CLIENT)
 	public void cacheSet(CompoundTag tag, boolean force) {
 		AbstractClientPlayer pl = Proxy.getClientPlayer();
 		if (!force && pl != null && pl.getCapability(capability).cast().resolve().isPresent()) {
@@ -61,6 +65,7 @@ public class PlayerCapabilityHolder<T extends PlayerCapabilityTemplate<T>> {
 		} else revive_cache = tag;
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	public CompoundTag getCache(Player pl) {
 		CompoundTag tag = revive_cache;
 		revive_cache = null;
