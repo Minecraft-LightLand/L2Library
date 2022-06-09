@@ -43,7 +43,7 @@ public class BaseRecipeBuilder<T extends BaseRecipeBuilder<T, Rec, SRec, Inv>, R
 				.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
 				.rewards(AdvancementRewards.Builder.recipe(id)).requirements(RequirementsStrategy.OR);
 		pvd.accept(new Result<>(type, recipe, id, this.advancement,
-				new ResourceLocation(id.getNamespace(), "recipes/" + type.getRegistryName().getPath() + "/" + id.getPath())));
+				new ResourceLocation(id.getNamespace(), "recipes/" + ForgeRegistries.RECIPE_SERIALIZERS.getKey(type).getPath() + "/" + id.getPath())));
 	}
 
 	protected void ensureValid(ResourceLocation id) {

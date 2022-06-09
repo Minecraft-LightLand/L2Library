@@ -33,7 +33,6 @@ public class CustomShapelessBuilder<T extends AbstractShapelessRecipe<T>> extend
 		p_200485_1_.accept(new Result(p_200485_2_, this.result, this.count, this.group == null ? "" : this.group, this.ingredients, this.advancement, new ResourceLocation(p_200485_2_.getNamespace(), "recipes/" + this.result.getItemCategory().getRecipeFolderName() + "/" + p_200485_2_.getPath())));
 	}
 
-
 	public CustomShapelessBuilder<T> unlockedBy(RegistrateRecipeProvider pvd, ItemLike item) {
 		this.advancement.addCriterion("has_" + pvd.safeName(item.asItem()),
 				DataIngredient.items(item.asItem()).getCritereon(pvd));

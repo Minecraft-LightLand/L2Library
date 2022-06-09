@@ -1,14 +1,13 @@
 package dev.xkmc.l2library.base;
 
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-public class NamedEntry<T extends NamedEntry<T>> extends ForgeRegistryEntry<T> {
+public class NamedEntry<T extends NamedEntry<T>>  {
 
 	private final Supplier<IForgeRegistry<T>> registry;
 
@@ -27,12 +26,20 @@ public class NamedEntry<T extends NamedEntry<T>> extends ForgeRegistryEntry<T> {
 		return desc;
 	}
 
-	public TranslatableComponent getDesc() {
-		return new TranslatableComponent(getDescriptionId());
+	public TranslatableContents getDesc() {
+		return new TranslatableContents(getDescriptionId());
+	}
+
+	public ResourceLocation getRegistryName(){
+		return registry.get().getKey(getThis());
 	}
 
 	public String getID() {
 		return getRegistryName().toString();
+	}
+
+	public T getThis(){
+		return (T) this;
 	}
 
 }

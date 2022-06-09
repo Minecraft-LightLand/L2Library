@@ -69,8 +69,7 @@ public class Helper {
 
 	public static JsonElement serializeFluidStack(FluidStack stack) {
 		JsonObject json = new JsonObject();
-		json.addProperty("fluid", stack.getFluid()
-				.getRegistryName()
+		json.addProperty("fluid", ForgeRegistries.FLUIDS.getKey(stack.getFluid())
 				.toString());
 		json.addProperty("amount", stack.getAmount());
 		if (stack.hasTag())

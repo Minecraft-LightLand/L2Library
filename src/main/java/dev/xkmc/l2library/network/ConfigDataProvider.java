@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import dev.xkmc.l2library.serial.codec.JsonCodec;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
@@ -17,8 +18,6 @@ import java.util.Map;
 import java.util.Objects;
 
 public abstract class ConfigDataProvider implements DataProvider {
-
-	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
 
 	private final DataGenerator generator;
 	private final String folder_path, name;
@@ -34,14 +33,14 @@ public abstract class ConfigDataProvider implements DataProvider {
 	public abstract void add(Map<String, BaseConfig> map);
 
 	@Override
-	public void run(HashCache cache) {
+	public void run(CachedOutput cache) {
 		Path folder = generator.getOutputFolder();
 		add(map);
 		map.forEach((k, v) -> {
 			try {
 				JsonElement elem = JsonCodec.toJson(v, BaseConfig.class);
 				Path path = folder.resolve(folder_path + k + ".json");
-				DataProvider.save(GSON, cache, elem, path);
+				DataProvider.saveStable(cache, elem, path);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

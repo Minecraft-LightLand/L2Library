@@ -77,7 +77,7 @@ public class OverlayManager {
 	private void load() {
 		JsonObject jo = ExceptionHandler.get(() -> GsonHelper.parse(new InputStreamReader(Minecraft.getInstance().getResourceManager().getResource(
 				new ResourceLocation(coords.getNamespace(), "textures/gui/overlays/" + coords.getPath() + ".json")
-		).getInputStream(), StandardCharsets.UTF_8)));
+		).get().open(), StandardCharsets.UTF_8)));
 		JsonCodec.from(jo, OverlayManager.class, this);
 		loaded = true;
 	}

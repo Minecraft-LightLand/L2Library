@@ -19,7 +19,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '0.0.8'
+version = '0.1.0'
 group = 'dev.kxmc.l2library' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'l2library'
 
@@ -176,4 +176,8 @@ publishing {
             url "file://${project.projectDir}/mcmodsrepo"
         }
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
