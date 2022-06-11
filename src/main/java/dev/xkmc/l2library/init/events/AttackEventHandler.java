@@ -25,6 +25,14 @@ public class AttackEventHandler {
 
 	public interface AttackListener {
 
+		default void onPlayerAttack(AttackCache cache) {
+
+		}
+
+		default void onCriticalHit(AttackCache cache) {
+
+		}
+
 		default void onAttack(AttackCache cache, ItemStack weapon) {
 		}
 
@@ -60,11 +68,13 @@ public class AttackEventHandler {
 			stage = Stage.PLAYER_ATTACK;
 			player = event;
 			strength = event.getPlayer().getAttackStrengthScale(1);
+			LISTENERS.forEach(e -> e.onPlayerAttack(this));
 		}
 
 		private void pushCrit(CriticalHitEvent event) {
 			stage = Stage.CRITICAL_HIT;
 			crit = event;
+			LISTENERS.forEach(e -> e.onCriticalHit(this));
 		}
 
 		private void pushAttack(LivingAttackEvent event) {
