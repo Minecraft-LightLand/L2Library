@@ -46,7 +46,7 @@ public class AttributeScreen extends BaseTextScreen {
 					ATTRIBUTE_MODIFIER_FORMAT.format(entry.usePercent() ? val * 100 : val),
 					new TranslatableComponent(entry.sup().get().getDescriptionId()));
 			this.font.draw(stack, comp, x, y, 0);
-			y += 13;
+			y += 10;
 		}
 
 

@@ -13,7 +13,7 @@ description='''
 [[dependencies.l2library]]
     modId="forge"
     mandatory=true
-    versionRange="[40,)"
+    versionRange="[40.1.51,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.l2library]]

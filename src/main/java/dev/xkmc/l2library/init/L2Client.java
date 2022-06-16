@@ -41,6 +41,7 @@ public class L2Client {
 			AttributeScreen.LIST.add(new AttributeScreen.AttributeEntry(() -> Attributes.ATTACK_SPEED, false));
 			AttributeScreen.LIST.add(new AttributeScreen.AttributeEntry(ForgeMod.REACH_DISTANCE, false));
 			AttributeScreen.LIST.add(new AttributeScreen.AttributeEntry(ForgeMod.ATTACK_RANGE, false));
+			AttributeScreen.LIST.add(new AttributeScreen.AttributeEntry(() -> Attributes.LUCK, false));
 		});
 	}
 
