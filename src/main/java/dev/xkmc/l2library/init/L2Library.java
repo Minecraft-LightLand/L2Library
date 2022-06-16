@@ -17,6 +17,8 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,6 +47,7 @@ public class L2Library {
 		MinecraftForge.EVENT_BUS.register(AttackEventHandler.class);
 		bus.addListener(L2Library::registerCaps);
 		bus.addListener(PacketHandler::setup);
+		bus.addListener(L2Library::setup);
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> L2Client.onCtorClient(bus, MinecraftForge.EVENT_BUS));
 	}
 
@@ -52,6 +55,10 @@ public class L2Library {
 		for (PlayerCapabilityHolder<?> holder : PlayerCapabilityHolder.INTERNAL_MAP.values()) {
 			event.register(holder.cls);
 		}
+	}
+
+	public static void setup(FMLCommonSetupEvent event) {
+
 	}
 
 }

@@ -129,7 +129,12 @@ public class AttackEventHandler {
 		}
 		UUID id = event.getEntityLiving().getUUID();
 		AttackCache cache = CACHE.get(id);
-		if (cache.stage.ordinal() >= Stage.HURT.ordinal()) {
+		boolean replace = cache == null;
+		if (!replace)
+			replace = cache.stage.ordinal() >= Stage.HURT.ordinal();
+		if (!replace && cache.player != null && event.getSource().getEntity() != null)
+			replace = event.getSource().getEntity() != cache.player.getPlayer();
+		if (replace) {
 			cache = new AttackCache();
 			CACHE.put(id, cache);
 		}
