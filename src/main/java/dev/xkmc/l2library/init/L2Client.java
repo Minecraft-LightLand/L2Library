@@ -1,7 +1,7 @@
 package dev.xkmc.l2library.init;
 
 import dev.xkmc.l2library.init.events.GenericEventHandler;
-import dev.xkmc.l2library.menu.tabs.contents.AttributeScreen;
+import dev.xkmc.l2library.menu.tabs.contents.AttributeEntry;
 import dev.xkmc.l2library.menu.tabs.contents.TabAttributes;
 import dev.xkmc.l2library.menu.tabs.contents.TabInventory;
 import dev.xkmc.l2library.menu.tabs.core.TabRegistry;
@@ -21,7 +21,7 @@ public class L2Client {
 	public static void onCtorClient(IEventBus bus, IEventBus eventBus) {
 		bus.addListener(L2Client::client);
 		bus.addListener(GenericEventHandler::clientReloadListeners);
-		eventBus.register(TabRegistry.class);
+		eventBus.addListener(TabInventory::guiPostInit);
 	}
 
 	public static void client(FMLClientSetupEvent event) {
@@ -30,18 +30,6 @@ public class L2Client {
 					new TranslatableComponent("menu.tabs.inventory"));
 			TAB_ATTRIBUTE = TabRegistry.registerTab(TabAttributes::new, () -> Items.IRON_SWORD,
 					new TranslatableComponent("menu.tabs.attribute"));
-
-			AttributeScreen.LIST.add(new AttributeScreen.AttributeEntry(() -> Attributes.MAX_HEALTH, false));
-			AttributeScreen.LIST.add(new AttributeScreen.AttributeEntry(() -> Attributes.ARMOR, false));
-			AttributeScreen.LIST.add(new AttributeScreen.AttributeEntry(() -> Attributes.ARMOR_TOUGHNESS, false));
-			AttributeScreen.LIST.add(new AttributeScreen.AttributeEntry(() -> Attributes.KNOCKBACK_RESISTANCE, false));
-			AttributeScreen.LIST.add(new AttributeScreen.AttributeEntry(() -> Attributes.MOVEMENT_SPEED, false));
-			AttributeScreen.LIST.add(new AttributeScreen.AttributeEntry(ForgeMod.SWIM_SPEED, false));
-			AttributeScreen.LIST.add(new AttributeScreen.AttributeEntry(() -> Attributes.ATTACK_DAMAGE, false));
-			AttributeScreen.LIST.add(new AttributeScreen.AttributeEntry(() -> Attributes.ATTACK_SPEED, false));
-			AttributeScreen.LIST.add(new AttributeScreen.AttributeEntry(ForgeMod.REACH_DISTANCE, false));
-			AttributeScreen.LIST.add(new AttributeScreen.AttributeEntry(ForgeMod.ATTACK_RANGE, false));
-			AttributeScreen.LIST.add(new AttributeScreen.AttributeEntry(() -> Attributes.LUCK, false));
 		});
 	}
 

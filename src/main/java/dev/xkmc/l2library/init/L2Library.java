@@ -7,17 +7,19 @@ import dev.xkmc.l2library.effects.EffectSyncEvents;
 import dev.xkmc.l2library.effects.EffectToClient;
 import dev.xkmc.l2library.init.events.AttackEventHandler;
 import dev.xkmc.l2library.init.events.GenericEventHandler;
+import dev.xkmc.l2library.menu.tabs.contents.AttributeEntry;
 import dev.xkmc.l2library.network.PacketHandler;
 import dev.xkmc.l2library.network.SyncPacket;
 import dev.xkmc.l2library.serial.handler.Handlers;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -58,7 +60,18 @@ public class L2Library {
 	}
 
 	public static void setup(FMLCommonSetupEvent event) {
-
+		event.enqueueWork(() -> {
+			AttributeEntry.add(() -> Attributes.MAX_HEALTH, false, 1000);
+			AttributeEntry.add(() -> Attributes.ARMOR, false, 2000);
+			AttributeEntry.add(() -> Attributes.ARMOR_TOUGHNESS, false, 3000);
+			AttributeEntry.add(() -> Attributes.KNOCKBACK_RESISTANCE, false, 4000);
+			AttributeEntry.add(() -> Attributes.MOVEMENT_SPEED, false, 5000);
+			AttributeEntry.add(() -> Attributes.ATTACK_DAMAGE, false, 6000);
+			AttributeEntry.add(() -> Attributes.ATTACK_SPEED, false, 7000);
+			AttributeEntry.add(ForgeMod.REACH_DISTANCE, false, 8000);
+			AttributeEntry.add(ForgeMod.ATTACK_RANGE, false, 9000);
+			AttributeEntry.add(() -> Attributes.LUCK, false, 10000);
+		});
 	}
 
 }
