@@ -2,6 +2,7 @@ package dev.xkmc.l2library.init;
 
 import dev.xkmc.l2library.init.events.GenericEventHandler;
 import dev.xkmc.l2library.menu.tabs.contents.AttributeEntry;
+import dev.xkmc.l2library.menu.tabs.contents.CuriosScreenCompat;
 import dev.xkmc.l2library.menu.tabs.contents.TabAttributes;
 import dev.xkmc.l2library.menu.tabs.contents.TabInventory;
 import dev.xkmc.l2library.menu.tabs.core.TabRegistry;
@@ -31,6 +32,7 @@ public class L2Client {
 			TAB_ATTRIBUTE = TabRegistry.registerTab(TabAttributes::new, () -> Items.IRON_SWORD,
 					new TranslatableComponent("menu.tabs.attribute"));
 		});
+		CuriosScreenCompat.onClientInit();
 	}
 
 }
