@@ -1,8 +1,8 @@
 package dev.xkmc.l2library.init.events;
 
-import dev.xkmc.l2library.menu.OverlayManager;
-import dev.xkmc.l2library.menu.SpriteManager;
-import dev.xkmc.l2library.network.PacketHandlerWithConfig;
+import dev.xkmc.l2library.base.menu.OverlayManager;
+import dev.xkmc.l2library.base.menu.SpriteManager;
+import dev.xkmc.l2library.serial.network.PacketHandlerWithConfig;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;

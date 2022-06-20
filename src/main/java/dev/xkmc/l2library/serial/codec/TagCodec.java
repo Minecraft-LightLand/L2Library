@@ -1,8 +1,8 @@
 package dev.xkmc.l2library.serial.codec;
 
-import dev.xkmc.l2library.serial.ExceptionHandler;
 import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.serial.handler.Handlers;
+import dev.xkmc.l2library.util.code.Wrappers;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -26,15 +26,15 @@ public class TagCodec {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T fromTag(CompoundTag tag, Class<?> cls) {
-		return (T) ExceptionHandler.get(() -> fromTag(tag, cls, null, f -> true));
+		return (T) Wrappers.get(() -> fromTag(tag, cls, null, f -> true));
 	}
 
 	public static CompoundTag toTag(CompoundTag tag, Object obj) {
-		return ExceptionHandler.get(() -> toTag(tag, obj.getClass(), obj, f -> true));
+		return Wrappers.get(() -> toTag(tag, obj.getClass(), obj, f -> true));
 	}
 
 	public static CompoundTag toTag(CompoundTag tag, Object obj, Class<?> cls) {
-		return ExceptionHandler.get(() -> toTag(tag, cls, obj, f -> true));
+		return Wrappers.get(() -> toTag(tag, cls, obj, f -> true));
 	}
 
 	public static Object fromTag(CompoundTag tag, Class<?> cls, Object obj, Predicate<SerialClass.SerialField> pred)

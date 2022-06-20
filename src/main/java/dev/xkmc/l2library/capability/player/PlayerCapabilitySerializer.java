@@ -1,8 +1,8 @@
 package dev.xkmc.l2library.capability.player;
 
-import dev.xkmc.l2library.serial.ExceptionHandler;
 import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.serial.codec.TagCodec;
+import dev.xkmc.l2library.util.code.Wrappers;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @SerialClass
-public class PlayerCapabilitySerializer<C extends PlayerCapabilityTemplate<C>> implements ICapabilitySerializable<CompoundTag>  {
+public class PlayerCapabilitySerializer<C extends PlayerCapabilityTemplate<C>> implements ICapabilitySerializable<CompoundTag> {
 
 	public final Player player;
 	public final Level level;
@@ -50,7 +50,7 @@ public class PlayerCapabilitySerializer<C extends PlayerCapabilityTemplate<C>> i
 
 	@Override
 	public void deserializeNBT(CompoundTag tag) {
-		ExceptionHandler.get(() -> TagCodec.fromTag(tag, holder.cls, handler, f -> true));
+		Wrappers.get(() -> TagCodec.fromTag(tag, holder.cls, handler, f -> true));
 	}
 
 }

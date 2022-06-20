@@ -1,8 +1,8 @@
 package dev.xkmc.l2library.capability.player;
 
-import dev.xkmc.l2library.network.SerialPacketBase;
 import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.serial.codec.TagCodec;
+import dev.xkmc.l2library.serial.network.SerialPacketBase;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;

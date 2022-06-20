@@ -2,7 +2,7 @@ package dev.xkmc.l2library.util;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -16,7 +16,7 @@ import java.util.Optional;
 public class Proxy {
 
 	@OnlyIn(Dist.CLIENT)
-	public static AbstractClientPlayer getClientPlayer() {
+	public static LocalPlayer getClientPlayer() {
 		return Minecraft.getInstance().player;
 	}
 

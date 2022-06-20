@@ -1,9 +1,9 @@
 package dev.xkmc.l2library.base;
 
-import dev.xkmc.l2library.serial.ExceptionHandler;
 import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.serial.codec.PacketCodec;
 import dev.xkmc.l2library.serial.codec.TagCodec;
+import dev.xkmc.l2library.util.code.Wrappers;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -34,7 +34,7 @@ public abstract class BaseEntity extends Entity implements IEntityAdditionalSpaw
 	protected void readAdditionalSaveData(CompoundTag tag) {
 		if (!tag.contains("auto-serial"))
 			return;
-		ExceptionHandler.run(() -> TagCodec.fromTag(tag.getCompound("auto-serial"), this.getClass(), this, f -> true));
+		Wrappers.run(() -> TagCodec.fromTag(tag.getCompound("auto-serial"), this.getClass(), this, f -> true));
 	}
 
 	@Override

@@ -1,16 +1,16 @@
 package dev.xkmc.l2library.init;
 
+import dev.xkmc.l2library.base.effects.EffectSyncEvents;
+import dev.xkmc.l2library.base.effects.EffectToClient;
+import dev.xkmc.l2library.base.tabs.contents.AttributeEntry;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityEvents;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
-import dev.xkmc.l2library.effects.EffectSyncEvents;
-import dev.xkmc.l2library.effects.EffectToClient;
 import dev.xkmc.l2library.init.events.AttackEventHandler;
 import dev.xkmc.l2library.init.events.GenericEventHandler;
-import dev.xkmc.l2library.menu.tabs.contents.AttributeEntry;
-import dev.xkmc.l2library.network.PacketHandler;
-import dev.xkmc.l2library.network.SyncPacket;
 import dev.xkmc.l2library.serial.handler.Handlers;
+import dev.xkmc.l2library.serial.network.PacketHandler;
+import dev.xkmc.l2library.serial.network.SyncPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.api.distmarker.Dist;

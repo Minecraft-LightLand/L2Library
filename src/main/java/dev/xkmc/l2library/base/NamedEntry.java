@@ -2,12 +2,9 @@ package dev.xkmc.l2library.base;
 
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Supplier;
-
-public class NamedEntry<T extends NamedEntry<T>>  {
+public class NamedEntry<T extends NamedEntry<T>> {
 
 	private final L2Registrate.RegistryInstance<T> registry;
 
@@ -30,7 +27,7 @@ public class NamedEntry<T extends NamedEntry<T>>  {
 		return new TranslatableContents(getDescriptionId());
 	}
 
-	public ResourceLocation getRegistryName(){
+	public ResourceLocation getRegistryName() {
 		return registry.get().getKey(getThis());
 	}
 
@@ -38,7 +35,7 @@ public class NamedEntry<T extends NamedEntry<T>>  {
 		return getRegistryName().toString();
 	}
 
-	public T getThis(){
+	public T getThis() {
 		return (T) this;
 	}
 

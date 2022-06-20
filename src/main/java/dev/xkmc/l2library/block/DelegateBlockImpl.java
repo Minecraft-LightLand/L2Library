@@ -9,6 +9,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.PushReaction;
@@ -37,7 +39,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @MethodsReturnNonnullByDefault
@@ -141,18 +146,18 @@ public class DelegateBlockImpl extends DelegateBlock {
 	}
 
 	@Override
-	public final void randomTick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
+	public final void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
 		impl.execute(RandomTickBlockMethod.class).forEach(e -> e.randomTick(state, world, pos, random));
 	}
 
 	@Override
-	public final void tick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
+	public final void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
 		impl.execute(ScheduleTickBlockMethod.class).forEach(e -> e.tick(state, world, pos, random));
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public final void animateTick(BlockState state, Level world, BlockPos pos, Random r) {
+	public final void animateTick(BlockState state, Level world, BlockPos pos, RandomSource r) {
 		impl.execute(AnimateTickBlockMethod.class).forEach(e -> e.animateTick(state, world, pos, r));
 	}
 
@@ -232,11 +237,11 @@ public class DelegateBlockImpl extends DelegateBlock {
 
 	public static class BlockImplementor {
 
-		private final Properties props;
+		private final BlockBehaviour.Properties props;
 		private final List<MultipleBlockMethod> list = new ArrayList<>();
 		private final HashMap<Class<?>, SingletonBlockMethod> map = new HashMap<>();
 
-		public BlockImplementor(Properties p) {
+		public BlockImplementor(BlockBehaviour.Properties p) {
 			props = p;
 		}
 

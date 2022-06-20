@@ -1,8 +1,8 @@
 package dev.xkmc.l2library.serial.codec;
 
-import dev.xkmc.l2library.serial.ExceptionHandler;
 import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.serial.handler.Handlers;
+import dev.xkmc.l2library.util.code.Wrappers;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.lang.reflect.Array;
@@ -16,15 +16,15 @@ public class PacketCodec {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T from(FriendlyByteBuf buf, Class<T> cls, T ans) {
-		return ExceptionHandler.get(() -> (T) fromRaw(buf, TypeInfo.of(cls), ans));
+		return Wrappers.get(() -> (T) fromRaw(buf, TypeInfo.of(cls), ans));
 	}
 
 	public static <T> void to(FriendlyByteBuf buf, T obj) {
-		ExceptionHandler.run(() -> toRaw(buf, TypeInfo.of(obj.getClass()), obj));
+		Wrappers.run(() -> toRaw(buf, TypeInfo.of(obj.getClass()), obj));
 	}
 
 	public static <T extends R, R> void to(FriendlyByteBuf buf, T obj, Class<R> r) {
-		ExceptionHandler.run(() -> toRaw(buf, TypeInfo.of(r), obj));
+		Wrappers.run(() -> toRaw(buf, TypeInfo.of(r), obj));
 	}
 
 	private static Object fromImpl(FriendlyByteBuf buf, Class<?> cls, Object ans) throws Exception {

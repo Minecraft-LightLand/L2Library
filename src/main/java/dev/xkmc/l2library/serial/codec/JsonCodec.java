@@ -2,9 +2,9 @@ package dev.xkmc.l2library.serial.codec;
 
 import com.google.gson.*;
 import com.mojang.datafixers.util.Pair;
-import dev.xkmc.l2library.serial.ExceptionHandler;
 import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.serial.handler.Handlers;
+import dev.xkmc.l2library.util.code.Wrappers;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -22,15 +22,15 @@ public class JsonCodec {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T from(JsonElement obj, Class<T> cls, T ans) {
-		return ExceptionHandler.get(() -> (T) fromRaw(obj, TypeInfo.of(cls), ans));
+		return Wrappers.get(() -> (T) fromRaw(obj, TypeInfo.of(cls), ans));
 	}
 
 	public static <T> JsonElement toJson(T obj) {
-		return ExceptionHandler.get(() -> toRaw(TypeInfo.of(obj.getClass()), obj));
+		return Wrappers.get(() -> toRaw(TypeInfo.of(obj.getClass()), obj));
 	}
 
 	public static <T extends R, R> JsonElement toJson(T obj, Class<R> cls) {
-		return ExceptionHandler.get(() -> toRaw(TypeInfo.of(cls), obj));
+		return Wrappers.get(() -> toRaw(TypeInfo.of(cls), obj));
 	}
 
 	private static Object fromImpl(JsonObject obj, Class<?> cls, Object ans) throws Exception {

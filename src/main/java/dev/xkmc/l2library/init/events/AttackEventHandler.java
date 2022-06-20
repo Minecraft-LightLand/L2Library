@@ -45,7 +45,7 @@ public class AttackEventHandler {
 	}
 
 	public enum Stage {
-		PREINIT, PLAYER_ATTACK, CRITICAL_HIT, HURT, ACTUALLY_HURT, DAMAGE;
+		PREINIT, PLAYER_ATTACK, CRITICAL_HIT, HURT, ACTUALLY_HURT, DAMAGE
 	}
 
 	public static class AttackCache {

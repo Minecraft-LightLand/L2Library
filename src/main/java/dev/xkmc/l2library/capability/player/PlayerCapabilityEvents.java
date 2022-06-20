@@ -1,7 +1,7 @@
 package dev.xkmc.l2library.capability.player;
 
-import dev.xkmc.l2library.serial.ExceptionHandler;
 import dev.xkmc.l2library.serial.codec.TagCodec;
+import dev.xkmc.l2library.util.code.Wrappers;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -47,7 +47,7 @@ public class PlayerCapabilityEvents {
 	public static void onPlayerClone(PlayerEvent.Clone event) {
 		for (PlayerCapabilityHolder<?> holder : PlayerCapabilityHolder.INTERNAL_MAP.values()) {
 			CompoundTag tag0 = TagCodec.toTag(new CompoundTag(), holder.get(event.getOriginal()));
-			ExceptionHandler.run(() -> TagCodec.fromTag(tag0, holder.cls, holder.get(event.getPlayer()), f -> true));
+			Wrappers.run(() -> TagCodec.fromTag(tag0, holder.cls, holder.get(event.getPlayer()), f -> true));
 			holder.get(event.getPlayer()).onClone(event.isWasDeath());
 			ServerPlayer e = (ServerPlayer) event.getPlayer();
 			holder.network.toClientSyncClone(e);
@@ -59,7 +59,7 @@ public class PlayerCapabilityEvents {
 	public static void onPlayerRespawn(ClientPlayerNetworkEvent.RespawnEvent event) {
 		for (PlayerCapabilityHolder<?> holder : PlayerCapabilityHolder.INTERNAL_MAP.values()) {
 			CompoundTag tag0 = holder.getCache(event.getOldPlayer());
-			ExceptionHandler.run(() -> TagCodec.fromTag(tag0, holder.cls, holder.get(event.getNewPlayer()), f -> true));
+			Wrappers.run(() -> TagCodec.fromTag(tag0, holder.cls, holder.get(event.getNewPlayer()), f -> true));
 			holder.get(event.getNewPlayer());
 		}
 	}

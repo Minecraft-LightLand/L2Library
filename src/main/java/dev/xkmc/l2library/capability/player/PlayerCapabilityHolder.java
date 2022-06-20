@@ -1,8 +1,8 @@
 package dev.xkmc.l2library.capability.player;
 
-import dev.xkmc.l2library.serial.ExceptionHandler;
 import dev.xkmc.l2library.serial.codec.TagCodec;
 import dev.xkmc.l2library.util.Proxy;
+import dev.xkmc.l2library.util.code.Wrappers;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -60,7 +60,7 @@ public class PlayerCapabilityHolder<T extends PlayerCapabilityTemplate<T>> {
 		if (!force && pl != null && pl.getCapability(capability).cast().resolve().isPresent()) {
 			T m = get(pl);
 			m.preInject();
-			ExceptionHandler.run(() -> TagCodec.fromTag(tag, cls, m, f -> true));
+			Wrappers.run(() -> TagCodec.fromTag(tag, cls, m, f -> true));
 			m.init();
 		} else revive_cache = tag;
 	}
