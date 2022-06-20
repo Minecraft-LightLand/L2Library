@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.init;
+package dev.xkmc.l2library.init.events;
 
 import dev.xkmc.l2library.menu.OverlayManager;
 import dev.xkmc.l2library.menu.SpriteManager;

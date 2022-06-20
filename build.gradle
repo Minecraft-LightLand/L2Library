@@ -19,7 +19,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '0.1.0'
+version = "${ll_version}"
 group = 'dev.kxmc.l2library' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'l2library'
 
@@ -112,6 +112,9 @@ repositories {
         }
     }
     maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+    maven {
+        url = "https://maven.theillusivec4.top/"
+    }
 
 }
 
@@ -128,6 +131,7 @@ dependencies {
     shade registrate
 
     implementation fg.deobf("mezz.jei:jei-${jei_minecraft_version}:${jei_version}")
+    implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
 
 }
 
