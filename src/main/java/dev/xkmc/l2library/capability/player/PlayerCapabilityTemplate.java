@@ -10,21 +10,25 @@ public class PlayerCapabilityTemplate<T extends PlayerCapabilityTemplate<T>> {
 	public Player player;
 	public Level world;
 
-	public void preInject(){
+	public void preInject() {
 
 	}
 
-	public void init(){
+	public void init() {
 
 	}
 
-	public T check(){
+	public void onClone(boolean isWasDeath) {
+
+	}
+
+	public T check() {
 		return getThis();
 	}
 
 	@SuppressWarnings("unchecked")
-	public T getThis(){
-		return (T)this;
+	public T getThis() {
+		return (T) this;
 	}
 
 	public void tick() {

@@ -48,7 +48,7 @@ public class PlayerCapabilityEvents {
 		for (PlayerCapabilityHolder<?> holder : PlayerCapabilityHolder.INTERNAL_MAP.values()) {
 			CompoundTag tag0 = TagCodec.toTag(new CompoundTag(), holder.get(event.getOriginal()));
 			ExceptionHandler.run(() -> TagCodec.fromTag(tag0, holder.cls, holder.get(event.getPlayer()), f -> true));
-			holder.get(event.getPlayer());
+			holder.get(event.getPlayer()).onClone(event.isWasDeath());
 			ServerPlayer e = (ServerPlayer) event.getPlayer();
 			holder.network.toClientSyncClone(e);
 		}
