@@ -45,12 +45,12 @@ public class AttackEventHandler {
 	}
 
 	public enum Stage {
-		PLAYER_ATTACK, CRITICAL_HIT, HURT, ACTUALLY_HURT, DAMAGE;
+		PREINIT, PLAYER_ATTACK, CRITICAL_HIT, HURT, ACTUALLY_HURT, DAMAGE;
 	}
 
 	public static class AttackCache {
 
-		public Stage stage;
+		public Stage stage = Stage.PREINIT;
 		public AttackEntityEvent player;
 		public CriticalHitEvent crit;
 		public LivingAttackEvent attack;
