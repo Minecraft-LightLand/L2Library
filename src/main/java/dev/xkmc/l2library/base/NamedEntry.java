@@ -10,11 +10,11 @@ import java.util.function.Supplier;
 
 public class NamedEntry<T extends NamedEntry<T>> extends ForgeRegistryEntry<T> {
 
-	private final Supplier<IForgeRegistry<T>> registry;
+	private final L2Registrate.RegistryInstance<T> registry;
 
 	private String desc = null;
 
-	public NamedEntry(Supplier<IForgeRegistry<T>> registry) {
+	public NamedEntry(L2Registrate.RegistryInstance<T> registry) {
 		this.registry = registry;
 	}
 
