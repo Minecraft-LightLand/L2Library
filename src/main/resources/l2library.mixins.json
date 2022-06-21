@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "priority": 1000,
+  "package": "dev.xkmc.l2library.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "refmap": "lightland.refmap.json",
+  "mixins": [
+	"EntityMixin"
+  ],
+  "client": [
+	"ClientLocalPlayerMixin"
+  ],
+  "injectors": {
+	"defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

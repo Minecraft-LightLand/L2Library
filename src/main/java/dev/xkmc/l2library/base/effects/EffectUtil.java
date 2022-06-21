@@ -1,11 +1,13 @@
 package dev.xkmc.l2library.base.effects;
 
+import dev.xkmc.l2library.base.effects.api.ForceEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.PotionEvent;
 
+import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
@@ -21,7 +23,7 @@ public class EffectUtil {
 	 * force add effect, make boss not override
 	 * for icon use only, such as Arcane Mark on Wither and Ender Dragon
 	 */
-	private static void forceAddEffect(LivingEntity e, MobEffectInstance ins, Entity source) {
+	private static void forceAddEffect(LivingEntity e, MobEffectInstance ins, @Nullable Entity source) {
 		MobEffectInstance effectinstance = e.getActiveEffectsMap().get(ins.getEffect());
 		MinecraftForge.EVENT_BUS.post(new PotionEvent.PotionAddedEvent(e, effectinstance, ins, source));
 		if (effectinstance == null) {
@@ -32,7 +34,7 @@ public class EffectUtil {
 		}
 	}
 
-	public static void addEffect(LivingEntity entity, MobEffectInstance ins, AddReason reason, Entity source) {
+	public static void addEffect(LivingEntity entity, MobEffectInstance ins, AddReason reason, @Nullable Entity source) {
 		if (entity == source)
 			reason = AddReason.SELF;
 		if (ins.getEffect() instanceof ForceEffect)

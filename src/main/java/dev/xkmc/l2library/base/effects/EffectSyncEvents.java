@@ -1,11 +1,14 @@
 package dev.xkmc.l2library.base.effects;
 
+import dev.xkmc.l2library.base.effects.EffectToClient;
 import dev.xkmc.l2library.init.L2Library;
+import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,6 +19,14 @@ public class EffectSyncEvents {
 
 	public static final Map<UUID, Map<MobEffect, Integer>> EFFECT_MAP = new HashMap<>();
 	public static final Set<MobEffect> TRACKED = new HashSet<>();
+
+	@OnlyIn(Dist.CLIENT)
+	@SubscribeEvent
+	public static void clientTick(TickEvent.ClientTickEvent event) {
+		if (Proxy.getClientPlayer() == null) {
+			EFFECT_MAP.clear();
+		}
+	}
 
 	@OnlyIn(Dist.CLIENT)
 	public static void sync(EffectToClient eff) {

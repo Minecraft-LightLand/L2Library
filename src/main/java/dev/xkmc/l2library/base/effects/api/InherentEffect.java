@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.base.effects;
+package dev.xkmc.l2library.base.effects.api;
 
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;

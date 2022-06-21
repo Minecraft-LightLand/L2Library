@@ -1,5 +1,6 @@
 package dev.xkmc.l2library.init;
 
+import dev.xkmc.l2library.base.effects.ClientEntityEffectRenderEvents;
 import dev.xkmc.l2library.base.effects.EffectSyncEvents;
 import dev.xkmc.l2library.base.effects.EffectToClient;
 import dev.xkmc.l2library.base.tabs.contents.AttributeEntry;
@@ -11,6 +12,7 @@ import dev.xkmc.l2library.init.events.GenericEventHandler;
 import dev.xkmc.l2library.serial.handler.Handlers;
 import dev.xkmc.l2library.serial.network.PacketHandler;
 import dev.xkmc.l2library.serial.network.SyncPacket;
+import dev.xkmc.l2library.util.raytrace.TargetSetPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.api.distmarker.Dist;
@@ -26,6 +28,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import static net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT;
+import static net.minecraftforge.network.NetworkDirection.PLAY_TO_SERVER;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(L2Library.MODID)
@@ -37,7 +40,8 @@ public class L2Library {
 	public static final PacketHandler PACKET_HANDLER = new PacketHandler(new ResourceLocation(MODID, "main"), 1,
 			e -> e.create(SyncPacket.class, PLAY_TO_CLIENT),
 			e -> e.create(EffectToClient.class, PLAY_TO_CLIENT),
-			e -> e.create(PlayerCapToClient.class, PLAY_TO_CLIENT));
+			e -> e.create(PlayerCapToClient.class, PLAY_TO_CLIENT),
+			e -> e.create(TargetSetPacket.class, PLAY_TO_SERVER));
 
 	public L2Library() {
 		Handlers.register();
@@ -47,6 +51,7 @@ public class L2Library {
 		MinecraftForge.EVENT_BUS.register(EffectSyncEvents.class);
 		MinecraftForge.EVENT_BUS.register(PlayerCapabilityEvents.class);
 		MinecraftForge.EVENT_BUS.register(AttackEventHandler.class);
+		MinecraftForge.EVENT_BUS.register(ClientEntityEffectRenderEvents.class);
 		bus.addListener(L2Library::registerCaps);
 		bus.addListener(PacketHandler::setup);
 		bus.addListener(L2Library::setup);
