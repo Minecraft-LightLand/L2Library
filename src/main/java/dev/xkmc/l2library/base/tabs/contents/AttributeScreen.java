@@ -35,7 +35,7 @@ public class AttributeScreen extends BaseTextScreen {
 			Component comp = MutableComponent.create(new TranslatableContents(
 					"attribute.modifier.equals." + (entry.usePercent() ? 1 : 0),
 					ATTRIBUTE_MODIFIER_FORMAT.format(entry.usePercent() ? val * 100 : val),
-					new TranslatableContents(entry.sup().get().getDescriptionId())));
+					MutableComponent.create(new TranslatableContents(entry.sup().get().getDescriptionId()))));
 			this.font.draw(stack, comp, x, y, 0);
 			y += 10;
 		}
