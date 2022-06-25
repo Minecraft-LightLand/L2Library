@@ -7,6 +7,7 @@ import dev.xkmc.l2library.base.tabs.contents.AttributeEntry;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityEvents;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
+import dev.xkmc.l2library.idea.infmaze.worldgen.MazeDimension;
 import dev.xkmc.l2library.init.events.AttackEventHandler;
 import dev.xkmc.l2library.init.events.GenericEventHandler;
 import dev.xkmc.l2library.serial.handler.Handlers;
@@ -47,6 +48,7 @@ public class L2Library {
 		Handlers.register();
 		FMLJavaModLoadingContext ctx = FMLJavaModLoadingContext.get();
 		IEventBus bus = ctx.getModEventBus();
+		bus.addListener(MazeDimension::register);
 		MinecraftForge.EVENT_BUS.register(GenericEventHandler.class);
 		MinecraftForge.EVENT_BUS.register(EffectSyncEvents.class);
 		MinecraftForge.EVENT_BUS.register(PlayerCapabilityEvents.class);
