@@ -20,7 +20,7 @@ public class EffectUtil {
 	private static final ThreadLocal<AddReason> REASON = new ThreadLocal<>();
 
 	/**
-	 * force add effect, make boss not override
+	 * force add effect, make hard not override
 	 * for icon use only, such as Arcane Mark on Wither and Ender Dragon
 	 */
 	private static void forceAddEffect(LivingEntity e, MobEffectInstance ins, @Nullable Entity source) {

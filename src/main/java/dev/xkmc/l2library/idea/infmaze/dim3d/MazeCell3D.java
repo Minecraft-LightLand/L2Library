@@ -1,5 +1,6 @@
 package dev.xkmc.l2library.idea.infmaze.dim3d;
 
+import dev.xkmc.l2library.idea.infmaze.init.CellContent;
 import dev.xkmc.l2library.idea.infmaze.pos.CellPos;
 import dev.xkmc.l2library.idea.infmaze.pos.MazeAxis;
 import dev.xkmc.l2library.idea.infmaze.pos.MazeDirection;
@@ -7,12 +8,12 @@ import dev.xkmc.l2library.idea.infmaze.pos.WallPos;
 
 public class MazeCell3D {
 
-	public final long seed;
 	public final CellPos pos;
-	public final MazeWall3D[] walls;
+	public final CellContent content;
 
+	private final long seed;
 	private final GenerationHelper helper;
-	private final boolean isLeaf;
+	private final MazeWall3D[] walls;
 
 	private Internal internal;
 
@@ -28,14 +29,14 @@ public class MazeCell3D {
 				openWall++;
 			}
 		}
-		isLeaf = pos.scale() == 0 || openWall == 1 && helper.predicateLeaf(pos.scale(), seed);
+		content = openWall != 1 ? null : helper.getLeaf(this, seed);
 	}
 
 	/**
 	 * get the child at the specified (3 bit) index
 	 */
 	public MazeCell3D loadChild(int index) {
-		if (isLeaf) {
+		if (content != null) {
 			return this;
 		}
 		if (internal == null) {
@@ -45,7 +46,11 @@ public class MazeCell3D {
 	}
 
 	public boolean isLeaf() {
-		return isLeaf;
+		return content != null;
+	}
+
+	public MazeWall3D getWall(MazeDirection dire) {
+		return walls[dire.ordinal()];
 	}
 
 	private static class Internal {

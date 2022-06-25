@@ -1,7 +1,7 @@
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 
-package dev.xkmc.l2library.idea.infmaze.config;
+package dev.xkmc.l2library.util.render;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

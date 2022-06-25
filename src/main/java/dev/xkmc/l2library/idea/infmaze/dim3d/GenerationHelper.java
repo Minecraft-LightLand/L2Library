@@ -1,9 +1,11 @@
 package dev.xkmc.l2library.idea.infmaze.dim3d;
 
-import dev.xkmc.l2library.idea.infmaze.config.GenerationConfig;
-import dev.xkmc.l2library.idea.infmaze.pos.MazeAxis;
+import dev.xkmc.l2library.idea.infmaze.init.CellContent;
+import dev.xkmc.l2library.idea.infmaze.init.GenerationConfig;
 import dev.xkmc.l2library.idea.infmaze.pos.BasePos;
+import dev.xkmc.l2library.idea.infmaze.pos.MazeAxis;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 public class GenerationHelper {
@@ -85,7 +87,8 @@ public class GenerationHelper {
 		}
 	}
 
-	public boolean predicateLeaf(int scale, long seed) {
-		return new Random(shift(seed,27)^SEEDS[14]).nextDouble() < config.leafChance(scale);
+	@Nullable
+	public CellContent getLeaf(MazeCell3D cell, long seed) {
+		return config.getLeaf(new Random(shift(seed, 27) ^ SEEDS[14]), cell);
 	}
 }

@@ -2,7 +2,6 @@ package dev.xkmc.l2library.idea.infmaze.init;
 
 import dev.xkmc.l2library.idea.infmaze.dim3d.MazeCell3D;
 import dev.xkmc.l2library.idea.infmaze.pos.BasePos;
-import dev.xkmc.l2library.idea.infmaze.pos.CellPos;
 
 public class CellLoaderChain {
 
@@ -23,7 +22,7 @@ public class CellLoaderChain {
 				int index = locate(pos, s);
 				list[s] = list[s + 1].loadChild(index);
 			}
-			if (list[s].isLeaf()){
+			if (list[s].isLeaf()) {
 				return list[s];
 			}
 		}

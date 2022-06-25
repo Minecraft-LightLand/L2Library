@@ -1,6 +1,5 @@
 package dev.xkmc.l2library.idea.infmaze.init;
 
-import dev.xkmc.l2library.idea.infmaze.config.GenerationConfig;
 import dev.xkmc.l2library.idea.infmaze.dim3d.GenerationHelper;
 import dev.xkmc.l2library.idea.infmaze.dim3d.MazeCell3D;
 import dev.xkmc.l2library.idea.infmaze.dim3d.MazeWall3D;

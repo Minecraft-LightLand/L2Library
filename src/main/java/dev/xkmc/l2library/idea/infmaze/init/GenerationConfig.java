@@ -1,4 +1,9 @@
-package dev.xkmc.l2library.idea.infmaze.config;
+package dev.xkmc.l2library.idea.infmaze.init;
+
+import dev.xkmc.l2library.idea.infmaze.dim3d.MazeCell3D;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public final class GenerationConfig {
 
@@ -9,11 +14,12 @@ public final class GenerationConfig {
 	public double cellExtra = 0;
 	public int cacheSize = 16384;
 
-	public LeafManager leaf = new LeafManager();
+	public LeafManager leaf;
 
-	public GenerationConfig(int maxScale, long seed) {
+	public GenerationConfig(int maxScale, long seed, LeafManager manager) {
 		this.maxScale = maxScale;
 		this.seed = seed;
+		this.leaf = manager;
 	}
 
 	public int maxScale() {
@@ -36,8 +42,8 @@ public final class GenerationConfig {
 		return cacheSize;
 	}
 
-	public double leafChance(int scale) {
-		return leaf.leafChance(scale);
+	@Nullable
+	public CellContent getLeaf(Random random, MazeCell3D cell) {
+		return leaf.getLeaf(random, cell);
 	}
-
 }
