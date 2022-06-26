@@ -34,23 +34,23 @@ public class MazeConfig {
 		conn_sec = c1;
 	}
 
-	public boolean testConn(Random r, boolean b) {
+	public boolean testConn(IRandom r, boolean b) {
 		return b ? r.nextDouble() < conn_pri : r.nextDouble() < conn_sec;
 	}
 
-	int randLoop(int i, MazeGen.StateRim rim, Random r) {
+	int randLoop(int i, MazeGen.StateRim rim, IRandom r) {
 		if (i < invariant) return 0;
 		int len = (int) Math.ceil(rim.aviLoop() * loop_fac);
 		return randSel(r, loop, rim.path == 0, len);
 	}
 
-	int randPath(int i, MazeGen.StateRim rim, Random r, int c) {
+	int randPath(int i, MazeGen.StateRim rim, IRandom r, int c) {
 		if (i <= invariant) return i <= 1 ? 1 : i == 2 ? 4 : 1;
 		int len = (int) Math.ceil(rim.aviPath() * path_fac);
 		return randSel(r, path, i < survive || c == 1 || !rim.state.isRoot(), len);
 	}
 
-	private int randSel(Random r, int[] arr, boolean beg, int len) {
+	private int randSel(IRandom r, int[] arr, boolean beg, int len) {
 		int a = 0, b = 0;
 		for (int i = 0; i < arr.length; i++)
 			b += arr[i];

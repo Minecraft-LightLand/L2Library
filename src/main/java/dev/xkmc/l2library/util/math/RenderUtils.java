@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.util.render;
+package dev.xkmc.l2library.util.math;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;

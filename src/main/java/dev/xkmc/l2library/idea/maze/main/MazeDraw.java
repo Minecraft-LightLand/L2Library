@@ -1,5 +1,6 @@
 package dev.xkmc.l2library.idea.maze.main;
 
+import dev.xkmc.l2library.idea.maze.generator.IRandom;
 import dev.xkmc.l2library.idea.maze.generator.MazeConfig;
 import dev.xkmc.l2library.idea.maze.generator.MazeGen;
 import dev.xkmc.l2library.idea.maze.objective.LeafMarker;
@@ -46,7 +47,7 @@ public class MazeDraw {
 	}
 
 	public static void perform(MazeConfig config) throws IOException {
-		MazeGen maze = new MazeGen(7, new Random(), config, new MazeGen.Debugger());
+		MazeGen maze = new MazeGen(7, IRandom.parse(new Random()), config, new MazeGen.Debugger());
 		maze.gen();
 		for (MazeRegistry.Entry<?, ?> ent : MazeRegistry.LIST) {
 			double ans = ent.execute(maze.ans, maze.r, maze.r);

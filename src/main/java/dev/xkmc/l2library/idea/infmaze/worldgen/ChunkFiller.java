@@ -10,6 +10,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.levelgen.RandomState;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -28,7 +29,7 @@ public class ChunkFiller {
 		this.xzCount = 16 / cellWidth;
 	}
 
-	public void fillChunk(InfiniMaze maze, ChunkPos pos, ChunkAccess access, RandomSource random) {
+	public void fillChunk(InfiniMaze maze, ChunkPos pos, ChunkAccess access, RandomState random) {
 		Set<CellPos> complete = new TreeSet<>();
 		for (long y = 0; y < heightInCell; y++) {
 			for (long x = 0; x < xzCount; x++) {
@@ -44,7 +45,7 @@ public class ChunkFiller {
 		}
 	}
 
-	private void fillCell(MazeCell3D cell, ChunkPos pos, ChunkAccess access, RandomSource random) {
+	private void fillCell(MazeCell3D cell, ChunkPos pos, ChunkAccess access, RandomState random) {
 		BasePos c0 = new BasePos((long) pos.x << 4, 0, (long) pos.z << 4);
 		BasePos c1 = new BasePos((long) (pos.x + 1) << 4, (long) heightInCell * cellWidth, (long) (pos.z + 1) << 4);
 		BoundBox boxC = new BoundBox(c0, c1);

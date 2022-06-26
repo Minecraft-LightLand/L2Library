@@ -218,7 +218,7 @@ public class MazeGen {
 
 	}
 
-	private static int[] randArray(int n, Random r) {
+	private static int[] randArray(int n, IRandom r) {
 		int[] ans = new int[n];
 		if (n <= 1)
 			return ans;
@@ -249,9 +249,9 @@ public class MazeGen {
 	public final int r;
 	public final int w;
 
-	final Random rand;
+	final IRandom rand;
 
-	public MazeGen(int rad, Random ra, MazeConfig conf, Debugger deb) {
+	public MazeGen(int rad, IRandom ra, MazeConfig conf, Debugger deb) {
 		config = conf;
 		debug = deb;
 		r = rad;
@@ -270,8 +270,8 @@ public class MazeGen {
 			StateRim[] rim = getStateRim(i);
 			// debug.setRim(rim);
 			int rootCount = 0;
-			for (int j = 0; j < rim.length; j++)
-				if (rim[j].state.isRoot())
+			for (StateRim stateRim : rim)
+				if (stateRim.state.isRoot())
 					rootCount++;
 			if (i == r)
 				rootCount = 1;

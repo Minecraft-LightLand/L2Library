@@ -1,5 +1,6 @@
 package dev.xkmc.l2library.base;
 
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -23,8 +24,8 @@ public class NamedEntry<T extends NamedEntry<T>> {
 		return desc;
 	}
 
-	public TranslatableContents getDesc() {
-		return new TranslatableContents(getDescriptionId());
+	public MutableComponent getDesc() {
+		return MutableComponent.create(new TranslatableContents(getDescriptionId()));
 	}
 
 	public ResourceLocation getRegistryName() {

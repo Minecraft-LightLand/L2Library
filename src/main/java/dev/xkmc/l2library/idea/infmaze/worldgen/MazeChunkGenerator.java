@@ -56,7 +56,7 @@ public class MazeChunkGenerator extends EmptyChunkGenerator {
 	public MazeChunkGenerator(Registry<StructureSet> structures, Registry<Biome> biomes) {
 		super(structures, Optional.empty(), new FixedBiomeSource(biomes.getHolder(Biomes.PLAINS).get()));
 		this.biomes = biomes;
-		maze = LazyFunction.create(seed -> new InfiniMaze(new GenerationConfig(SCALE, seed, null)));
+		maze = LazyFunction.create(seed -> new InfiniMaze(new GenerationConfig(SCALE, seed, MANAGER)));
 		filler = new ChunkFiller(CELL_WIDTH, SCALE, BLOCKS);
 	}
 
@@ -75,7 +75,7 @@ public class MazeChunkGenerator extends EmptyChunkGenerator {
 		return CompletableFuture.supplyAsync(() -> {
 			InfiniMaze maze = this.maze.get(random.legacyLevelSeed());
 			ChunkPos pos = access.getPos();
-			filler.fillChunk(maze, pos, access, random.getOrCreateRandomFactory(RL).at(pos.getBlockAt(0, 0, 0)));
+			filler.fillChunk(maze, pos, access, random);
 			return access;
 		}, executor);
 	}

@@ -4,16 +4,14 @@ import dev.xkmc.l2library.idea.infmaze.dim3d.MazeCell3D;
 import dev.xkmc.l2library.idea.infmaze.init.CellContent;
 import dev.xkmc.l2library.idea.infmaze.init.LeafManager;
 import dev.xkmc.l2library.util.math.MathHelper;
+import net.minecraft.world.level.levelgen.RandomState;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.TreeMap;
+import java.util.*;
 
 public class RoomLeafManager implements LeafManager {
 
-	public final Map<LeafType, List<CellContentEntry>> map = new TreeMap<>();
+	private final Map<LeafType, List<CellContentEntry>> map = new TreeMap<>();
 
 	@Nullable
 	@Override
@@ -23,6 +21,15 @@ public class RoomLeafManager implements LeafManager {
 		CellContentEntry entry = MathHelper.pick(list, CellContentEntry::weight, random.nextDouble());
 		if (entry == null) return null;
 		return entry.content();
+	}
+
+	@Override
+	public void decoratePath(RandomState random, MazeCell3D cell) {
+
+	}
+
+	public void addCell(@Nullable CellContent cell, LeafType type, int weight) {
+		map.computeIfAbsent(type, e -> new ArrayList<>()).add(new CellContentEntry(cell, weight));
 	}
 
 }
