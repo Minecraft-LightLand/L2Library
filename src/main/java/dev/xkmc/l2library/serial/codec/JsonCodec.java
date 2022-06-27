@@ -1,8 +1,10 @@
 package dev.xkmc.l2library.serial.codec;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import dev.xkmc.l2library.serial.unified.JsonContext;
 import dev.xkmc.l2library.serial.unified.UnifiedCodec;
+import dev.xkmc.l2library.serial.wrapper.ClassCache;
 import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import dev.xkmc.l2library.util.code.Wrappers;
 
@@ -24,6 +26,11 @@ public class JsonCodec {
 	@Nullable
 	public static <T extends R, R> JsonElement toJson(T obj, Class<R> cls) {
 		return Wrappers.get(() -> UnifiedCodec.serializeValue(new JsonContext(), TypeInfo.of(cls), obj));
+	}
+
+	@Nullable
+	public static <T> JsonObject toJsonObject(T obj, JsonObject input) {
+		return Wrappers.get(() -> UnifiedCodec.serializeObject(new JsonContext(), input, ClassCache.get(obj.getClass()), obj));
 	}
 
 }

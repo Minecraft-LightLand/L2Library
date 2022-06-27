@@ -2,7 +2,7 @@ package dev.xkmc.l2library.serial.unified;
 
 import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 
-public abstract class SingletonContext<E> implements UnifiedContext<E, E, E> {
+public abstract class SingletonContext<E> extends UnifiedContext<E, E, E> {
 
 	public final E instance;
 

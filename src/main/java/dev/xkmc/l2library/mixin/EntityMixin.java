@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class EntityMixin {
 
 	@Inject(at = @At("HEAD"), method = "isCurrentlyGlowing", cancellable = true)
-	public void isCurrentlyGlowing(CallbackInfoReturnable<Boolean> cir) {
+	public void l2library_overrideClientGlow_isCurrentlyGlowing(CallbackInfoReturnable<Boolean> cir) {
 		for (EntityTarget target : EntityTarget.LIST) {
 			if (target.target == (Object) this) {
 				cir.setReturnValue(true);

@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class TagContext implements TreeContext<Tag, CompoundTag, ListTag> {
+public class TagContext extends TreeContext<Tag, CompoundTag, ListTag> {
 
 	private final Predicate<SerialClass.SerialField> pred;
 
@@ -126,7 +126,9 @@ public class TagContext implements TreeContext<Tag, CompoundTag, ListTag> {
 
 	@Override
 	public void addField(CompoundTag obj, String str, Tag e) {
-		obj.put(str, e);
+		if (e != null) {
+			obj.put(str, e);
+		}
 	}
 
 	@Override

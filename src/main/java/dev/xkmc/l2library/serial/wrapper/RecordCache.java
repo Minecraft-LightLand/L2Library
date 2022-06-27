@@ -4,6 +4,7 @@ import dev.xkmc.l2library.util.code.LazyExc;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class RecordCache {
 
 	private RecordCache(Class<?> cls) {
 		fields = new LazyExc<>(() -> {
-			var ans = cls.getDeclaredFields();
+			var ans = Arrays.stream(cls.getDeclaredFields()).filter(f -> !Modifier.isStatic(f.getModifiers())).toArray(Field[]::new);
 			for (Field f : ans) {
 				f.setAccessible(true);
 			}

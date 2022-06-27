@@ -20,12 +20,12 @@ public abstract class ClientLocalPlayerMixin {
 	private static boolean in_ai_step = false;
 
 	@Inject(at = @At("HEAD"), method = "aiStep")
-	public void aiStep(CallbackInfo ci) {
+	public void l2library_setFlag_inAiStep(CallbackInfo ci) {
 		in_ai_step = true;
 	}
 
 	@Inject(at = @At("HEAD"), method = "isUsingItem", cancellable = true)
-	public void isUsingItem(CallbackInfoReturnable<Boolean> cir) {
+	public void l2library_clearFlagAndPreventItemUseSlowdown_isUsingItem_in_inAiStep(CallbackInfoReturnable<Boolean> cir) {
 		if (in_ai_step) {
 			in_ai_step = false;
 			Player player = (Player) (Object) this;

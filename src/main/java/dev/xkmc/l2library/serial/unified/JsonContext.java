@@ -11,7 +11,7 @@ import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import java.util.Map;
 import java.util.Optional;
 
-public class JsonContext implements TreeContext<JsonElement, JsonObject, JsonArray> {
+public class JsonContext extends TreeContext<JsonElement, JsonObject, JsonArray> {
 
 	@Override
 	public boolean hasSpecialHandling(Class<?> cls) {

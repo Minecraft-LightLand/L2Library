@@ -5,41 +5,71 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.xkmc.l2library.serial.stack.EnchantmentStackCodec;
+import dev.xkmc.l2library.serial.stack.JsonStackCodec;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 public class StackHelper {
 
 	private static final Gson GSON = new Gson();
 
+	private static final List<JsonStackCodec> LIST = new ArrayList<>();
+
+	public static void add(JsonStackCodec codec) {
+		LIST.add(codec);
+	}
+
+	static {
+		add(new EnchantmentStackCodec());
+	}
+
+	/**
+	 * for mod recipes that use automatic serialization
+	 */
 	public static JsonElement serializeItemStack(ItemStack stack) {
+		for (JsonStackCodec codec : LIST) {
+			Optional<JsonElement> result = codec.serialize(stack);
+			if (result.isPresent()) {
+				return result.get();
+			}
+		}
+		return serializeForgeItemStack(stack);
+	}
+
+	/**
+	 * for vanilla recipes
+	 */
+	public static JsonElement serializeForgeItemStack(ItemStack stack) {
 		JsonObject ans = new JsonObject();
 		ans.addProperty("item", ForgeRegistries.ITEMS.getKey(stack.getItem()).toString());
 		if (stack.getCount() > 1) {
 			ans.addProperty("count", stack.getCount());
 		}
-
+		if (stack.hasTag()) {
+			ans.addProperty("nbt", stack.getTag().toString());
+		}
 		return ans;
 	}
 
 	public static ItemStack deserializeItemStack(JsonElement elem) {
-		JsonObject obj = elem.getAsJsonObject();
-		if (obj.has("enchant_book")) {
-			JsonObject book = obj.getAsJsonObject("enchant_book");
-			Enchantment ench = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(book.get("id").getAsString()));
-			int lvl = book.get("lvl").getAsInt();
-			assert ench != null;
-			return EnchantedBookItem.createForEnchantment(new EnchantmentInstance(ench, lvl));
+		for (JsonStackCodec codec : LIST) {
+			Optional<ItemStack> result = codec.deserialize(elem);
+			if (result.isPresent()) {
+				return result.get();
+			}
 		}
+		JsonObject obj = elem.getAsJsonObject();
 		return CraftingHelper.getItemStack(obj, true, false);
 	}
 

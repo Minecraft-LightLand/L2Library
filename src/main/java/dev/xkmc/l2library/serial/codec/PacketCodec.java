@@ -12,7 +12,7 @@ public class PacketCodec {
 
 	@Nullable
 	@SuppressWarnings("unchecked")
-	public static <T> T from(FriendlyByteBuf buf, Class<T> cls, T ans) {
+	public static <T> T from(FriendlyByteBuf buf, Class<T> cls, @Nullable T ans) {
 		return Wrappers.get(() -> (T) UnifiedCodec.deserializeValue(new PacketContext(buf), buf, TypeInfo.of(cls), ans));
 	}
 
