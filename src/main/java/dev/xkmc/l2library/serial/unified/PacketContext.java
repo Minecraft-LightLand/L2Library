@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class PacketContext extends SingletonContext<FriendlyByteBuf> {
 
-	protected PacketContext(FriendlyByteBuf instance) {
+	public PacketContext(FriendlyByteBuf instance) {
 		super(instance);
 	}
 

@@ -1,6 +1,7 @@
 package dev.xkmc.l2library.serial.generic;
 
 import com.mojang.datafixers.util.Pair;
+import dev.xkmc.l2library.serial.unified.UnifiedCodec;
 import dev.xkmc.l2library.serial.unified.UnifiedContext;
 import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import org.jetbrains.annotations.Nullable;
@@ -29,8 +30,8 @@ public class MapCodec implements GenericCodec {
 			int n = ctx.getSize(arr);
 			for (int i = 0; i < n; i++) {
 				O jeo = ctx.castAsMap(ctx.getElement(arr, i));
-				Object key = deserializeValue(ctx, ctx.getKeyOfEntry(jeo), ckey, null);
-				Object val = deserializeValue(ctx, ctx.getValueOfEntry(jeo), cval, null);
+				Object key = UnifiedCodec.deserializeValue(ctx, ctx.getKeyOfEntry(jeo), ckey, null);
+				Object val = UnifiedCodec.deserializeValue(ctx, ctx.getValueOfEntry(jeo), cval, null);
 				((Map) ans).put(key, val);
 			}
 			return ans;
@@ -48,8 +49,8 @@ public class MapCodec implements GenericCodec {
 		List<Pair<E, E>> list = new ArrayList<>();
 		boolean can_be_map = true;
 		for (Map.Entry<?, ?> ent : map.entrySet()) {
-			E k = serializeValue(ctx, ckey, ent.getKey());
-			E v = serializeValue(ctx, cval, ent.getValue());
+			E k = UnifiedCodec.serializeValue(ctx, ckey, ent.getKey());
+			E v = UnifiedCodec.serializeValue(ctx, cval, ent.getValue());
 			list.add(Pair.of(k, v));
 			can_be_map &= ctx.canBeString(k);
 		}

@@ -1,6 +1,7 @@
 package dev.xkmc.l2library.serial.generic;
 
 import dev.xkmc.l2library.serial.codec.AliasCollection;
+import dev.xkmc.l2library.serial.unified.UnifiedCodec;
 import dev.xkmc.l2library.serial.unified.UnifiedContext;
 import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +24,7 @@ public class AliasCodec implements GenericCodec {
 		TypeInfo com = TypeInfo.of(alias.getElemClass());
 		int n = ctx.getSize(arr);
 		for (int i = 0; i < n; i++) {
-			alias.setRaw(n, i, deserializeValue(ctx, ctx.getElement(arr, i), com, null));
+			alias.setRaw(n, i, UnifiedCodec.deserializeValue(ctx, ctx.getElement(arr, i), com, null));
 		}
 		return alias;
 	}
@@ -36,7 +37,7 @@ public class AliasCodec implements GenericCodec {
 		A ans = ctx.createList(list.size());
 		TypeInfo com = TypeInfo.of(alias.getElemClass());
 		for (Object o : list) {
-			ctx.addListItem(ans, serializeValue(ctx, com, o));
+			ctx.addListItem(ans, UnifiedCodec.serializeValue(ctx, com, o));
 		}
 		return ans;
 	}

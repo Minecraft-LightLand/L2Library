@@ -1,5 +1,6 @@
 package dev.xkmc.l2library.serial.generic;
 
+import dev.xkmc.l2library.serial.unified.UnifiedCodec;
 import dev.xkmc.l2library.serial.unified.UnifiedContext;
 import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +24,7 @@ public class ArrayCodec implements GenericCodec {
 		if (ans == null)
 			ans = Array.newInstance(com.getAsClass(), n);
 		for (int i = 0; i < n; i++) {
-			Array.set(ans, i, deserializeValue(ctx, ctx.getElement(arr, i), com, null));
+			Array.set(ans, i, UnifiedCodec.deserializeValue(ctx, ctx.getElement(arr, i), com, null));
 		}
 		return ans;
 	}
@@ -35,7 +36,7 @@ public class ArrayCodec implements GenericCodec {
 		A ans = ctx.createList(n);
 		TypeInfo com = cls.getComponentType();
 		for (int i = 0; i < n; i++) {
-			ctx.addListItem(ans, serializeValue(ctx, com, Array.get(obj, i)));
+			ctx.addListItem(ans, UnifiedCodec.serializeValue(ctx, com, Array.get(obj, i)));
 		}
 		return ans;
 	}

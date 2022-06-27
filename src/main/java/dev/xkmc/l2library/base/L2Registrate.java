@@ -4,6 +4,7 @@ import com.google.common.base.Suppliers;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
+import com.tterrag.registrate.providers.RegistrateLangProvider;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import com.tterrag.registrate.util.nullness.NonnullType;
 import dev.xkmc.l2library.serial.handler.RLClassHandler;
@@ -76,7 +77,7 @@ public class L2Registrate extends AbstractRegistrate<L2Registrate> {
 		}
 
 		public GenericBuilder<T, P> defaultLang() {
-			return lang(NamedEntry::getDescriptionId);
+			return lang(NamedEntry::getDescriptionId, RegistrateLangProvider.toEnglishName(this.getName()));
 		}
 
 	}
