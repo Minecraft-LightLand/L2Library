@@ -1,10 +1,14 @@
 package dev.xkmc.l2library.serial.unified;
 
-import dev.xkmc.l2library.serial.wrapper.TypeInfo;
+import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Pair;
 import dev.xkmc.l2library.serial.wrapper.ClassCache;
 import dev.xkmc.l2library.serial.wrapper.FieldCache;
+import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 
-public interface UnifiedContext<E,O,A> {
+import java.util.Optional;
+
+public interface UnifiedContext<E, O, A> {
 
 	boolean hasSpecialHandling(Class<?> cls);
 
@@ -12,9 +16,19 @@ public interface UnifiedContext<E,O,A> {
 
 	E serializeSpecial(Class<?> cls, Object obj);
 
-	ClassCache fetchRealClass(O obj, ClassCache def);
+	/**
+	 * Optional.empty() : normal
+	 * Optional.of(Either.left(...)) : fast return
+	 * Optional.of(Either.right(...)) : class override
+	 */
+	Optional<Either<Optional<Object>, TypeInfo>> fetchRealClass(E obj, TypeInfo def) throws Exception;
 
-	void writeRealClass(O obj, ClassCache cls);
+	/**
+	 * Optional.empty() : normal
+	 * Optional.of(Pair.of(..., Optional.empty())) : fast return
+	 * Optional.of(Pair.of(..., Optional.of(...))) : class override
+	 */
+	Optional<Pair<Optional<E>, Optional<ClassCache>>> writeRealClass(TypeInfo cls, Object obj) throws Exception;
 
 	boolean shouldRead(O obj, FieldCache field) throws Exception;
 

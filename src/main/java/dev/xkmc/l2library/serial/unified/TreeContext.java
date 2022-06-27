@@ -21,4 +21,5 @@ public interface TreeContext<E, O extends E, A extends E> extends UnifiedContext
 	default void setValueOfEntry(O obj, E e) {
 		addField(obj, "_val", e);
 	}
+
 }

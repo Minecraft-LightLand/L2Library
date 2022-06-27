@@ -1,27 +1,17 @@
 package dev.xkmc.l2library.serial.unified;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import dev.xkmc.l2library.serial.wrapper.TypeInfo;
+import com.google.gson.*;
+import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Pair;
+import dev.xkmc.l2library.serial.handler.Handlers;
 import dev.xkmc.l2library.serial.wrapper.ClassCache;
 import dev.xkmc.l2library.serial.wrapper.FieldCache;
-import dev.xkmc.l2library.serial.handler.Handlers;
+import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class JsonContext implements TreeContext<JsonElement, JsonObject, JsonArray> {
-
-	@Override
-	public ClassCache fetchRealClass(JsonObject obj, ClassCache def) {
-		return null;//TODO
-	}
-
-	@Override
-	public void writeRealClass(JsonObject obj, ClassCache cls) {
-		//TODO
-	}
 
 	@Override
 	public boolean hasSpecialHandling(Class<?> cls) {
@@ -36,6 +26,36 @@ public class JsonContext implements TreeContext<JsonElement, JsonObject, JsonArr
 	@Override
 	public JsonElement serializeSpecial(Class<?> cls, Object obj) {
 		return Handlers.JSON_MAP.get(cls).toJson(obj);
+	}
+
+	@Override
+	public Optional<Either<Optional<Object>, TypeInfo>> fetchRealClass(JsonElement e, TypeInfo def) throws Exception {
+		if (e.isJsonNull()) {
+			return Optional.of(Either.left(Optional.empty()));
+		}
+		if (e.isJsonObject()) {
+			JsonObject obj = e.getAsJsonObject();
+			if (obj.has("_class")) {
+				return Optional.of(Either.right(TypeInfo.of(Class.forName(obj.get("_class").getAsString()))));
+			}
+		}
+		return Optional.empty();
+	}
+
+	@Override
+	public Optional<Pair<Optional<JsonElement>, Optional<ClassCache>>> writeRealClass(TypeInfo cls, Object obj) throws Exception {
+		if (obj == null) {
+			return Optional.of(Pair.of(Optional.of(JsonNull.INSTANCE), Optional.empty()));
+		}
+		if (obj.getClass() != cls.getAsClass()) {
+			ClassCache cache = ClassCache.get(obj.getClass());
+			if (cache.getSerialAnnotation() != null) {
+				JsonObject ans = new JsonObject();
+				ans.addProperty("_class", obj.getClass().getName());
+				return Optional.of(Pair.of(Optional.of(ans), Optional.of(cache)));
+			}
+		}
+		return Optional.empty();
 	}
 
 	@Override
@@ -119,4 +139,5 @@ public class JsonContext implements TreeContext<JsonElement, JsonObject, JsonArr
 	public JsonElement fromString(String str) {
 		return new JsonPrimitive(str);
 	}
+
 }

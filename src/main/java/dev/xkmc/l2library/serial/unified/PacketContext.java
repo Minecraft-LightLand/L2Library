@@ -1,9 +1,14 @@
 package dev.xkmc.l2library.serial.unified;
 
+import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Pair;
+import dev.xkmc.l2library.serial.handler.Handlers;
 import dev.xkmc.l2library.serial.wrapper.ClassCache;
 import dev.xkmc.l2library.serial.wrapper.FieldCache;
-import dev.xkmc.l2library.serial.handler.Handlers;
+import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import net.minecraft.network.FriendlyByteBuf;
+
+import java.util.Optional;
 
 public class PacketContext extends SingletonContext<FriendlyByteBuf> {
 
@@ -28,13 +33,30 @@ public class PacketContext extends SingletonContext<FriendlyByteBuf> {
 	}
 
 	@Override
-	public ClassCache fetchRealClass(FriendlyByteBuf obj, ClassCache def) {
-		return null;//TODO
+	public Optional<Either<Optional<Object>, TypeInfo>> fetchRealClass(FriendlyByteBuf obj, TypeInfo cls) throws Exception {
+		byte header = instance.readByte();
+		if (header == 0) {
+			return Optional.of(Either.left(Optional.empty()));
+		} else if (header == 2) {
+			return Optional.of(Either.right(TypeInfo.of(Class.forName(instance.readUtf()))));
+		} else return Optional.empty();
 	}
 
 	@Override
-	public void writeRealClass(FriendlyByteBuf obj, ClassCache cls) {
-		//TODO
+	public Optional<Pair<Optional<FriendlyByteBuf>, Optional<ClassCache>>> writeRealClass(TypeInfo cls, Object obj) throws Exception {
+		if (obj == null) {
+			instance.writeByte(0);
+			return Optional.of(Pair.of(Optional.of(instance), Optional.empty()));
+		}
+		if (obj.getClass() != cls.getAsClass()) {
+			ClassCache cache = ClassCache.get(obj.getClass());
+			if (cache.getSerialAnnotation() != null) {
+				instance.writeByte(2);
+				return Optional.of(Pair.of(Optional.of(instance), Optional.of(cache)));
+			}
+		}
+		instance.writeByte(1);
+		return Optional.empty();
 	}
 
 	@Override
@@ -63,4 +85,5 @@ public class PacketContext extends SingletonContext<FriendlyByteBuf> {
 		instance.writeUtf(str);
 		return instance;
 	}
+
 }

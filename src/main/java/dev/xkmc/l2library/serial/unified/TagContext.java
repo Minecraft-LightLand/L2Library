@@ -1,16 +1,20 @@
 package dev.xkmc.l2library.serial.unified;
 
+import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Pair;
 import dev.xkmc.l2library.serial.SerialClass;
-import dev.xkmc.l2library.serial.wrapper.TypeInfo;
+import dev.xkmc.l2library.serial.handler.Handlers;
 import dev.xkmc.l2library.serial.wrapper.ClassCache;
 import dev.xkmc.l2library.serial.wrapper.FieldCache;
-import dev.xkmc.l2library.serial.handler.Handlers;
+import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class TagContext implements TreeContext<Tag, CompoundTag, ListTag> {
@@ -22,13 +26,47 @@ public class TagContext implements TreeContext<Tag, CompoundTag, ListTag> {
 	}
 
 	@Override
-	public ClassCache fetchRealClass(CompoundTag obj, ClassCache def) {
-		return null;//TODO
+	public Optional<Either<Optional<Object>, TypeInfo>> fetchRealClass(Tag e, TypeInfo def) throws Exception {
+		if (e == null) {
+			return Optional.of(Either.left(def.getAsClass() == ItemStack.class ? Optional.of(ItemStack.EMPTY) : Optional.empty()));
+		}
+		if (e instanceof CompoundTag obj) {
+			if (obj.contains("_class")) {
+				return Optional.of(Either.right(TypeInfo.of(Class.forName(obj.get("_class").getAsString()))));
+			}
+		}
+		return Optional.empty();
 	}
 
 	@Override
-	public void writeRealClass(CompoundTag obj, ClassCache cls) {
-		//TODO
+	public Optional<Pair<Optional<Tag>, Optional<ClassCache>>> writeRealClass(TypeInfo cls, Object obj) throws Exception {
+		if (obj == null) {
+			return Optional.of(Pair.of(Optional.empty(), Optional.empty()));
+		}
+		if (obj.getClass() != cls.getAsClass()) {
+			ClassCache cache = ClassCache.get(obj.getClass());
+			if (cache.getSerialAnnotation() != null) {
+				CompoundTag ans = new CompoundTag();
+				ans.putString("_class", obj.getClass().getName());
+				return Optional.of(Pair.of(Optional.of(ans), Optional.of(cache)));
+			}
+		}
+		return Optional.empty();
+	}
+
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	@Override
+	public Object deserializeEfficientMap(Tag tag, TypeInfo key, TypeInfo val, Object def) throws Exception {
+		CompoundTag ctag = (CompoundTag) tag;
+		Map map = (Map) def;
+		map.clear();
+		for (String str : ctag.getAllKeys()) {
+			Object mkey = key.getAsClass() == String.class ? str :
+					key.getAsClass().isEnum() ? Enum.valueOf((Class) key.getAsClass(), str) :
+							Handlers.NBT_MAP.get(key.getAsClass()).fromTag(StringTag.valueOf(str));
+			map.put(mkey, UnifiedCodec.deserializeValue(this, ctag.get(str), val, null));
+		}
+		return map;
 	}
 
 	@Override
@@ -81,21 +119,6 @@ public class TagContext implements TreeContext<Tag, CompoundTag, ListTag> {
 		return (CompoundTag) e;
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	@Override
-	public Object deserializeEfficientMap(Tag tag, TypeInfo key, TypeInfo val, Object def) throws Exception {
-		CompoundTag ctag = (CompoundTag) tag;
-		Map map = (Map) def;
-		map.clear();
-		for (String str : ctag.getAllKeys()) {
-			Object mkey = key.getAsClass() == String.class ? str :
-					key.getAsClass().isEnum() ? Enum.valueOf((Class) key.getAsClass(), str) :
-							Handlers.NBT_MAP.get(key.getAsClass()).fromTag(StringTag.valueOf(str));
-			map.put(mkey, UnifiedCodec.deserializeValue(this, ctag.get(str), val, null));
-		}
-		return map;
-	}
-
 	@Override
 	public String getAsString(Tag e) {
 		return e.getAsString();
@@ -130,4 +153,5 @@ public class TagContext implements TreeContext<Tag, CompoundTag, ListTag> {
 	public Tag fromString(String str) {
 		return StringTag.valueOf(str);
 	}
+
 }

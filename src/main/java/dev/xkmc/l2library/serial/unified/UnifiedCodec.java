@@ -7,10 +7,7 @@ import dev.xkmc.l2library.serial.wrapper.MethodCache;
 import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @SuppressWarnings({"unsafe"})
 public class UnifiedCodec {
@@ -29,7 +26,6 @@ public class UnifiedCodec {
 
 	public static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
 	Object deserializeObject(C ctx, O obj, ClassCache cls, @Nullable Object ans) throws Exception {
-		cls = ctx.fetchRealClass(obj, cls);
 		if (cls.getSerialAnnotation() == null) {
 			throw new Exception("invalid class " + cls + " with object " + obj);
 		}
@@ -67,13 +63,22 @@ public class UnifiedCodec {
 
 	public static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
 	Object deserializeValue(C ctx, E e, TypeInfo cls, @Nullable Object ans) throws Exception {
-		//TODO header info
-		if (ctx.hasSpecialHandling(cls.getAsClass())) {
-			return ctx.deserializeSpecial(cls.getAsClass(), e);
-		}
-		for (GenericCodec codec : LIST) {
-			if (codec.predicate(cls, ans)) {
-				return codec.deserializeValue(ctx, e, cls, ans);
+		var real = ctx.fetchRealClass(e, cls);
+		if (real.isPresent()) {
+			Optional<Optional<Object>> left = real.get().left();
+			if (left.isPresent()) {
+				return left.get().orElse(null);
+			} else if (real.get().right().isPresent()) {
+				cls = real.get().right().get();
+			}
+		} else {
+			if (ctx.hasSpecialHandling(cls.getAsClass())) {
+				return ctx.deserializeSpecial(cls.getAsClass(), e);
+			}
+			for (GenericCodec codec : LIST) {
+				if (codec.predicate(cls, ans)) {
+					return codec.deserializeValue(ctx, e, cls, ans);
+				}
 			}
 		}
 		return deserializeObject(ctx, ctx.castAsMap(e), cls.toCache(), ans);
@@ -81,11 +86,6 @@ public class UnifiedCodec {
 
 	public static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
 	O serializeObject(C ctx, O ans, ClassCache cls, Object obj) throws Exception {
-		ClassCache ocls = ClassCache.get(obj.getClass());
-		if (ocls != cls && ocls.getSerialAnnotation() != null) {
-			cls = ocls;
-			ctx.writeRealClass(ans, ocls);
-		}
 		if (cls.getSerialAnnotation() == null)
 			throw new Exception("cannot serialize " + cls);
 		while (cls.getSerialAnnotation() != null) {
@@ -106,13 +106,23 @@ public class UnifiedCodec {
 
 	public static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
 	E serializeValue(C ctx, TypeInfo cls, @Nullable Object obj) throws Exception {
-		// TODO header
-		if (ctx.hasSpecialHandling(cls.getAsClass())) {
-			return ctx.serializeSpecial(cls.getAsClass(), obj);
-		}
-		for (GenericCodec codec : LIST) {
-			if (codec.predicate(cls, obj)) {
-				return codec.serializeValue(ctx, cls, obj);
+		var real = ctx.writeRealClass(cls, obj);
+		if (real.isPresent()) {
+			Optional<E> first = real.get().getFirst();
+			Optional<ClassCache> second = real.get().getSecond();
+			if (second.isEmpty()) {
+				return first.orElse(null);
+			}
+			O o = first.map(ctx::castAsMap).orElseGet(ctx::createMap);
+			return serializeObject(ctx, o, second.get(), obj);
+		} else {
+			if (ctx.hasSpecialHandling(cls.getAsClass())) {
+				return ctx.serializeSpecial(cls.getAsClass(), obj);
+			}
+			for (GenericCodec codec : LIST) {
+				if (codec.predicate(cls, obj)) {
+					return codec.serializeValue(ctx, cls, obj);
+				}
 			}
 		}
 		return serializeObject(ctx, ctx.createMap(), cls.toCache(), obj);

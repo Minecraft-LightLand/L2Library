@@ -1,7 +1,7 @@
 package dev.xkmc.l2library.serial.generic;
 
-import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import dev.xkmc.l2library.serial.unified.UnifiedContext;
+import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 
 import javax.annotation.Nullable;
 

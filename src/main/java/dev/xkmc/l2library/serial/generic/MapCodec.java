@@ -1,8 +1,8 @@
 package dev.xkmc.l2library.serial.generic;
 
 import com.mojang.datafixers.util.Pair;
-import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import dev.xkmc.l2library.serial.unified.UnifiedContext;
+import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
