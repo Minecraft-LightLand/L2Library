@@ -6,7 +6,6 @@ import dev.xkmc.l2library.idea.infmaze.dim3d.MazeWall3D;
 import dev.xkmc.l2library.idea.infmaze.init.InfiniMaze;
 import dev.xkmc.l2library.idea.infmaze.pos.*;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;

@@ -31,7 +31,7 @@ public class MathHelper {
 		double val = random * total;
 		for (T t : list) {
 			val -= func.apply(t);
-			if (val < 0){
+			if (val < 0) {
 				return t;
 			}
 		}

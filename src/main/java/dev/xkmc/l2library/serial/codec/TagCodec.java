@@ -10,11 +10,6 @@ import net.minecraft.nbt.CompoundTag;
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
-/**
- * Capable of handing primitive types, array, BlockPos, ItemStack, inheritance
- * <br>
- * Not capable of handing collections
- */
 public class TagCodec {
 
 	@Nullable

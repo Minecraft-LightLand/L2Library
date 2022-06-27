@@ -2,7 +2,6 @@ package dev.xkmc.l2library.idea.maze.generator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class MazeGen {
 

@@ -37,7 +37,7 @@ public class ClientEntityEffectRenderEvents {
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void clientTick(TickEvent.ClientTickEvent event) {
-		if (Proxy.getClientPlayer()!=null){
+		if (Proxy.getClientPlayer() != null) {
 			AbstractClientPlayer player = Proxy.getClientPlayer();
 			for (Map.Entry<MobEffect, MobEffectInstance> entry : player.getActiveEffectsMap().entrySet()) {
 				if (entry.getKey() instanceof FirstPlayerRenderEffect effect) {

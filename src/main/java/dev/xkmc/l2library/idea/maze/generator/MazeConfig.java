@@ -1,7 +1,5 @@
 package dev.xkmc.l2library.idea.maze.generator;
 
-import java.util.Random;
-
 public class MazeConfig {
 
 	private static final int[] PATH = {3, 6, 51, 0, 0, 0, 0};

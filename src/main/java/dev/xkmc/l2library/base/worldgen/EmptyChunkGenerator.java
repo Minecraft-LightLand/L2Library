@@ -2,8 +2,10 @@ package dev.xkmc.l2library.base.worldgen;
 
 import net.minecraft.core.*;
 import net.minecraft.server.level.WorldGenRegion;
-import net.minecraft.world.level.*;
-import net.minecraft.world.level.biome.*;
+import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.biome.BiomeManager;
+import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.GenerationStep;

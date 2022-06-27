@@ -1,6 +1,5 @@
 package dev.xkmc.l2library.base.effects;
 
-import dev.xkmc.l2library.base.effects.EffectToClient;
 import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.server.level.ServerPlayer;
