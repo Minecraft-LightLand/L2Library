@@ -28,7 +28,7 @@ public class SyncPacket extends SerialPacketBase {
 	@Override
 	public void handle(NetworkEvent.Context ctx) {
 		if (map != null)
-			PacketHandlerWithConfig.INTERNAL.get(id).CONFIGS = map;
+			PacketHandlerWithConfig.INTERNAL.get(id).configs = map;
 	}
 
 }

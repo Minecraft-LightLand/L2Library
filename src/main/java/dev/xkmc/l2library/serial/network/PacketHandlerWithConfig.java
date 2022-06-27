@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2library.serial.codec.JsonCodec;
+import dev.xkmc.l2library.util.code.Wrappers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -18,14 +19,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
+@SuppressWarnings("unused")
 public class PacketHandlerWithConfig extends PacketHandler {
 
 	static final HashMap<ResourceLocation, PacketHandlerWithConfig> INTERNAL = new HashMap<>();
 
 	public static void onDatapackSync(OnDatapackSyncEvent event) {
 		for (PacketHandlerWithConfig handler : INTERNAL.values()) {
-			SyncPacket packet = new SyncPacket(handler, handler.CONFIGS);
+			SyncPacket packet = new SyncPacket(handler, handler.configs);
 			if (event.getPlayer() == null) L2Library.PACKET_HANDLER.toAllClient(packet);
 			else L2Library.PACKET_HANDLER.toClientPlayer(packet, event.getPlayer());
 		}
@@ -33,22 +36,23 @@ public class PacketHandlerWithConfig extends PacketHandler {
 
 	public static void addReloadListeners(AddReloadListenerEvent event) {
 		for (PacketHandlerWithConfig handler : INTERNAL.values()) {
-			if (handler.CONFIG != null)
-				event.addListener(handler.CONFIG);
+			if (handler.listener != null)
+				event.addListener(handler.listener);
 		}
 	}
 
-	public HashMap<String, BaseConfig> CONFIGS = new HashMap<>();
+	public HashMap<String, BaseConfig> configs = new HashMap<>();
 
-	private final PreparableReloadListener CONFIG;
+	private final PreparableReloadListener listener;
 	private final List<Runnable> listener_before = new ArrayList<>();
 	private final List<Runnable> listener_after = new ArrayList<>();
+	private final Map<String, CachedConfig<?>> cache = new HashMap<>();
 
 	@SafeVarargs
 	public PacketHandlerWithConfig(ResourceLocation id, int version, String config_path, Function<PacketHandler, LoadedPacket<?>>... values) {
 		super(id, version, values);
 		INTERNAL.put(id, this);
-		CONFIG = new ConfigReloadListener(config_path);
+		listener = new ConfigReloadListener(config_path);
 	}
 
 	public void addBeforeReloadListener(Runnable runnable) {
@@ -57,6 +61,43 @@ public class PacketHandlerWithConfig extends PacketHandler {
 
 	public void addAfterReloadListener(Runnable runnable) {
 		listener_after.add(runnable);
+	}
+
+	public <T extends BaseConfig> void addCachedConfig(String id, Function<Stream<Map.Entry<String, BaseConfig>>, T> loader) {
+		CachedConfig<T> c = new CachedConfig<>(id, loader);
+		cache.put(id, c);
+		addAfterReloadListener(() -> c.result = null);
+	}
+
+	public <T extends BaseConfig> T getCachedConfig(String id) {
+		return Wrappers.cast(cache.get(id).load());
+	}
+
+	public Stream<Map.Entry<String, BaseConfig>> getConfigs(String id) {
+		return configs.entrySet().stream()
+				.filter(e -> new ResourceLocation(e.getKey()).getPath().split("/")[0].equals(id));
+	}
+
+	private class CachedConfig<T extends BaseConfig> {
+
+		private final Function<Stream<Map.Entry<String, BaseConfig>>, T> function;
+		private final String id;
+
+		private T result;
+
+		CachedConfig(String id, Function<Stream<Map.Entry<String, BaseConfig>>, T> function) {
+			this.id = id;
+			this.function = function;
+		}
+
+		T load() {
+			if (result != null) {
+				return result;
+			}
+			result = function.apply(getConfigs(id));
+			return result;
+		}
+
 	}
 
 	private class ConfigReloadListener extends SimpleJsonResourceReloadListener {
@@ -75,8 +116,10 @@ public class PacketHandlerWithConfig extends PacketHandler {
 					}
 				}
 				BaseConfig config = JsonCodec.from(v, BaseConfig.class, null);
-				if (config != null)
-					CONFIGS.put(k.toString(), config);
+				if (config != null) {
+					config.id = k;
+					configs.put(k.toString(), config);
+				}
 			});
 			listener_after.forEach(Runnable::run);
 		}

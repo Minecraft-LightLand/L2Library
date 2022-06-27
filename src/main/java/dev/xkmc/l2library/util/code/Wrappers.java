@@ -3,6 +3,7 @@ package dev.xkmc.l2library.util.code;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 
+import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public class Wrappers {
@@ -24,6 +25,7 @@ public class Wrappers {
 		}
 	}
 
+	@Nullable
 	public static <T> T get(ExcSup<T> sup) {
 		try {
 			return sup.get();
@@ -33,10 +35,11 @@ public class Wrappers {
 		}
 	}
 
+	@Nullable
 	public static <T> T ignore(ExcSup<T> sup) {
 		try {
 			return sup.get();
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			return null;
 		}
 	}
@@ -44,21 +47,22 @@ public class Wrappers {
 	public static void ignore(ExcRun sup) {
 		try {
 			sup.get();
-		} catch (Throwable e) {
+		} catch (Exception e) {
 		}
 	}
 
 	@FunctionalInterface
 	public interface ExcRun {
 
-		void get() throws Throwable;
+		void get() throws Exception;
 
 	}
 
 	@FunctionalInterface
 	public interface ExcSup<T> {
 
-		T get() throws Throwable;
+		@Nullable
+		T get() throws Exception;
 
 	}
 

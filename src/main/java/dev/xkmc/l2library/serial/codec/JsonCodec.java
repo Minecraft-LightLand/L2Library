@@ -4,8 +4,10 @@ import com.google.gson.*;
 import com.mojang.datafixers.util.Pair;
 import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.serial.handler.Handlers;
+import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import dev.xkmc.l2library.util.code.Wrappers;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -18,22 +20,23 @@ import java.util.*;
  */
 public class JsonCodec {
 
-	private static final Gson GSON = new Gson();
-
+	@Nullable
 	@SuppressWarnings("unchecked")
-	public static <T> T from(JsonElement obj, Class<T> cls, T ans) {
+	public static <T> T from(JsonElement obj, Class<T> cls, @Nullable T ans) {
 		return Wrappers.get(() -> (T) fromRaw(obj, TypeInfo.of(cls), ans));
 	}
 
+	@Nullable
 	public static <T> JsonElement toJson(T obj) {
 		return Wrappers.get(() -> toRaw(TypeInfo.of(obj.getClass()), obj));
 	}
 
+	@Nullable
 	public static <T extends R, R> JsonElement toJson(T obj, Class<R> cls) {
 		return Wrappers.get(() -> toRaw(TypeInfo.of(cls), obj));
 	}
 
-	private static Object fromImpl(JsonObject obj, Class<?> cls, Object ans) throws Exception {
+	private static Object fromImpl(JsonObject obj, Class<?> cls, @Nullable Object ans) throws Exception {
 		if (obj.has("_class")) {
 			cls = Class.forName(obj.get("_class").getAsString());
 		}
@@ -71,7 +74,7 @@ public class JsonCodec {
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	private static Object fromRaw(JsonElement e, TypeInfo cls, Object ans) throws Exception {
+	private static Object fromRaw(JsonElement e, TypeInfo cls, @Nullable Object ans) throws Exception {
 		if (cls.isArray()) {
 			JsonArray arr = e.getAsJsonArray();
 			TypeInfo com = cls.getComponentType();
@@ -169,7 +172,7 @@ public class JsonCodec {
 		return ans;
 	}
 
-	private static JsonElement toRaw(TypeInfo cls, Object obj) throws Exception {
+	private static JsonElement toRaw(TypeInfo cls, @Nullable Object obj) throws Exception {
 		if (obj == null) {
 			return JsonNull.INSTANCE;
 		}

@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.serial.codec;
+package dev.xkmc.l2library.serial.wrapper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
@@ -69,5 +69,9 @@ public class TypeInfo {
 	@Override
 	public String toString() {
 		return "{cls = " + cls + ", type = " + type + "}";
+	}
+
+	public ClassCache toCache() {
+		return ClassCache.get(cls);
 	}
 }

@@ -2,6 +2,7 @@ package dev.xkmc.l2library.serial.codec;
 
 import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.serial.handler.Handlers;
+import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import dev.xkmc.l2library.util.code.Wrappers;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -9,6 +10,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -24,20 +26,23 @@ import java.util.function.Predicate;
  */
 public class TagCodec {
 
+	@Nullable
 	@SuppressWarnings("unchecked")
 	public static <T> T fromTag(CompoundTag tag, Class<?> cls) {
 		return (T) Wrappers.get(() -> fromTag(tag, cls, null, f -> true));
 	}
 
+	@Nullable
 	public static CompoundTag toTag(CompoundTag tag, Object obj) {
 		return Wrappers.get(() -> toTag(tag, obj.getClass(), obj, f -> true));
 	}
 
+	@Nullable
 	public static CompoundTag toTag(CompoundTag tag, Object obj, Class<?> cls) {
 		return Wrappers.get(() -> toTag(tag, cls, obj, f -> true));
 	}
 
-	public static Object fromTag(CompoundTag tag, Class<?> cls, Object obj, Predicate<SerialClass.SerialField> pred)
+	public static Object fromTag(CompoundTag tag, Class<?> cls, @Nullable Object obj, Predicate<SerialClass.SerialField> pred)
 			throws Exception {
 		if (tag.contains("_class"))
 			cls = Class.forName(tag.getString("_class"));
@@ -73,7 +78,7 @@ public class TagCodec {
 		return obj;
 	}
 
-	public static CompoundTag toTag(CompoundTag tag, Class<?> cls, Object obj, Predicate<SerialClass.SerialField> pred)
+	public static CompoundTag toTag(CompoundTag tag, Class<?> cls, @Nullable Object obj, Predicate<SerialClass.SerialField> pred)
 			throws Exception {
 		if (obj == null)
 			return tag;
@@ -95,8 +100,9 @@ public class TagCodec {
 		return tag;
 	}
 
+	@Nullable
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	private static Object fromTagRaw(Tag tag, TypeInfo cls, Object def, Predicate<SerialClass.SerialField> pred) throws Exception {
+	private static Object fromTagRaw(@Nullable Tag tag, TypeInfo cls, @Nullable Object def, Predicate<SerialClass.SerialField> pred) throws Exception {
 		if (tag == null)
 			if (cls.getAsClass() == ItemStack.class)
 				return ItemStack.EMPTY;

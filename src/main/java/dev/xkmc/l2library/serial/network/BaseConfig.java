@@ -1,6 +1,7 @@
 package dev.xkmc.l2library.serial.network;
 
 import dev.xkmc.l2library.serial.SerialClass;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -9,6 +10,12 @@ import java.util.function.Supplier;
 
 @SerialClass
 public class BaseConfig {
+
+	ResourceLocation id;
+
+	public ResourceLocation getID() {
+		return id;
+	}
 
 	public static <T, C> HashSet<T> collectSet(List<C> list, Function<C, Set<T>> getter) {
 		return list.stream().reduce(new HashSet<T>(), (a, c) -> {
@@ -38,6 +45,14 @@ public class BaseConfig {
 			b.forEach((k, v) -> merger.accept(a.computeIfAbsent(k, e -> gen.get()), v));
 			return a;
 		});
+	}
+
+	public static <C, K, T> HashMap<K, T> overrideMap(List<C> list, Function<C, HashMap<K, T>> getter) {
+		HashMap<K, T> ans = new HashMap<>();
+		for (C c : list) {
+			ans.putAll(getter.apply(c));
+		}
+		return ans;
 	}
 
 }

@@ -2,9 +2,11 @@ package dev.xkmc.l2library.serial.codec;
 
 import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.serial.handler.Handlers;
+import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import dev.xkmc.l2library.util.code.Wrappers;
 import net.minecraft.network.FriendlyByteBuf;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -14,6 +16,7 @@ import java.util.TreeMap;
 
 public class PacketCodec {
 
+	@Nullable
 	@SuppressWarnings("unchecked")
 	public static <T> T from(FriendlyByteBuf buf, Class<T> cls, T ans) {
 		return Wrappers.get(() -> (T) fromRaw(buf, TypeInfo.of(cls), ans));
@@ -27,7 +30,7 @@ public class PacketCodec {
 		Wrappers.run(() -> toRaw(buf, TypeInfo.of(r), obj));
 	}
 
-	private static Object fromImpl(FriendlyByteBuf buf, Class<?> cls, Object ans) throws Exception {
+	private static Object fromImpl(FriendlyByteBuf buf, Class<?> cls, @Nullable Object ans) throws Exception {
 		if (cls.getAnnotation(SerialClass.class) == null)
 			throw new Exception("cannot deserialize " + cls);
 		if (ans == null)
@@ -63,8 +66,9 @@ public class PacketCodec {
 		return ans;
 	}
 
+	@Nullable
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	private static Object fromRaw(FriendlyByteBuf buf, TypeInfo cls, Object ans) throws Exception {
+	private static Object fromRaw(FriendlyByteBuf buf, TypeInfo cls, @Nullable Object ans) throws Exception {
 		byte type = buf.readByte();
 		if (type == 0)
 			return null;
@@ -137,7 +141,7 @@ public class PacketCodec {
 		}
 	}
 
-	private static void toRaw(FriendlyByteBuf buf, TypeInfo cls, Object obj) throws Exception {
+	private static void toRaw(FriendlyByteBuf buf, TypeInfo cls, @Nullable Object obj) throws Exception {
 		if (obj == null) {
 			buf.writeByte(0);
 			return;

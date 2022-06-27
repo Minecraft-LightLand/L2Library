@@ -17,7 +17,7 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class Helper {
+public class StackHelper {
 
 	private static final Gson GSON = new Gson();
 

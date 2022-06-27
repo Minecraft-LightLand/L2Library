@@ -65,8 +65,8 @@ public class Handlers {
 		new ClassHandler<>(String.class, JsonPrimitive::new, JsonElement::getAsString, FriendlyByteBuf::readUtf, FriendlyByteBuf::writeUtf, Tag::getAsString, StringTag::valueOf);
 
 		// minecraft
-		new ClassHandler<>(ItemStack.class, Helper::serializeItemStack, Helper::deserializeItemStack, FriendlyByteBuf::readItem, (p, is) -> p.writeItemStack(is, false), ItemStack::of, is -> is.save(new CompoundTag()));
-		new ClassHandler<>(FluidStack.class, Helper::serializeFluidStack, Helper::deserializeFluidStack, FluidStack::readFromPacket, (p, f) -> f.writeToPacket(p), FluidStack::loadFluidStackFromNBT, f -> f.writeToNBT(new CompoundTag()));
+		new ClassHandler<>(ItemStack.class, StackHelper::serializeItemStack, StackHelper::deserializeItemStack, FriendlyByteBuf::readItem, (p, is) -> p.writeItemStack(is, false), ItemStack::of, is -> is.save(new CompoundTag()));
+		new ClassHandler<>(FluidStack.class, StackHelper::serializeFluidStack, StackHelper::deserializeFluidStack, FluidStack::readFromPacket, (p, f) -> f.writeToPacket(p), FluidStack::loadFluidStackFromNBT, f -> f.writeToNBT(new CompoundTag()));
 
 		new StringClassHandler<>(ResourceLocation.class, ResourceLocation::new, ResourceLocation::toString);
 		new StringClassHandler<>(UUID.class, UUID::fromString, UUID::toString);
