@@ -1,11 +1,10 @@
 package dev.xkmc.l2library.serial.unified;
 
-import dev.xkmc.l2library.serial.wrapper.TypeInfo;
-import dev.xkmc.l2library.serial.codec.generic.*;
+import dev.xkmc.l2library.serial.generic.*;
 import dev.xkmc.l2library.serial.wrapper.ClassCache;
 import dev.xkmc.l2library.serial.wrapper.FieldCache;
 import dev.xkmc.l2library.serial.wrapper.MethodCache;
-import dev.xkmc.l2library.serial.generic.*;
+import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ public class UnifiedCodec {
 	private static final List<GenericCodec> LIST = new ArrayList<>();
 
 	static {
+		LIST.add(new RecordCodec());
 		LIST.add(new EnumCodec());
 		LIST.add(new ArrayCodec());
 		LIST.add(new AliasCodec());
