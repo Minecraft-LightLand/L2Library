@@ -3,6 +3,9 @@ package dev.xkmc.l2library.init;
 import dev.xkmc.l2library.base.effects.ClientEntityEffectRenderEvents;
 import dev.xkmc.l2library.base.effects.EffectSyncEvents;
 import dev.xkmc.l2library.base.effects.EffectToClient;
+import dev.xkmc.l2library.base.ingredients.EnchantmentIngredient;
+import dev.xkmc.l2library.base.ingredients.MobEffectIngredient;
+import dev.xkmc.l2library.base.ingredients.PotionIngredient;
 import dev.xkmc.l2library.base.tabs.contents.AttributeEntry;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityEvents;
@@ -20,11 +23,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,6 +63,7 @@ public class L2Library {
 		bus.addListener(L2Library::registerCaps);
 		bus.addListener(PacketHandler::setup);
 		bus.addListener(L2Library::setup);
+		bus.addListener(L2Library::registerRecipeSerializers);
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> L2Client.onCtorClient(bus, MinecraftForge.EVENT_BUS));
 	}
 
@@ -79,6 +86,14 @@ public class L2Library {
 			AttributeEntry.add(ForgeMod.ATTACK_RANGE, false, 9000);
 			AttributeEntry.add(() -> Attributes.LUCK, false, 10000);
 		});
+	}
+
+	public static void registerRecipeSerializers(RegisterEvent event) {
+		if (event.getRegistryKey().equals(ForgeRegistries.Keys.RECIPE_SERIALIZERS)) {
+			CraftingHelper.register(EnchantmentIngredient.INSTANCE.id(), EnchantmentIngredient.INSTANCE);
+			CraftingHelper.register(PotionIngredient.INSTANCE.id(), PotionIngredient.INSTANCE);
+			CraftingHelper.register(MobEffectIngredient.INSTANCE.id(), MobEffectIngredient.INSTANCE);
+		}
 	}
 
 }
