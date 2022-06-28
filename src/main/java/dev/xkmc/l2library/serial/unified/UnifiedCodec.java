@@ -34,12 +34,18 @@ public class UnifiedCodec {
 		}
 		ClassCache mcls = cls;
 		while (cls.getSerialAnnotation() != null) {
+			TreeMap<String, FieldCache> map = new TreeMap<>();
 			for (FieldCache f : cls.getFields()) {
 				if (f.getSerialAnnotation() != null) {
-					if (ctx.shouldRead(obj, f)) {
-						Object def = f.get(ans);
-						f.set(ans, deserializeValue(ctx, ctx.retrieve(obj, f.getName()), f.toType(), def));
-					}
+					map.put(f.getName(), f);
+				}
+			}
+			for (Map.Entry<String, FieldCache> entry : map.entrySet()) {
+				FieldCache f = entry.getValue();
+				if (ctx.shouldRead(obj, f)) {
+					Object def = f.get(ans);
+					f.set(ans, deserializeValue(ctx, ctx.retrieve(obj, f.getName()), f.toType(), def));
+
 				}
 			}
 			cls = cls.getSuperclass();

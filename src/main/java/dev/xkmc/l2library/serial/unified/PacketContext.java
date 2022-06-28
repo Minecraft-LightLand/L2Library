@@ -52,6 +52,7 @@ public class PacketContext extends SingletonContext<FriendlyByteBuf> {
 			ClassCache cache = ClassCache.get(obj.getClass());
 			if (cache.getSerialAnnotation() != null) {
 				instance.writeByte(2);
+				instance.writeUtf(obj.getClass().getName());
 				return Optional.of(Pair.of(Optional.of(instance), Optional.of(cache)));
 			}
 		}
