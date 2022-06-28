@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings({"unchecked", "unsafe", "rawtypes"})
-public class MapCodec implements GenericCodec {
+public class MapCodec extends GenericCodec {
 
 	@Override
 	public boolean predicate(TypeInfo cls, @Nullable Object obj) {

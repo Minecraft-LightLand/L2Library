@@ -4,11 +4,13 @@ import com.google.gson.JsonElement;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNullableByDefault;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 @SuppressWarnings({"unsafe", "unchecked"})
-public class ClassHandler<R extends Tag, T> implements Handlers.JsonClassHandler<T>, Handlers.NBTClassHandler<R, T>, Handlers.PacketClassHandler<T> {
+public class ClassHandler<R extends Tag, T> implements JsonClassHandler<T>, NBTClassHandler<R, T>, PacketClassHandler<T> {
 
 	public final Function<Object, JsonElement> toJson;
 	public final Function<JsonElement, ?> fromJson;
@@ -18,8 +20,9 @@ public class ClassHandler<R extends Tag, T> implements Handlers.JsonClassHandler
 	public final Function<Object, Tag> toTag;
 
 	@SuppressWarnings("unchecked")
-	public ClassHandler(Class<T> cls, Function<T, JsonElement> tj, Function<JsonElement, T> fj, Function<FriendlyByteBuf, T> fp,
-						BiConsumer<FriendlyByteBuf, T> tp, Function<R, T> ft, Function<T, Tag> tt, Class<?>... others) {
+	@ParametersAreNullableByDefault
+	public ClassHandler(@Nonnull Class<T> cls, Function<T, JsonElement> tj, Function<JsonElement, T> fj, Function<FriendlyByteBuf, T> fp,
+						BiConsumer<FriendlyByteBuf, T> tp, Function<R, T> ft, Function<T, Tag> tt, @Nonnull Class<?>... others) {
 		this.toJson = (Function<Object, JsonElement>) tj;
 		this.fromJson = fj;
 		this.fromPacket = fp;

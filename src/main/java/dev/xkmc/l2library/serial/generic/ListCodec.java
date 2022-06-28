@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 @SuppressWarnings({"unchecked", "unsafe", "rawtypes"})
-public class ListCodec implements GenericCodec {
+public class ListCodec extends GenericCodec {
 
 	@Override
 	public boolean predicate(TypeInfo cls, @Nullable Object obj) {

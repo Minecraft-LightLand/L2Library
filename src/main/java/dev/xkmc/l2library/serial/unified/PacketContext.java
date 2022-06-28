@@ -6,6 +6,7 @@ import dev.xkmc.l2library.serial.handler.Handlers;
 import dev.xkmc.l2library.serial.wrapper.ClassCache;
 import dev.xkmc.l2library.serial.wrapper.FieldCache;
 import dev.xkmc.l2library.serial.wrapper.TypeInfo;
+import dev.xkmc.l2library.util.code.Wrappers;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.Optional;
@@ -47,6 +48,11 @@ public class PacketContext extends SingletonContext<FriendlyByteBuf> {
 		if (obj == null) {
 			instance.writeByte(0);
 			return Optional.of(Pair.of(Optional.of(instance), Optional.empty()));
+		}
+		Optional<Wrappers.ExcSup<FriendlyByteBuf>> special = UnifiedCodec.serializeSpecial(this, cls, obj);
+		if (special.isPresent()) {
+			instance.writeByte(1);
+			return Optional.of(Pair.of(Optional.ofNullable(special.get().get()), Optional.empty()));
 		}
 		if (obj.getClass() != cls.getAsClass()) {
 			ClassCache cache = ClassCache.get(obj.getClass());

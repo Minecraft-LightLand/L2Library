@@ -22,6 +22,7 @@ public class TagContext extends TreeContext<Tag, CompoundTag, ListTag> {
 	private final Predicate<SerialClass.SerialField> pred;
 
 	public TagContext(Predicate<SerialClass.SerialField> pred) {
+		super(Optional.of(Pair.of(Optional.empty(), Optional.empty())));
 		this.pred = pred;
 	}
 
@@ -33,22 +34,6 @@ public class TagContext extends TreeContext<Tag, CompoundTag, ListTag> {
 		if (e instanceof CompoundTag obj) {
 			if (obj.contains("_class")) {
 				return Optional.of(Either.right(TypeInfo.of(Class.forName(obj.get("_class").getAsString()))));
-			}
-		}
-		return Optional.empty();
-	}
-
-	@Override
-	public Optional<Pair<Optional<Tag>, Optional<ClassCache>>> writeRealClass(TypeInfo cls, Object obj) throws Exception {
-		if (obj == null) {
-			return Optional.of(Pair.of(Optional.empty(), Optional.empty()));
-		}
-		if (obj.getClass() != cls.getAsClass()) {
-			ClassCache cache = ClassCache.get(obj.getClass());
-			if (cache.getSerialAnnotation() != null) {
-				CompoundTag ans = new CompoundTag();
-				ans.putString("_class", obj.getClass().getName());
-				return Optional.of(Pair.of(Optional.of(ans), Optional.of(cache)));
 			}
 		}
 		return Optional.empty();

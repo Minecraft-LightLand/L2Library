@@ -2,6 +2,10 @@ package dev.xkmc.l2library.serial.handler;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import dev.xkmc.l2library.serial.generic.*;
+import dev.xkmc.l2library.serial.nulldefer.NullDefer;
+import dev.xkmc.l2library.serial.nulldefer.SimpleNullDefer;
+import dev.xkmc.l2library.util.code.Wrappers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.*;
 import net.minecraft.network.FriendlyByteBuf;
@@ -19,9 +23,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Handlers {
 
@@ -29,27 +31,10 @@ public class Handlers {
 	public static final Map<Class<?>, NBTClassHandler<?, ?>> NBT_MAP = new HashMap<>();
 	public static final Map<Class<?>, PacketClassHandler<?>> PACKET_MAP = new HashMap<>();
 
-	public interface NBTClassHandler<R extends Tag, T> {
+	public static final List<GenericCodec> LIST = new ArrayList<>();
+	public static final Map<Class<?>, NullDefer<?>> MAP = new HashMap<>();
 
-		T fromTag(Tag valueOf);
-
-		R toTag(Object obj);
-	}
-
-	public interface JsonClassHandler<T> {
-
-		JsonElement toJson(Object obj);
-
-		T fromJson(JsonElement e);
-	}
-
-	public interface PacketClassHandler<T> {
-
-		void toPacket(FriendlyByteBuf buf, Object obj);
-
-		T fromPacket(FriendlyByteBuf buf);
-	}
-
+	// register handlers
 	static {
 		// primitives
 
@@ -76,7 +61,7 @@ public class Handlers {
 		new RLClassHandler<>(Potion.class, () -> ForgeRegistries.POTIONS);
 		new RLClassHandler<>(Enchantment.class, () -> ForgeRegistries.ENCHANTMENTS);
 		new RLClassHandler<>(MobEffect.class, () -> ForgeRegistries.MOB_EFFECTS);
-		new RLClassHandler<>((Class<EntityType<?>>) (Class) EntityType.class, () -> ForgeRegistries.ENTITIES);
+		new RLClassHandler<>(Wrappers.cast(EntityType.class), () -> ForgeRegistries.ENTITIES);
 
 		// partials
 
@@ -117,6 +102,23 @@ public class Handlers {
 				});
 		new ClassHandler<>(MobEffectInstance.class, null, null, null, null,
 				MobEffectInstance::load, e -> e.save(new CompoundTag()));
+	}
+
+	// register generic codec
+	static {
+		new RecordCodec();
+		new EnumCodec();
+		new ArrayCodec();
+		new AliasCodec();
+		new ListCodec();
+		new SetCodec();
+		new MapCodec();
+	}
+
+	// register null defer
+	static {
+		new SimpleNullDefer<>(ItemStack.class, ItemStack.EMPTY);
+		new SimpleNullDefer<>(Ingredient.class, Ingredient.EMPTY);
 	}
 
 	public static void register() {

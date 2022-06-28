@@ -1,28 +1,19 @@
 package dev.xkmc.l2library.serial.unified;
 
 import dev.xkmc.l2library.serial.generic.*;
+import dev.xkmc.l2library.serial.handler.Handlers;
+import dev.xkmc.l2library.serial.nulldefer.NullDefer;
 import dev.xkmc.l2library.serial.wrapper.ClassCache;
 import dev.xkmc.l2library.serial.wrapper.FieldCache;
 import dev.xkmc.l2library.serial.wrapper.MethodCache;
 import dev.xkmc.l2library.serial.wrapper.TypeInfo;
+import dev.xkmc.l2library.util.code.Wrappers;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
 @SuppressWarnings({"unsafe"})
 public class UnifiedCodec {
-
-	private static final List<GenericCodec> LIST = new ArrayList<>();
-
-	static {
-		LIST.add(new RecordCodec());
-		LIST.add(new EnumCodec());
-		LIST.add(new ArrayCodec());
-		LIST.add(new AliasCodec());
-		LIST.add(new ListCodec());
-		LIST.add(new SetCodec());
-		LIST.add(new MapCodec());
-	}
 
 	public static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
 	Object deserializeObject(C ctx, O obj, ClassCache cls, @Nullable Object ans) throws Exception {
@@ -73,7 +64,14 @@ public class UnifiedCodec {
 		if (real.isPresent()) {
 			Optional<Optional<Object>> left = real.get().left();
 			if (left.isPresent()) {
-				return left.get().orElse(null);
+				Object result = left.get().orElse(null);
+				if (result == null) {
+					NullDefer<?> nil = NullDefer.get(cls.getAsClass());
+					if (nil != null) {
+						return nil.getNullDefault();
+					}
+				}
+				return result;
 			} else if (real.get().right().isPresent()) {
 				cls = real.get().right().get();
 			}
@@ -81,7 +79,7 @@ public class UnifiedCodec {
 			if (ctx.hasSpecialHandling(cls.getAsClass())) {
 				return ctx.deserializeSpecial(cls.getAsClass(), e);
 			}
-			for (GenericCodec codec : LIST) {
+			for (GenericCodec codec : Handlers.LIST) {
 				if (codec.predicate(cls, ans)) {
 					return codec.deserializeValue(ctx, e, cls, ans);
 				}
@@ -112,6 +110,12 @@ public class UnifiedCodec {
 
 	public static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
 	E serializeValue(C ctx, TypeInfo cls, @Nullable Object obj) throws Exception {
+		if (obj != null) {
+			NullDefer<?> nil = NullDefer.get(cls.getAsClass());
+			if (nil != null && nil.predicate(Wrappers.cast(obj))) {
+				obj = null;
+			}
+		}
 		var real = ctx.writeRealClass(cls, obj);
 		if (real.isPresent()) {
 			Optional<E> first = real.get().getFirst();
@@ -121,17 +125,22 @@ public class UnifiedCodec {
 			}
 			O o = first.map(ctx::castAsMap).orElseGet(ctx::createMap);
 			return serializeObject(ctx, o, second.get(), obj);
-		} else {
-			if (ctx.hasSpecialHandling(cls.getAsClass())) {
-				return ctx.serializeSpecial(cls.getAsClass(), obj);
-			}
-			for (GenericCodec codec : LIST) {
-				if (codec.predicate(cls, obj)) {
-					return codec.serializeValue(ctx, cls, obj);
-				}
-			}
 		}
 		return serializeObject(ctx, ctx.createMap(), cls.toCache(), obj);
 	}
+
+	static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
+	Optional<Wrappers.ExcSup<E>> serializeSpecial(C ctx, TypeInfo cls, @Nullable Object obj) throws Exception {
+		if (ctx.hasSpecialHandling(cls.getAsClass())) {
+			return Optional.of(() -> ctx.serializeSpecial(cls.getAsClass(), obj));
+		}
+		for (GenericCodec codec : Handlers.LIST) {
+			if (codec.predicate(cls, obj)) {
+				return Optional.of(() -> codec.serializeValue(ctx, cls, obj));
+			}
+		}
+		return Optional.empty();
+	}
+
 
 }

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 
-public class RecordCodec implements GenericCodec {
+public class RecordCodec extends GenericCodec {
 
 	@Override
 	public boolean predicate(TypeInfo cls, @Nullable Object obj) {

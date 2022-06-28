@@ -5,7 +5,7 @@ import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings({"unchecked", "unsafe", "rawtypes"})
-public class EnumCodec implements GenericCodec {
+public class EnumCodec extends GenericCodec {
 
 	@Override
 	public boolean predicate(TypeInfo cls, @Nullable Object obj) {

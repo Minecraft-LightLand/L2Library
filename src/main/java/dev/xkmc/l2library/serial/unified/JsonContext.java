@@ -4,7 +4,6 @@ import com.google.gson.*;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import dev.xkmc.l2library.serial.handler.Handlers;
-import dev.xkmc.l2library.serial.wrapper.ClassCache;
 import dev.xkmc.l2library.serial.wrapper.FieldCache;
 import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 
@@ -12,6 +11,10 @@ import java.util.Map;
 import java.util.Optional;
 
 public class JsonContext extends TreeContext<JsonElement, JsonObject, JsonArray> {
+
+	public JsonContext() {
+		super(Optional.of(Pair.of(Optional.of(JsonNull.INSTANCE), Optional.empty())));
+	}
 
 	@Override
 	public boolean hasSpecialHandling(Class<?> cls) {
@@ -37,22 +40,6 @@ public class JsonContext extends TreeContext<JsonElement, JsonObject, JsonArray>
 			JsonObject obj = e.getAsJsonObject();
 			if (obj.has("_class")) {
 				return Optional.of(Either.right(TypeInfo.of(Class.forName(obj.get("_class").getAsString()))));
-			}
-		}
-		return Optional.empty();
-	}
-
-	@Override
-	public Optional<Pair<Optional<JsonElement>, Optional<ClassCache>>> writeRealClass(TypeInfo cls, Object obj) throws Exception {
-		if (obj == null) {
-			return Optional.of(Pair.of(Optional.of(JsonNull.INSTANCE), Optional.empty()));
-		}
-		if (obj.getClass() != cls.getAsClass()) {
-			ClassCache cache = ClassCache.get(obj.getClass());
-			if (cache.getSerialAnnotation() != null) {
-				JsonObject ans = new JsonObject();
-				ans.addProperty("_class", obj.getClass().getName());
-				return Optional.of(Pair.of(Optional.of(ans), Optional.of(cache)));
 			}
 		}
 		return Optional.empty();
