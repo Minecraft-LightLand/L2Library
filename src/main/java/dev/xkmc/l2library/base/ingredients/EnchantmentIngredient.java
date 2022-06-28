@@ -17,25 +17,25 @@ public class EnchantmentIngredient extends BaseIngredient<EnchantmentIngredient>
 	@SerialClass.SerialField
 	public Enchantment enchantment;
 	@SerialClass.SerialField
-	public int minLevel;
+	public int min_level;
 
 	@Deprecated
 	public EnchantmentIngredient() {
 
 	}
 
-	protected EnchantmentIngredient validate() {
-		return new EnchantmentIngredient(enchantment, minLevel);
-	}
-
 	public EnchantmentIngredient(Enchantment enchantment, int minLevel) {
 		super(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(enchantment, minLevel)));
 		this.enchantment = enchantment;
-		this.minLevel = minLevel;
+		this.min_level = minLevel;
+	}
+
+	protected EnchantmentIngredient validate() {
+		return new EnchantmentIngredient(enchantment, min_level);
 	}
 
 	public boolean test(ItemStack stack) {
-		return stack.getEnchantmentLevel(this.enchantment) >= this.minLevel;
+		return stack.getEnchantmentLevel(this.enchantment) >= this.min_level;
 	}
 
 	public Serializer<EnchantmentIngredient> getSerializer() {

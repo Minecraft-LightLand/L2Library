@@ -1,6 +1,6 @@
 package dev.xkmc.l2library.serial.unified;
 
-import dev.xkmc.l2library.serial.generic.*;
+import dev.xkmc.l2library.serial.generic.GenericCodec;
 import dev.xkmc.l2library.serial.handler.Handlers;
 import dev.xkmc.l2library.serial.nulldefer.NullDefer;
 import dev.xkmc.l2library.serial.wrapper.ClassCache;
@@ -10,7 +10,9 @@ import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import dev.xkmc.l2library.util.code.Wrappers;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
+import java.util.TreeMap;
 
 @SuppressWarnings({"unsafe"})
 public class UnifiedCodec {
@@ -36,7 +38,11 @@ public class UnifiedCodec {
 				if (ctx.shouldRead(obj, f)) {
 					Object def = f.get(ans);
 					f.set(ans, deserializeValue(ctx, ctx.retrieve(obj, f.getName()), f.toType(), def));
-
+				} else {
+					NullDefer<?> nil = NullDefer.get(f.toType().getAsClass());
+					if (nil != null) {
+						f.set(ans, nil.getNullDefault());
+					}
 				}
 			}
 			cls = cls.getSuperclass();

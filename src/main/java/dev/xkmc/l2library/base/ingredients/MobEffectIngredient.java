@@ -36,6 +36,7 @@ public class MobEffectIngredient extends BaseIngredient<MobEffectIngredient> {
 	public MobEffectIngredient(Item item, MobEffect effect, int minLevel, int minTime) {
 		super(PotionUtils.setCustomEffects(new ItemStack(item),
 				List.of(new MobEffectInstance(effect, minTime, minLevel))));
+		this.item = item;
 		this.effect = effect;
 		this.min_level = minLevel;
 		this.min_time = minTime;
