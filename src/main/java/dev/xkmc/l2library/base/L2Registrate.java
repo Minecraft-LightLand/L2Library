@@ -1,6 +1,7 @@
 package dev.xkmc.l2library.base;
 
 import com.google.common.base.Suppliers;
+import com.mojang.serialization.Codec;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
@@ -9,6 +10,7 @@ import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import com.tterrag.registrate.util.nullness.NonnullType;
 import dev.xkmc.l2library.serial.handler.RLClassHandler;
 import net.minecraft.core.Registry;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -52,6 +54,19 @@ public class L2Registrate extends AbstractRegistrate<L2Registrate> {
 						new RLClassHandler<>((Class<E>) cls, () -> r)));
 		return new RegistryInstance<>(Suppliers.memoize(() -> RegistryManager.ACTIVE.getRegistry(key)), key);
 	}
+
+	public <E extends NamedEntry<E>> L2Registrate.RegistryInstance<E> newDatapackRegistry(String id, Class<E> cls, Codec<E> codec) {
+		ResourceKey<Registry<E>> key = this.makeRegistry(id, () ->
+				new RegistryBuilder<E>().dataPackRegistry(codec)
+						.onCreate((r, s) -> new RLClassHandler<StringTag, E>(cls, () -> r)));
+		return new RegistryInstance<>(Suppliers.memoize(() -> RegistryManager.ACTIVE.getRegistry(key)), key);
+	}
+
+
+	public <E extends NamedEntry<E>> L2Registrate.RegistryInstance<E> newDatapackRegistry(String id, Class<E> cls, Supplier<E> sup) {
+		return newDatapackRegistry(id, cls, Codec.unit(sup));
+	}
+
 
 	public record RegistryInstance<E extends NamedEntry<E>>(Supplier<IForgeRegistry<E>> supplier,
 															ResourceKey<Registry<E>> key) implements Supplier<IForgeRegistry<E>> {

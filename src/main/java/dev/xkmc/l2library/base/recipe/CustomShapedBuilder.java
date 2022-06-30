@@ -1,5 +1,6 @@
 package dev.xkmc.l2library.base.recipe;
 
+import com.google.gson.JsonObject;
 import com.tterrag.registrate.providers.RegistrateRecipeProvider;
 import com.tterrag.registrate.util.DataIngredient;
 import com.tterrag.registrate.util.entry.RegistryEntry;
@@ -41,11 +42,14 @@ public class CustomShapedBuilder<T extends AbstractShapedRecipe<T>> extends Shap
 				"recipes/" + folder + id.getPath())));
 	}
 
-
 	public CustomShapedBuilder<T> unlockedBy(RegistrateRecipeProvider pvd, ItemLike item) {
 		this.advancement.addCriterion("has_" + pvd.safeName(item.asItem()),
 				DataIngredient.items(item.asItem()).getCritereon(pvd));
 		return this;
+	}
+
+	public void addAdditional(JsonObject obj){
+
 	}
 
 	class Result extends ShapedRecipeBuilder.Result {
@@ -56,9 +60,16 @@ public class CustomShapedBuilder<T extends AbstractShapedRecipe<T>> extends Shap
 		}
 
 		@Override
+		public void serializeRecipeData(JsonObject obj) {
+			super.serializeRecipeData(obj);
+			addAdditional(obj);
+		}
+
+		@Override
 		public RecipeSerializer<?> getType() {
 			return serializer.get();
 		}
+
 	}
 
 

@@ -1,9 +1,13 @@
 package dev.xkmc.l2library.base;
 
+import dev.xkmc.l2library.util.code.Wrappers;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class NamedEntry<T extends NamedEntry<T>> {
 
@@ -25,11 +29,11 @@ public class NamedEntry<T extends NamedEntry<T>> {
 	}
 
 	public MutableComponent getDesc() {
-		return MutableComponent.create(new TranslatableContents(getDescriptionId()));
+		return Component.translatable(getDescriptionId());
 	}
 
 	public ResourceLocation getRegistryName() {
-		return registry.get().getKey(getThis());
+		return Objects.requireNonNull(registry.get().getKey(getThis()));
 	}
 
 	public String getID() {
@@ -37,7 +41,7 @@ public class NamedEntry<T extends NamedEntry<T>> {
 	}
 
 	public T getThis() {
-		return (T) this;
+		return Wrappers.cast(this);
 	}
 
 }

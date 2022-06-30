@@ -5,8 +5,6 @@ import dev.xkmc.l2library.base.tabs.core.TabManager;
 import dev.xkmc.l2library.init.L2Client;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
@@ -32,10 +30,10 @@ public class AttributeScreen extends BaseTextScreen {
 		int y = topPos + 6;
 		for (AttributeEntry entry : AttributeEntry.LIST) {
 			double val = player.getAttributeValue(entry.sup().get());
-			Component comp = MutableComponent.create(new TranslatableContents(
+			Component comp = Component.translatable(
 					"attribute.modifier.equals." + (entry.usePercent() ? 1 : 0),
 					ATTRIBUTE_MODIFIER_FORMAT.format(entry.usePercent() ? val * 100 : val),
-					MutableComponent.create(new TranslatableContents(entry.sup().get().getDescriptionId()))));
+					Component.translatable(entry.sup().get().getDescriptionId()));
 			this.font.draw(stack, comp, x, y, 0);
 			y += 10;
 		}

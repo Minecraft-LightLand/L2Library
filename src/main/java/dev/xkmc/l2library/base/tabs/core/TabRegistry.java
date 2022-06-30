@@ -1,5 +1,6 @@
 package dev.xkmc.l2library.base.tabs.core;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
@@ -16,7 +17,7 @@ public class TabRegistry {
 	public TabRegistry() {
 	}
 
-	public static <T extends BaseTab<T>> TabToken<T> registerTab(TabToken.TabFactory<T> sup, Supplier<Item> item, ComponentContents title) {
+	public static <T extends BaseTab<T>> TabToken<T> registerTab(TabToken.TabFactory<T> sup, Supplier<Item> item, Component title) {
 		TabToken<T> ans = new TabToken<>(TABS.size(), sup, item, title);
 		TABS.add(ans);
 		return ans;

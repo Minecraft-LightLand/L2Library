@@ -23,13 +23,13 @@ public class TabToken<T extends BaseTab<T>> {
 	private final Supplier<Item> item;
 	private final Component title;
 
-	public TabToken(int index, TabFactory<T> factory, Supplier<Item> item, ComponentContents component) {
+	public TabToken(int index, TabFactory<T> factory, Supplier<Item> item, Component component) {
 		this.index = index;
 		this.factory = factory;
 		this.type = TabType.ABOVE;
 
 		this.item = item;
-		this.title = MutableComponent.create(component);
+		this.title = component;
 	}
 
 	public T create(TabManager manager) {
