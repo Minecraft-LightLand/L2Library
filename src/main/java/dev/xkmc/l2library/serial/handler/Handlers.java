@@ -78,11 +78,10 @@ public class Handlers {
 			buf.writeNbt(comp);
 		}, e -> e, e -> e);
 
-		// NBT only
 		new ClassHandler<>(long[].class, null, null, null, null, LongArrayTag::getAsLongArray, LongArrayTag::new);
 		new ClassHandler<>(int[].class, null, null, null, null, IntArrayTag::getAsIntArray, IntArrayTag::new);
 		new ClassHandler<>(byte[].class, null, null, null, null, ByteArrayTag::getAsByteArray, ByteArrayTag::new);
-		new ClassHandler<CompoundTag, BlockPos>(BlockPos.class, null, null, null, null,
+		new AutoPacketNBTHandler<>(BlockPos.class,
 				tag -> new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z")),
 				obj -> {
 					CompoundTag tag = new CompoundTag();
@@ -91,7 +90,7 @@ public class Handlers {
 					tag.putInt("z", obj.getZ());
 					return tag;
 				});
-		new ClassHandler<CompoundTag, Vec3>(Vec3.class, null, null, null, null,
+		new AutoPacketNBTHandler<>(Vec3.class,
 				tag -> new Vec3(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z")),
 				obj -> {
 					CompoundTag tag = new CompoundTag();
@@ -100,7 +99,7 @@ public class Handlers {
 					tag.putDouble("z", obj.z());
 					return tag;
 				});
-		new ClassHandler<>(MobEffectInstance.class, null, null, null, null,
+		new AutoPacketNBTHandler<>(MobEffectInstance.class,
 				MobEffectInstance::load, e -> e.save(new CompoundTag()));
 	}
 

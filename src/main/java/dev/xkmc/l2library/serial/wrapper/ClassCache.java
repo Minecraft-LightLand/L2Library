@@ -17,6 +17,8 @@ public class ClassCache {
 		return CACHE.computeIfAbsent(cls, ClassCache::new);
 	}
 
+	public final Class<?> cls;
+
 	private final LazyExc<SerialClass> annotation;
 	private final LazyExc<ClassCache> superClass;
 	private final LazyExc<Constructor<?>> constructor;
@@ -24,6 +26,7 @@ public class ClassCache {
 	private final LazyExc<MethodCache[]> methods;
 
 	private ClassCache(Class<?> cls) {
+		this.cls = cls;
 		this.constructor = new LazyExc<>(() -> {
 			var ans = cls.getConstructor();
 			ans.setAccessible(true);
@@ -55,4 +58,5 @@ public class ClassCache {
 	public MethodCache[] getMethods() throws Exception {
 		return methods.get();
 	}
+
 }

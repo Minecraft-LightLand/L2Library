@@ -4,6 +4,7 @@ import dev.xkmc.l2library.serial.unified.PacketContext;
 import dev.xkmc.l2library.serial.unified.UnifiedCodec;
 import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import dev.xkmc.l2library.util.code.Wrappers;
+import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 
 import javax.annotation.Nullable;
@@ -17,7 +18,7 @@ public class PacketCodec {
 	}
 
 	public static <T> void to(FriendlyByteBuf buf, T obj) {
-		Wrappers.run(() -> UnifiedCodec.serializeValue(new PacketContext(buf), TypeInfo.of(obj.getClass()), obj));
+		PacketCodec.to(buf, obj, Wrappers.cast(obj.getClass()));
 	}
 
 	public static <T extends R, R> void to(FriendlyByteBuf buf, T obj, Class<R> r) {

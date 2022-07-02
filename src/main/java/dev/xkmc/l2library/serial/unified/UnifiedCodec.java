@@ -17,51 +17,30 @@ import java.util.TreeMap;
 @SuppressWarnings({"unsafe"})
 public class UnifiedCodec {
 
+	public static boolean DEBUG = false;
+
 	public static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
 	Object deserializeObject(C ctx, O obj, ClassCache cls, @Nullable Object ans) throws Exception {
-		if (cls.getSerialAnnotation() == null) {
-			throw new Exception("invalid class " + cls + " with object " + obj);
-		}
-		if (ans == null) {
-			ans = cls.create();
-		}
-		ClassCache mcls = cls;
-		while (cls.getSerialAnnotation() != null) {
-			TreeMap<String, FieldCache> map = new TreeMap<>();
-			for (FieldCache f : cls.getFields()) {
-				if (f.getSerialAnnotation() != null) {
-					map.put(f.getName(), f);
-				}
+		if (DEBUG) {
+			try {
+				return deserializeObjectImpl(ctx, obj, cls, ans);
+			} catch (Exception e) {
+				throw new Exception("Error while deserializing " + cls.cls.getName(), e);
 			}
-			for (Map.Entry<String, FieldCache> entry : map.entrySet()) {
-				FieldCache f = entry.getValue();
-				if (ctx.shouldRead(obj, f)) {
-					Object def = f.get(ans);
-					f.set(ans, deserializeValue(ctx, ctx.retrieve(obj, f.getName()), f.toType(), def));
-				} else {
-					NullDefer<?> nil = NullDefer.get(f.toType().getAsClass());
-					if (nil != null) {
-						f.set(ans, nil.getNullDefault());
-					}
-				}
-			}
-			cls = cls.getSuperclass();
 		}
-		cls = mcls;
-		while (cls.getSerialAnnotation() != null) {
-			MethodCache m0 = null;
-			for (MethodCache m : cls.getMethods()) {
-				if (m.getInjectAnnotation() != null) {
-					m0 = m;
-				}
+		return deserializeObjectImpl(ctx, obj, cls, ans);
+	}
+
+	public static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
+	O serializeObject(C ctx, O ans, ClassCache cls, Object obj) throws Exception {
+		if (DEBUG) {
+			try {
+				return serializeObjectImpl(ctx, ans, cls, obj);
+			} catch (Exception e) {
+				throw new Exception("Error while serializing " + cls.cls.getName(), e);
 			}
-			if (m0 != null) {
-				m0.invoke(ans);
-				break;
-			}
-			cls = cls.getSuperclass();
 		}
-		return ans;
+		return serializeObjectImpl(ctx, ans, cls, obj);
 	}
 
 	public static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
@@ -95,26 +74,6 @@ public class UnifiedCodec {
 	}
 
 	public static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
-	O serializeObject(C ctx, O ans, ClassCache cls, Object obj) throws Exception {
-		if (cls.getSerialAnnotation() == null)
-			throw new Exception("cannot serialize " + cls);
-		while (cls.getSerialAnnotation() != null) {
-			TreeMap<String, FieldCache> map = new TreeMap<>();
-			for (FieldCache f : cls.getFields()) {
-				if (f.getSerialAnnotation() != null) {
-					map.put(f.getName(), f);
-				}
-			}
-			for (Map.Entry<String, FieldCache> entry : map.entrySet()) {
-				FieldCache f = entry.getValue();
-				ctx.addField(ans, entry.getKey(), serializeValue(ctx, f.toType(), f.get(obj)));
-			}
-			cls = cls.getSuperclass();
-		}
-		return ans;
-	}
-
-	public static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
 	E serializeValue(C ctx, TypeInfo cls, @Nullable Object obj) throws Exception {
 		if (obj != null) {
 			NullDefer<?> nil = NullDefer.get(cls.getAsClass());
@@ -135,6 +94,93 @@ public class UnifiedCodec {
 		return serializeObject(ctx, ctx.createMap(), cls.toCache(), obj);
 	}
 
+	private static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
+	O serializeObjectImpl(C ctx, O ans, ClassCache cls, Object obj) throws Exception {
+		if (cls.getSerialAnnotation() == null)
+			throw new Exception("cannot serialize " + cls);
+		while (cls.getSerialAnnotation() != null) {
+			TreeMap<String, FieldCache> map = new TreeMap<>();
+			for (FieldCache f : cls.getFields()) {
+				if (f.getSerialAnnotation() != null) {
+					map.put(f.getName(), f);
+				}
+			}
+			for (Map.Entry<String, FieldCache> entry : map.entrySet()) {
+				FieldCache f = entry.getValue();
+				E content;
+				if (DEBUG) {
+					try {
+						content = serializeValue(ctx, f.toType(), f.get(obj));
+					} catch (Exception e) {
+						throw new Exception("Error while serializing field " + cls.cls.getName() + "." + f.getName(), e);
+					}
+				} else {
+					content = serializeValue(ctx, f.toType(), f.get(obj));
+				}
+				ctx.addField(ans, entry.getKey(), content);
+			}
+			cls = cls.getSuperclass();
+		}
+		return ans;
+	}
+
+	private static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
+	Object deserializeObjectImpl(C ctx, O obj, ClassCache cls, @Nullable Object ans) throws Exception {
+		if (cls.getSerialAnnotation() == null) {
+			throw new Exception("invalid class " + cls + " with object " + obj);
+		}
+		if (ans == null) {
+			ans = cls.create();
+		}
+		ClassCache mcls = cls;
+		while (cls.getSerialAnnotation() != null) {
+			TreeMap<String, FieldCache> map = new TreeMap<>();
+			for (FieldCache f : cls.getFields()) {
+				if (f.getSerialAnnotation() != null) {
+					map.put(f.getName(), f);
+				}
+			}
+			for (Map.Entry<String, FieldCache> entry : map.entrySet()) {
+				FieldCache f = entry.getValue();
+				if (ctx.shouldRead(obj, f)) {
+					Object def = f.get(ans);
+					Object content;
+					if (DEBUG) {
+						try {
+							content = deserializeValue(ctx, ctx.retrieve(obj, f.getName()), f.toType(), def);
+						} catch (Exception e) {
+							throw new Exception("Error while deserializing field " + cls.cls.getName() + "." + f.getName(), e);
+						}
+					} else {
+						content = deserializeValue(ctx, ctx.retrieve(obj, f.getName()), f.toType(), def);
+					}
+					f.set(ans, content);
+				} else {
+					NullDefer<?> nil = NullDefer.get(f.toType().getAsClass());
+					if (nil != null) {
+						f.set(ans, nil.getNullDefault());
+					}
+				}
+			}
+			cls = cls.getSuperclass();
+		}
+		cls = mcls;
+		while (cls.getSerialAnnotation() != null) {
+			MethodCache m0 = null;
+			for (MethodCache m : cls.getMethods()) {
+				if (m.getInjectAnnotation() != null) {
+					m0 = m;
+				}
+			}
+			if (m0 != null) {
+				m0.invoke(ans);
+				break;
+			}
+			cls = cls.getSuperclass();
+		}
+		return ans;
+	}
+
 	static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
 	Optional<Wrappers.ExcSup<E>> serializeSpecial(C ctx, TypeInfo cls, @Nullable Object obj) throws Exception {
 		if (ctx.hasSpecialHandling(cls.getAsClass())) {
@@ -147,6 +193,5 @@ public class UnifiedCodec {
 		}
 		return Optional.empty();
 	}
-
 
 }

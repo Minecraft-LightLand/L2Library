@@ -124,7 +124,7 @@ public class AttackEventHandler {
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onAttackPre(LivingAttackEvent event) {
-		if (CACHE.size() > 100) {
+		if (CACHE.size() > 1000) {
 			L2Library.LOGGER.error("attack cache too large: " + CACHE.size());
 		}
 		UUID id = event.getEntityLiving().getUUID();

@@ -47,6 +47,7 @@ public class MapCodec extends GenericCodec {
 		TypeInfo ckey = cls.getGenericType(0);
 		TypeInfo cval = cls.getGenericType(1);
 		List<Pair<E, E>> list = new ArrayList<>();
+		A lans = ctx.createList(map.size());
 		boolean can_be_map = true;
 		for (Map.Entry<?, ?> ent : map.entrySet()) {
 			E k = UnifiedCodec.serializeValue(ctx, ckey, ent.getKey());
@@ -61,14 +62,13 @@ public class MapCodec extends GenericCodec {
 			}
 			return ans;
 		} else {
-			A ans = ctx.createList(list.size());
 			for (Pair<E, E> p : list) {
 				O entry = ctx.createMap();
 				ctx.setKeyOfEntry(entry, p.getFirst());
 				ctx.setValueOfEntry(entry, p.getSecond());
-				ctx.addListItem(ans, entry);
+				ctx.addListItem(lans, entry);
 			}
-			return ans;
+			return lans;
 		}
 	}
 
