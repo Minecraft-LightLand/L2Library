@@ -3,7 +3,7 @@
   "priority": 1000,
   "package": "dev.xkmc.l2library.mixin",
   "compatibilityLevel": "JAVA_16",
-  "refmap": "lightland.refmap.json",
+  "refmap": "l2library.refmap.json",
   "mixins": [
 	"EntityMixin"
   ],

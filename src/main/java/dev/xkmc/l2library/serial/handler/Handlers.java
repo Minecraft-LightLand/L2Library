@@ -61,7 +61,7 @@ public class Handlers {
 		new RLClassHandler<>(Potion.class, () -> ForgeRegistries.POTIONS);
 		new RLClassHandler<>(Enchantment.class, () -> ForgeRegistries.ENCHANTMENTS);
 		new RLClassHandler<>(MobEffect.class, () -> ForgeRegistries.MOB_EFFECTS);
-		new RLClassHandler<>(Wrappers.cast(EntityType.class), () -> ForgeRegistries.ENTITIES);
+		new RLClassHandler<>(Wrappers.cast(EntityType.class), () -> ForgeRegistries.ENTITY_TYPES);
 
 		// partials
 

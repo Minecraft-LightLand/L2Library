@@ -5,7 +5,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
@@ -25,7 +25,7 @@ public class EffectUtil {
 	 */
 	private static void forceAddEffect(LivingEntity e, MobEffectInstance ins, @Nullable Entity source) {
 		MobEffectInstance effectinstance = e.getActiveEffectsMap().get(ins.getEffect());
-		MinecraftForge.EVENT_BUS.post(new PotionEvent.PotionAddedEvent(e, effectinstance, ins, source));
+		MinecraftForge.EVENT_BUS.post(new MobEffectEvent.Added(e, effectinstance, ins, source));
 		if (effectinstance == null) {
 			e.getActiveEffectsMap().put(ins.getEffect(), ins);
 			e.onEffectAdded(ins, source);
@@ -60,7 +60,7 @@ public class EffectUtil {
 		Iterator<MobEffectInstance> itr = entity.activeEffects.values().iterator();
 		while (itr.hasNext()) {
 			MobEffectInstance effect = itr.next();
-			if (pred.test(effect) && !MinecraftForge.EVENT_BUS.post(new PotionEvent.PotionRemoveEvent(entity, effect))) {
+			if (pred.test(effect) && !MinecraftForge.EVENT_BUS.post(new MobEffectEvent.Remove(entity, effect))) {
 				entity.onEffectRemoved(effect);
 				itr.remove();
 				entity.effectsDirty = true;

@@ -121,6 +121,9 @@ repositories {
         url = "https://maven.theillusivec4.top/"
     }
 
+    flatDir{
+        dirs 'libs'
+    }
 }
 
 configurations {
@@ -131,7 +134,8 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
-    def registrate = "com.tterrag.registrate:Registrate:${registrate_version}"
+    //def registrate = "com.tterrag.registrate:Registrate:${registrate_version}"
+    def registrate = "local.libs.registrate:Registrate-MC1.19:1.2.0"
     implementation fg.deobf(registrate)
     shade registrate
 

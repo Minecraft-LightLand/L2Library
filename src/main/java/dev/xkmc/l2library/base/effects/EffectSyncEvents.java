@@ -8,7 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -41,16 +41,16 @@ public class EffectSyncEvents {
 	}
 
 	@SubscribeEvent
-	public static void onPotionAddedEvent(PotionEvent.PotionAddedEvent event) {
-		if (TRACKED.contains(event.getPotionEffect().getEffect())) {
-			onEffectAppear(event.getPotionEffect().getEffect(), event.getEntityLiving(), event.getPotionEffect().getAmplifier());
+	public static void onPotionAddedEvent(MobEffectEvent.Added event) {
+		if (TRACKED.contains(event.getEffectInstance().getEffect())) {
+			onEffectAppear(event.getEffectInstance().getEffect(), event.getEntity(), event.getEffectInstance().getAmplifier());
 		}
 	}
 
 	@SubscribeEvent
-	public static void onPotionExpiryEvent(PotionEvent.PotionExpiryEvent event) {
-		if (event.getPotionEffect() != null && TRACKED.contains(event.getPotionEffect().getEffect())) {
-			onEffectDisappear(event.getPotionEffect().getEffect(), event.getEntityLiving());
+	public static void onPotionExpiryEvent(MobEffectEvent.Expired event) {
+		if (event.getEffectInstance() != null && TRACKED.contains(event.getEffectInstance().getEffect())) {
+			onEffectDisappear(event.getEffectInstance().getEffect(), event.getEntity());
 		}
 	}
 
@@ -78,7 +78,7 @@ public class EffectSyncEvents {
 
 	@SubscribeEvent
 	public static void onServerPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-		ServerPlayer e = (ServerPlayer) event.getPlayer();
+		ServerPlayer e = (ServerPlayer) event.getEntity();
 		if (e != null) {
 			for (MobEffect eff : e.getActiveEffectsMap().keySet()) {
 				if (TRACKED.contains(eff)) {
@@ -90,7 +90,7 @@ public class EffectSyncEvents {
 
 	@SubscribeEvent
 	public static void onServerPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
-		ServerPlayer e = (ServerPlayer) event.getPlayer();
+		ServerPlayer e = (ServerPlayer) event.getEntity();
 		if (e != null) {
 			for (MobEffect eff : e.getActiveEffectsMap().keySet()) {
 				if (TRACKED.contains(eff)) {

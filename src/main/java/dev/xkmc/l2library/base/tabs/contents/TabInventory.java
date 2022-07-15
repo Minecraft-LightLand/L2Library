@@ -27,7 +27,7 @@ public class TabInventory extends BaseTab<TabInventory> {
 	public static Predicate<Screen> inventoryTest = e -> e instanceof InventoryScreen;
 	public static Runnable openInventory = () -> Minecraft.getInstance().setScreen(new InventoryScreen(Proxy.getClientPlayer()));
 
-	public static void guiPostInit(ScreenEvent.InitScreenEvent.Post event) {
+	public static void guiPostInit(ScreenEvent.Init.Post event) {
 		if (inventoryTest.test(event.getScreen())) {
 			TabManager manager = new TabManager(event.getScreen());
 			manager.init(event::addListener, L2Client.TAB_INVENTORY);

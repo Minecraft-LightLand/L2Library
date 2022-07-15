@@ -13,7 +13,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
 
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -59,7 +59,7 @@ public class OverlayManager {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public ScreenRenderer getRenderer(ForgeIngameGui gui, PoseStack stack) {
+	public ScreenRenderer getRenderer(ForgeGui gui, PoseStack stack) {
 		check();
 		return new ScreenRenderer(gui, stack);
 	}
@@ -100,12 +100,12 @@ public class OverlayManager {
 
 		private final int x, y;
 
-		public final ForgeIngameGui gui;
+		public final ForgeGui gui;
 		public final PoseStack stack;
 		public final Entity cameraEntity;
 		public final LocalPlayer localPlayer;
 
-		public ScreenRenderer(ForgeIngameGui gui, PoseStack stack) {
+		public ScreenRenderer(ForgeGui gui, PoseStack stack) {
 			this.gui = gui;
 			this.stack = stack;
 			this.x = gui.screenWidth / 2;

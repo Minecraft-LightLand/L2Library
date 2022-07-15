@@ -35,7 +35,7 @@ public class PlayerCapabilityEvents {
 
 	@SubscribeEvent
 	public static void onServerPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-		ServerPlayer e = (ServerPlayer) event.getPlayer();
+		ServerPlayer e = (ServerPlayer) event.getEntity();
 		if (e != null) {
 			for (PlayerCapabilityHolder<?> holder : PlayerCapabilityHolder.INTERNAL_MAP.values()) {
 				holder.network.toClientSyncAll(e);
@@ -47,16 +47,17 @@ public class PlayerCapabilityEvents {
 	public static void onPlayerClone(PlayerEvent.Clone event) {
 		for (PlayerCapabilityHolder<?> holder : PlayerCapabilityHolder.INTERNAL_MAP.values()) {
 			CompoundTag tag0 = TagCodec.toTag(new CompoundTag(), holder.get(event.getOriginal()));
-			Wrappers.run(() -> TagCodec.fromTag(tag0, holder.cls, holder.get(event.getPlayer()), f -> true));
-			holder.get(event.getPlayer()).onClone(event.isWasDeath());
-			ServerPlayer e = (ServerPlayer) event.getPlayer();
+			assert tag0 != null;
+			Wrappers.run(() -> TagCodec.fromTag(tag0, holder.cls, holder.get(event.getEntity()), f -> true));
+			holder.get(event.getEntity()).onClone(event.isWasDeath());
+			ServerPlayer e = (ServerPlayer) event.getEntity();
 			holder.network.toClientSyncClone(e);
 		}
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
-	public static void onPlayerRespawn(ClientPlayerNetworkEvent.RespawnEvent event) {
+	public static void onPlayerRespawn(ClientPlayerNetworkEvent.Clone event) {
 		for (PlayerCapabilityHolder<?> holder : PlayerCapabilityHolder.INTERNAL_MAP.values()) {
 			CompoundTag tag0 = holder.getCache(event.getOldPlayer());
 			Wrappers.run(() -> TagCodec.fromTag(tag0, holder.cls, holder.get(event.getNewPlayer()), f -> true));
