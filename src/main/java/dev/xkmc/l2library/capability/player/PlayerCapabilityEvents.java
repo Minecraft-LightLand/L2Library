@@ -27,7 +27,7 @@ public class PlayerCapabilityEvents {
 
 	@SubscribeEvent
 	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-		if (event.player.isAlive())
+		if (event.player.isAlive() && event.phase == TickEvent.Phase.END)
 			for (PlayerCapabilityHolder<?> holder : PlayerCapabilityHolder.INTERNAL_MAP.values()) {
 				holder.get(event.player).tick();
 			}
