@@ -1,14 +1,16 @@
 modLoader="javafml"
 loaderVersion="[41,)"
-license="All rights reserved"
+license="LGPL v2.1"
 [[mods]]
 modId="l2library"
 version="${file.jarVersion}" #mandatory
-displayName="LightLand Library" #mandatory
+displayName="L2 Library" #mandatory
 logoFile="l2library.png" #optional
-credits="Thanks for this example mod goes to Java" #optional
-authors="Love, Cheese and small house plants" #optional
+credits="Thanks to GalatiCraft for player inventory tab idea" #optional
+authors="lcy0x1 and LightLand team" #optional
 description='''
+A library mod that provides a lot of useful code for lcy0x1's other mods.
+Also adds inventory tabs. Accessible in creative only if you install Curios.
 '''
 [[dependencies.l2library]]
     modId="forge"

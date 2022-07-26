@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.serial;
+package dev.xkmc.l2library.util.nbt;
 
 import net.minecraft.nbt.ListTag;
 

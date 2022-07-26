@@ -1,7 +1,7 @@
 package dev.xkmc.l2library.idea.magic;
 
-import dev.xkmc.l2library.serial.NBTList;
-import dev.xkmc.l2library.serial.NBTObj;
+import dev.xkmc.l2library.util.nbt.NBTList;
+import dev.xkmc.l2library.util.nbt.NBTObj;
 import dev.xkmc.l2library.util.math.Frac;
 
 public class HexHandler {
