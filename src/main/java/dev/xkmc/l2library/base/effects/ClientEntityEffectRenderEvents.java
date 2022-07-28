@@ -118,6 +118,7 @@ public class ClientEntityEffectRenderEvents {
 	}
 
 
+	@OnlyIn(Dist.CLIENT)
 	public static RenderType get2DIcon(ResourceLocation rl) {
 		return RenderType.create(
 				"entity_body_icon",
