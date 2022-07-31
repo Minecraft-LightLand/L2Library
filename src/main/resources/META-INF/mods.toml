@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[41,)"
+loaderVersion="[42,)"
 license="LGPL v2.1"
 [[mods]]
 modId="l2library"
@@ -15,12 +15,12 @@ Also adds inventory tabs. Accessible in creative only if you install Curios.
 [[dependencies.l2library]]
     modId="forge"
     mandatory=true
-    versionRange="[41.0.94,)"
+    versionRange="[42.0.0,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.l2library]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,1.20)"
+    versionRange="[1.19.1,1.20)"
     ordering="NONE"
     side="BOTH"

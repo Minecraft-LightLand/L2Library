@@ -24,7 +24,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -55,7 +55,8 @@ public class ClientEntityEffectRenderEvents {
 
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
-	public static void levelRenderLast(RenderLevelLastEvent event) {
+	public static void levelRenderLast(RenderLevelStageEvent event) {
+		if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_WEATHER) return;
 		LevelRenderer renderer = event.getLevelRenderer();
 		MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
 		Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();

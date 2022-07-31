@@ -27,8 +27,7 @@ public abstract class SerialPacketBase extends SimplePacketBase {
 
 	@Override
 	public final void handle(Supplier<NetworkEvent.Context> context) {
-		context.get().enqueueWork(() -> handle(context.get()));
-		context.get().setPacketHandled(true);
+		handle(context.get());
 	}
 
 	public abstract void handle(NetworkEvent.Context ctx);

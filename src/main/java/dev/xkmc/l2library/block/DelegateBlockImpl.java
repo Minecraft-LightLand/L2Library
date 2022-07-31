@@ -3,8 +3,6 @@ package dev.xkmc.l2library.block;
 import dev.xkmc.l2library.block.mult.*;
 import dev.xkmc.l2library.block.one.*;
 import dev.xkmc.l2library.block.type.BlockMethod;
-import dev.xkmc.l2library.block.type.MultipleBlockMethod;
-import dev.xkmc.l2library.block.type.SingletonBlockMethod;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,7 +24,6 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.PushReaction;
@@ -39,11 +36,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
@@ -75,6 +68,17 @@ public class DelegateBlockImpl extends DelegateBlock {
 	public final boolean isSignalSource(BlockState bs) {
 		return impl.one(BlockPowerBlockMethod.class).isPresent();
 	}
+
+	@Override
+	public final int getAnalogOutputSignal(BlockState blockState, Level worldIn, BlockPos pos) {
+		return impl.one(AnalogOutputBlockMethod.class).map(e -> e.getAnalogOutputSignal(blockState, worldIn, pos)).orElse(0);
+	}
+
+	@Override
+	public boolean hasAnalogOutputSignal(BlockState state) {
+		return impl.one(AnalogOutputBlockMethod.class).map(e -> e.hasAnalogOutputSignal(state)).orElse(false);
+	}
+
 
 	@Override
 	public final int getLightEmission(BlockState bs, BlockGetter w, BlockPos pos) {
@@ -233,63 +237,6 @@ public class DelegateBlockImpl extends DelegateBlock {
 
 	public final BlockImplementor getImpl() {
 		return impl;
-	}
-
-	public static class BlockImplementor {
-
-		private final BlockBehaviour.Properties props;
-		private final List<MultipleBlockMethod> list = new ArrayList<>();
-		private final HashMap<Class<?>, SingletonBlockMethod> map = new HashMap<>();
-
-		public BlockImplementor(BlockBehaviour.Properties p) {
-			props = p;
-		}
-
-		public BlockImplementor addImpls(BlockMethod... impls) {
-			for (BlockMethod impl : impls) {
-				if (impl instanceof MultipleBlockMethod)
-					list.add((MultipleBlockMethod) impl);
-				if (impl instanceof SingletonBlockMethod one) {
-					List<Class<?>> list = new ArrayList<>();
-					addOneImpl(one.getClass(), list);
-					for (Class<?> cls : list) {
-						if (map.containsKey(cls)) {
-							throw new RuntimeException("class " + cls + " is implemented twice with " + map.get(cls) + " and " + impl);
-						} else {
-							map.put(cls, one);
-						}
-					}
-				}
-			}
-			return this;
-		}
-
-		private void addOneImpl(Class<?> cls, List<Class<?>> list) {
-			for (Class<?> ci : cls.getInterfaces()) {
-				if (ci == SingletonBlockMethod.class) {
-					throw new RuntimeException("class " + cls + " should not implement IOneImpl directly");
-				}
-				if (SingletonBlockMethod.class.isAssignableFrom(ci)) {
-					Class<?>[] arr = ci.getInterfaces();
-					if (arr.length == 1 && arr[0] == SingletonBlockMethod.class) {
-						list.add(ci);
-					} else {
-						addOneImpl(ci, list);
-					}
-				}
-			}
-		}
-
-		@SuppressWarnings("unchecked")
-		public <T extends MultipleBlockMethod> Stream<T> execute(Class<T> cls) {
-			return list.stream().filter(cls::isInstance).map(e -> (T) e);
-		}
-
-		@SuppressWarnings("unchecked")
-		public <T extends SingletonBlockMethod> Optional<T> one(Class<T> cls) {
-			return Optional.ofNullable((T) map.get(cls));
-		}
-
 	}
 
 }

@@ -4,22 +4,28 @@ import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import dev.xkmc.l2library.block.NameSetable;
 import dev.xkmc.l2library.block.mult.OnClickBlockMethod;
 import dev.xkmc.l2library.block.mult.SetPlacedByBlockMethod;
+import dev.xkmc.l2library.block.one.AnalogOutputBlockMethod;
 import dev.xkmc.l2library.block.one.BlockEntityBlockMethod;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Objects;
 
 /**
  * To make it tickable, implements TickableBlockEntity <br>
@@ -30,9 +36,16 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public record BlockEntityBlockMethodImpl<T extends BlockEntity>(
-		BlockEntityEntry<T> type,
-		Class<T> cls) implements BlockEntityBlockMethod<T>, OnClickBlockMethod, SetPlacedByBlockMethod {
+public class BlockEntityBlockMethodImpl<T extends BlockEntity> implements BlockEntityBlockMethod<T>, OnClickBlockMethod,
+		SetPlacedByBlockMethod, AnalogOutputBlockMethod {
+
+	private final BlockEntityEntry<T> type;
+	private final Class<T> cls;
+
+	public BlockEntityBlockMethodImpl(BlockEntityEntry<T> type, Class<T> cls) {
+		this.type = type;
+		this.cls = cls;
+	}
 
 	@Override
 	public BlockEntity createTileEntity(BlockPos pos, BlockState state) {
@@ -69,6 +82,22 @@ public record BlockEntityBlockMethodImpl<T extends BlockEntity>(
 				be.setCustomName(stack.getHoverName());
 			}
 		}
+	}
+
+	@Override
+	public int getAnalogOutputSignal(BlockState blockState, Level worldIn, BlockPos pos) {
+		BlockEntity e = worldIn.getBlockEntity(pos);
+		if (e != null) {
+			if (e instanceof Container) {
+				return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(e);
+			}
+			var lazyCap = e.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+			if (lazyCap.resolve().isPresent()) {
+				var cap = lazyCap.resolve().get();
+				return ItemHandlerHelper.calcRedstoneFromInventory(cap);
+			}
+		}
+		return 0;
 	}
 
 }

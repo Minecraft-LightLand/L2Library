@@ -13,4 +13,7 @@ public interface BlockEntityBlockMethod<T extends BlockEntity> extends Singleton
 	BlockEntityType<T> getType();
 
 	Class<T> getEntityClass();
+
+
+
 }

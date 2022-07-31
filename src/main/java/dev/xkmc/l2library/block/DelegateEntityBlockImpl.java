@@ -26,17 +26,6 @@ public class DelegateEntityBlockImpl extends DelegateBlockImpl implements Entity
 	}
 
 	@Override
-	public final int getAnalogOutputSignal(BlockState blockState, Level worldIn, BlockPos pos) {
-		return impl.one(BlockEntityBlockMethod.class).map(e -> Optional.ofNullable(worldIn.getBlockEntity(pos))
-				.map(AbstractContainerMenu::getRedstoneSignalFromBlockEntity).orElse(0)).orElse(0);
-	}
-
-	@Override
-	public boolean hasAnalogOutputSignal(BlockState state) {
-		return impl.one(BlockEntityBlockMethod.class).isPresent();
-	}
-
-	@Override
 	public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return impl.one(BlockEntityBlockMethod.class).map(e -> e.createTileEntity(pos, state)).orElse(null);
 	}
