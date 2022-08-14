@@ -10,7 +10,12 @@ import net.minecraftforge.event.entity.player.CriticalHitEvent;
 
 import javax.annotation.Nullable;
 
+@SuppressWarnings("unused")
 public class AttackCache {
+
+	int recursive = 0;
+
+	private boolean damageFrozen = true;
 
 	private Stage stage = Stage.PREINIT;
 	private AttackEntityEvent player;
@@ -41,32 +46,50 @@ public class AttackCache {
 		AttackEventHandler.LISTENERS.forEach(e -> e.onCriticalHit(this));
 	}
 
-	void pushAttack(LivingAttackEvent event) {
-		stage = Stage.HURT;
+	void pushAttackPre(LivingAttackEvent event) {
+		stage = Stage.HURT_PRE;
 		attack = event;
 		target = attack.getEntity();
 		damage_pre = event.getAmount();
 		AttackEventHandler.LISTENERS.forEach(e -> e.onAttack(this, weapon));
 	}
 
-	void pushHurt(LivingHurtEvent event) {
-		stage = Stage.ACTUALLY_HURT;
+	void pushAttackPost(LivingAttackEvent event) {
+		stage = Stage.ACTUALLY_HURT_POST;
+	}
+
+	void pushHurtPre(LivingHurtEvent event) {
+		stage = Stage.ACTUALLY_HURT_PRE;
 		hurt = event;
 		damage_modified = event.getAmount();
+		damageFrozen = false;
 		AttackEventHandler.LISTENERS.forEach(e -> e.onHurt(this, weapon));
+		damageFrozen = true;
 		if (damage_modified != event.getAmount()) {
 			event.setAmount(damage_modified);
 		}
+		AttackEventHandler.LISTENERS.forEach(e -> e.onHurtMaximized(this, weapon));
 	}
 
-	void pushDamage(LivingDamageEvent event) {
-		stage = Stage.DAMAGE;
+	void pushHurtPost(LivingHurtEvent event) {
+		stage = Stage.ACTUALLY_HURT_POST;
+	}
+
+	void pushDamagePre(LivingDamageEvent event) {
+		stage = Stage.DAMAGE_PRE;
 		damage = event;
 		damage_dealt = event.getAmount();
 		AttackEventHandler.LISTENERS.forEach(e -> e.onDamage(this, weapon));
 		if (damage_dealt != event.getAmount()) {
 			event.setAmount(damage_dealt);
 		}
+	}
+
+	void pushDamagePost(LivingDamageEvent event) {
+		stage = Stage.DAMAGE_POST;
+		damage = event;
+		damage_dealt = event.getAmount();
+		AttackEventHandler.LISTENERS.forEach(e -> e.onDamageFinalized(this, weapon));
 	}
 
 	void setupAttackerProfile(LivingEntity entity, ItemStack stack) {
@@ -121,22 +144,32 @@ public class AttackCache {
 	}
 
 	public float getDamageOriginal() {
+		if (stage.ordinal() < Stage.HURT_PRE.ordinal())
+			throw new IllegalStateException("dealt damage not calculated yet");
 		return damage_pre;
 	}
 
 	public float getDamageModified() {
+		if (stage.ordinal() < Stage.ACTUALLY_HURT_PRE.ordinal())
+			throw new IllegalStateException("dealt damage not calculated yet");
 		return damage_modified;
 	}
 
 	public void setDamageModified(float damage) {
+		if (damageFrozen)
+			throw new IllegalStateException("modify hurt damage only on onHurt event.");
 		this.damage_modified = damage;
 	}
 
 	public float getDamageDealt() {
+		if (stage.ordinal() < Stage.DAMAGE_PRE.ordinal())
+			throw new IllegalStateException("actual damage not calculated yet");
 		return damage_dealt;
 	}
 
 	public void setDamageDealt(float damage) {
+		if (stage != Stage.DAMAGE_PRE)
+			throw new IllegalStateException("set actual damage only on onDamage event.");
 		damage_dealt = damage;
 	}
 

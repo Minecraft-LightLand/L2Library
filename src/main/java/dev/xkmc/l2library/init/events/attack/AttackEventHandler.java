@@ -43,19 +43,25 @@ public class AttackEventHandler {
 	public static void onAttackPre(LivingAttackEvent event) {
 		if (CACHE.size() > 1000) {
 			L2Library.LOGGER.error("attack cache too large: " + CACHE.size());
+			CACHE.clear();
+			return;
 		}
 		UUID id = event.getEntity().getUUID();
 		AttackCache cache = CACHE.get(id);
+		if (cache != null && cache.getStage() == Stage.HURT_PRE) {
+			cache.recursive++;
+			return;
+		}
 		boolean replace = cache == null;
 		if (!replace)
-			replace = cache.getStage().ordinal() >= Stage.HURT.ordinal();
+			replace = cache.getStage().ordinal() >= Stage.HURT_PRE.ordinal();
 		if (!replace && cache.getPlayerAttackEntityEvent() != null && event.getSource().getEntity() != null)
 			replace = event.getSource().getEntity() != cache.getPlayerAttackEntityEvent().getEntity();
 		if (replace) {
 			cache = new AttackCache();
 			CACHE.put(id, cache);
 		}
-		cache.pushAttack(event);
+		cache.pushAttackPre(event);
 		DamageSource source = event.getSource();
 		if (source.getEntity() instanceof LivingEntity entity) { // direct damage only
 			ItemStack stack = entity.getMainHandItem();
@@ -63,24 +69,44 @@ public class AttackEventHandler {
 		}
 	}
 
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void onAttackPost(LivingAttackEvent event) {
+		AttackCache cache = CACHE.get(event.getEntity().getUUID());
+		if (cache != null && cache.getStage() == Stage.HURT_PRE) {
+			if (cache.recursive > 0) {
+				cache.recursive--;
+				return;
+			}
+			cache.pushAttackPost(event);
+		}
+	}
+
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onActuallyHurtPre(LivingHurtEvent event) {
 		AttackCache cache = CACHE.get(event.getEntity().getUUID());
-		if (cache != null)
-			cache.pushHurt(event);
-		else {
-			L2Library.LOGGER.error("incorrect sequence at hurt: " + event.getEntity());
-		}
+		if (cache != null && cache.getStage() == Stage.HURT_POST)
+			cache.pushHurtPre(event);
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void onActuallyHurtPost(LivingHurtEvent event) {
+		AttackCache cache = CACHE.get(event.getEntity().getUUID());
+		if (cache != null && cache.getStage() == Stage.ACTUALLY_HURT_PRE)
+			cache.pushHurtPost(event);
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onDamagePre(LivingDamageEvent event) {
 		AttackCache cache = CACHE.get(event.getEntity().getUUID());
-		if (cache != null)
-			cache.pushDamage(event);
-		else {
-			L2Library.LOGGER.error("incorrect sequence at damage: " + event.getEntity());
-		}
+		if (cache != null && cache.getStage() == Stage.ACTUALLY_HURT_POST)
+			cache.pushDamagePre(event);
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void onDamagePost(LivingDamageEvent event) {
+		AttackCache cache = CACHE.get(event.getEntity().getUUID());
+		if (cache != null && cache.getStage() == Stage.DAMAGE_PRE)
+			cache.pushDamagePost(event);
 	}
 
 	@SubscribeEvent
