@@ -23,6 +23,7 @@ public class SetCodec extends GenericCodec {
 		int n = ctx.getSize(arr);
 		if (ans == null) ans = cls.newInstance();
 		Set list = (Set) ans;
+		list.clear();
 		for (int i = 0; i < n; i++) {
 			list.add(UnifiedCodec.deserializeValue(ctx, ctx.getElement(arr, i), com, null));
 		}

@@ -54,6 +54,9 @@ public class AttackCache {
 		hurt = event;
 		damage_modified = event.getAmount();
 		AttackEventHandler.LISTENERS.forEach(e -> e.onHurt(this, weapon));
+		if (damage_modified != event.getAmount()) {
+			event.setAmount(damage_modified);
+		}
 	}
 
 	void pushDamage(LivingDamageEvent event) {
@@ -61,6 +64,9 @@ public class AttackCache {
 		damage = event;
 		damage_dealt = event.getAmount();
 		AttackEventHandler.LISTENERS.forEach(e -> e.onDamage(this, weapon));
+		if (damage_dealt != event.getAmount()) {
+			event.setAmount(damage_dealt);
+		}
 	}
 
 	void setupAttackerProfile(LivingEntity entity, ItemStack stack) {
@@ -129,4 +135,9 @@ public class AttackCache {
 	public float getDamageDealt() {
 		return damage_dealt;
 	}
+
+	public void setDamageDealt(float damage) {
+		damage_dealt = damage;
+	}
+
 }

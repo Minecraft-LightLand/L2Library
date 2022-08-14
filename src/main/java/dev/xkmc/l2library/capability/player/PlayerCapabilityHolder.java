@@ -1,9 +1,11 @@
 package dev.xkmc.l2library.capability.player;
 
+import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.serial.codec.TagCodec;
 import dev.xkmc.l2library.util.Proxy;
 import dev.xkmc.l2library.util.code.Wrappers;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.RemotePlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -12,6 +14,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -39,11 +42,12 @@ public class PlayerCapabilityHolder<T extends PlayerCapabilityTemplate<T>> {
 
 	public T get(Player e) {
 		T data;
-		if (!e.getCapability(capability).isPresent()) {
+		var lazyCap = e.getCapability(capability);
+		if (!lazyCap.isPresent()) {
 			e.reviveCaps();
-			data = e.getCapability(capability).resolve().get().check();
+			data = lazyCap.resolve().get().check();
 			e.invalidateCaps();
-		} else data = e.getCapability(capability).resolve().get().check();
+		} else data = lazyCap.resolve().get().check();
 		return data;
 	}
 
@@ -76,5 +80,16 @@ public class PlayerCapabilityHolder<T extends PlayerCapabilityTemplate<T>> {
 
 	public PlayerCapabilitySerializer<T> generateSerializer(Player player, Level level) {
 		return new PlayerCapabilitySerializer<>(player, level, this);
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public void updateTracked(CompoundTag tag, @Nullable Player pl) {
+		if (!(pl instanceof RemotePlayer player)) return;
+		if (player.getCapability(capability).cast().resolve().isPresent()) {
+			T m = get(player);
+			m.preInject();
+			Wrappers.run(() -> TagCodec.fromTag(tag, cls, m, SerialClass.SerialField::toTracking));
+			m.init();
+		}
 	}
 }

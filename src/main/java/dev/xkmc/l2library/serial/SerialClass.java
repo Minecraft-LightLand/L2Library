@@ -19,6 +19,8 @@ public @interface SerialClass {
 
 		boolean toClient() default false;
 
+		boolean toTracking() default false;
+
 	}
 
 	@Documented

@@ -83,6 +83,7 @@ public class JsonContext extends TreeContext<JsonElement, JsonObject, JsonArray>
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public Object deserializeEfficientMap(JsonElement e, TypeInfo ckey, TypeInfo cval, Object ans) throws Exception {
+		((Map) ans).clear();
 		for (Map.Entry<String, JsonElement> ent : e.getAsJsonObject().entrySet()) {
 			Object key = ckey.getAsClass() == String.class ? ent.getKey() :
 					ckey.getAsClass().isEnum() ? Enum.valueOf((Class) ckey.getAsClass(), ent.getKey()) :

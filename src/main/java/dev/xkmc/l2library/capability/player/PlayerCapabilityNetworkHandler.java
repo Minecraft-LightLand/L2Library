@@ -19,4 +19,12 @@ public class PlayerCapabilityNetworkHandler<T extends PlayerCapabilityTemplate<T
 		L2Library.PACKET_HANDLER.toClientPlayer(new PlayerCapToClient(PlayerCapToClient.Action.CLONE, holder, holder.get(e)), e);
 	}
 
+	public void toTracking(ServerPlayer e) {
+		L2Library.PACKET_HANDLER.toTrackingPlayers(new PlayerCapToClient(PlayerCapToClient.Action.TRACK, holder, holder.get(e)), e);
+	}
+
+	public void startTracking(ServerPlayer tracker, ServerPlayer target) {
+		L2Library.PACKET_HANDLER.toClientPlayer(new PlayerCapToClient(PlayerCapToClient.Action.TRACK, holder, holder.get(target)), tracker);
+	}
+
 }

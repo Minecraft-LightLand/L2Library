@@ -39,6 +39,7 @@ public class PlayerCapabilityEvents {
 		if (e != null) {
 			for (PlayerCapabilityHolder<?> holder : PlayerCapabilityHolder.INTERNAL_MAP.values()) {
 				holder.network.toClientSyncAll(e);
+				holder.network.toTracking(e);
 			}
 		}
 	}
@@ -52,6 +53,7 @@ public class PlayerCapabilityEvents {
 			holder.get(event.getEntity()).onClone(event.isWasDeath());
 			ServerPlayer e = (ServerPlayer) event.getEntity();
 			holder.network.toClientSyncClone(e);
+			holder.network.toTracking(e);
 		}
 	}
 
@@ -62,6 +64,14 @@ public class PlayerCapabilityEvents {
 			CompoundTag tag0 = holder.getCache(event.getOldPlayer());
 			Wrappers.run(() -> TagCodec.fromTag(tag0, holder.cls, holder.get(event.getNewPlayer()), f -> true));
 			holder.get(event.getNewPlayer());
+		}
+	}
+
+	@SubscribeEvent
+	public static void onStartTracking(PlayerEvent.StartTracking event) {
+		for (PlayerCapabilityHolder<?> holder : PlayerCapabilityHolder.INTERNAL_MAP.values()) {
+			if (!(event.getTarget() instanceof ServerPlayer e)) continue;
+			holder.network.startTracking((ServerPlayer) event.getEntity(), e);
 		}
 	}
 

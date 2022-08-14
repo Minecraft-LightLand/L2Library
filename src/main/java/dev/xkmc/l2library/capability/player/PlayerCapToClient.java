@@ -4,10 +4,12 @@ import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.serial.codec.TagCodec;
 import dev.xkmc.l2library.serial.network.SerialPacketBase;
 import dev.xkmc.l2library.util.Proxy;
+import net.minecraft.client.player.RemotePlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -23,6 +25,9 @@ public class PlayerCapToClient extends SerialPacketBase {
 	@SerialClass.SerialField
 	public CompoundTag tag;
 
+	@SerialClass.SerialField
+	public UUID playerID;
+
 	@Deprecated
 	public PlayerCapToClient() {
 
@@ -32,28 +37,32 @@ public class PlayerCapToClient extends SerialPacketBase {
 		this.action = action;
 		this.holderID = holder.id;
 		this.tag = action.server.apply(handler);
+		this.playerID = handler.player.getUUID();
 	}
 
 	public void handle(NetworkEvent.Context context) {
 		if (action != Action.ALL && action != Action.CLONE && !Proxy.getClientPlayer().isAlive())
 			return;
 		PlayerCapabilityHolder<?> holder = PlayerCapabilityHolder.INTERNAL_MAP.get(holderID);
-		action.client.accept(holder, tag);
+		action.client.accept(holder, this);
 	}
 
 	public enum Action {
 		ALL((m) -> {
 			return TagCodec.toTag(new CompoundTag(), m);
-		}, (holder, tag) -> holder.cacheSet(tag, false)),
+		}, (holder, packet) -> holder.cacheSet(packet.tag, false)),
 		CLONE((m) -> {
 			return TagCodec.toTag(new CompoundTag(), m);
-		}, (holder, tag) -> holder.cacheSet(tag, true));
+		}, (holder, packet) -> holder.cacheSet(packet.tag, true)),
+		TRACK((m) -> {
+			return TagCodec.toTag(new CompoundTag(), m.getClass(), m, SerialClass.SerialField::toTracking);
+		}, (holder, packet) -> holder.updateTracked(packet.tag, Proxy.getClientWorld().getPlayerByUUID(packet.playerID)));
 
 		public final Function<Object, CompoundTag> server;
-		public final BiConsumer<PlayerCapabilityHolder<?>, CompoundTag> client;
+		public final BiConsumer<PlayerCapabilityHolder<?>, PlayerCapToClient> client;
 
 
-		Action(Function<Object, CompoundTag> server, BiConsumer<PlayerCapabilityHolder<?>, CompoundTag> client) {
+		Action(Function<Object, CompoundTag> server, BiConsumer<PlayerCapabilityHolder<?>, PlayerCapToClient> client) {
 			this.server = server;
 			this.client = client;
 		}

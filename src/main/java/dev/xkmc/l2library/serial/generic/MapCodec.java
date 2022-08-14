@@ -28,6 +28,7 @@ public class MapCodec extends GenericCodec {
 		if (ctx.isListFormat(e)) {
 			A arr = ctx.castAsList(e);
 			int n = ctx.getSize(arr);
+			((Map) ans).clear();
 			for (int i = 0; i < n; i++) {
 				O jeo = ctx.castAsMap(ctx.getElement(arr, i));
 				Object key = UnifiedCodec.deserializeValue(ctx, ctx.getKeyOfEntry(jeo), ckey, null);
