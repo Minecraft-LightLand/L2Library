@@ -52,7 +52,7 @@ public class EffectUtil {
 
 	public static void refreshEffect(LivingEntity entity, MobEffectInstance ins, AddReason reason, Entity source) {
 		MobEffectInstance cur = entity.getEffect(ins.getEffect());
-		if (cur == null || cur.getAmplifier() < ins.getAmplifier())
+		if (cur == null || cur.getAmplifier() < ins.getAmplifier() || cur.getAmplifier() == ins.getAmplifier() && cur.getDuration() < ins.getDuration() / 2)
 			addEffect(entity, ins, reason, source);
 	}
 

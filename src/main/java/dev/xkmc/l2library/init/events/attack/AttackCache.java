@@ -26,7 +26,8 @@ public class AttackCache {
 
 	private LivingEntity target;
 	private LivingEntity attacker;
-	private ItemStack weapon;
+
+	private ItemStack weapon = ItemStack.EMPTY;
 
 	private float strength = -1;
 	private float damage_pre;
@@ -134,7 +135,6 @@ public class AttackCache {
 		return attacker;
 	}
 
-	@Nullable
 	public ItemStack getWeapon() {
 		return weapon;
 	}
