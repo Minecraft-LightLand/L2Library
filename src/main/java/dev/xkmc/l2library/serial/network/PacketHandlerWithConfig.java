@@ -18,13 +18,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
 public class PacketHandlerWithConfig extends PacketHandler {
 
-	static final HashMap<ResourceLocation, PacketHandlerWithConfig> INTERNAL = new HashMap<>();
+	static final Map<ResourceLocation, PacketHandlerWithConfig> INTERNAL = new ConcurrentHashMap<>();
 
 	public static void onDatapackSync(OnDatapackSyncEvent event) {
 		for (PacketHandlerWithConfig handler : INTERNAL.values()) {

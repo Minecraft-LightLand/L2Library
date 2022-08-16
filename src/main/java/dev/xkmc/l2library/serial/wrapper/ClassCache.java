@@ -8,10 +8,11 @@ import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ClassCache {
 
-	private static final Map<Class<?>, ClassCache> CACHE = new HashMap<>();
+	private static final Map<Class<?>, ClassCache> CACHE = new ConcurrentHashMap<>();
 
 	public static ClassCache get(Class<?> cls) {
 		return CACHE.computeIfAbsent(cls, ClassCache::new);

@@ -8,11 +8,12 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings({"rawtypes", "unsafe"})
 public class RecordCache {
 
-	private static final Map<Class<?>, RecordCache> CACHE = new HashMap<>();
+	private static final Map<Class<?>, RecordCache> CACHE = new ConcurrentHashMap<>();
 
 	public static RecordCache get(Class<?> cls) {
 		return CACHE.computeIfAbsent(cls, RecordCache::new);
