@@ -12,7 +12,8 @@ public record AttributeEntry(Supplier<Attribute> sup, boolean usePercent, int or
 	static final List<AttributeEntry> LIST = new ArrayList<>();
 
 	public static void add(Supplier<Attribute> sup, boolean usePercent, int order) {
-		LIST.add(new AttributeEntry(() -> sup.get().setSyncable(true), usePercent, order));
+		sup.get().setSyncable(true);
+		LIST.add(new AttributeEntry(sup, usePercent, order));
 		LIST.sort(Comparator.comparingInt(AttributeEntry::order));
 	}
 

@@ -36,4 +36,10 @@ public abstract class BaseTextScreen extends Screen {
 		this.blit(stack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 		super.render(stack, mx, my, ptick);
 	}
+
+	@Override
+	public boolean isPauseScreen() {
+		return false;
+	}
+
 }
