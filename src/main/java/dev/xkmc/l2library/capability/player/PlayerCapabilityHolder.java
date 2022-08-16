@@ -43,9 +43,9 @@ public class PlayerCapabilityHolder<T extends PlayerCapabilityTemplate<T>> {
 	public T get(Player e) {
 		T data;
 		var lazyCap = e.getCapability(capability);
-		if (!lazyCap.isPresent()) {
+		if (lazyCap.resolve().isEmpty()) {
 			e.reviveCaps();
-			data = lazyCap.resolve().get().check();
+			data = e.getCapability(capability).resolve().get().check();
 			e.invalidateCaps();
 		} else data = lazyCap.resolve().get().check();
 		return data;

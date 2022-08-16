@@ -1,4 +1,10 @@
 {
     "menu.tabs.inventory":"Inventory",
-    "menu.tabs.attribute":"Attributes"
+    "menu.tabs.attribute":"Attributes",
+    "menu.tabs.attribute.detail": "Press Shift to show details",
+    "menu.tabs.attribute.base": "Base value: %s",
+    "menu.tabs.attribute.add": "Addition: %s",
+    "menu.tabs.attribute.mult_base": "Multiply Base: %s",
+    "menu.tabs.attribute.mult_all": "Multiply total: %s",
+    "menu.tabs.attribute.format": "(%s%s)x(1%s)x%s=%s"
 }
