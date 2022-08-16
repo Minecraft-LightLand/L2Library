@@ -84,7 +84,7 @@ public class AttributeScreen extends BaseTextScreen {
 				ans.add(numberSigned("%s%%", e.getAmount() * 100).append(name(e)));
 			}
 		}
-		ans.add(Component.translatable("menu.tabs.attribute.mult_all", number("*%s", m1v)).withStyle(ChatFormatting.BLUE));
+		ans.add(Component.translatable("menu.tabs.attribute.mult_all", number("x%s", m1v)).withStyle(ChatFormatting.BLUE));
 		if (shift) {
 			for (var e : m1s) {
 				ans.add(number("x%s", 1 + e.getAmount()).append(name(e)));
