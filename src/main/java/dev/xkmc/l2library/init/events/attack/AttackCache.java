@@ -56,7 +56,7 @@ public class AttackCache {
 	}
 
 	void pushAttackPost(LivingAttackEvent event) {
-		stage = Stage.ACTUALLY_HURT_POST;
+		stage = Stage.HURT_POST;
 	}
 
 	void pushHurtPre(LivingHurtEvent event) {
