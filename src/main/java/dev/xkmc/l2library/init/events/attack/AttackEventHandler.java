@@ -27,6 +27,8 @@ public class AttackEventHandler {
 
 	@SubscribeEvent
 	public static void onPlayerAttack(AttackEntityEvent event) {
+		if (event.getTarget().getLevel().isClientSide())
+			return;
 		AttackCache cache = new AttackCache();
 		CACHE.put(event.getTarget().getUUID(), cache);
 		cache.pushPlayer(event);
@@ -34,13 +36,18 @@ public class AttackEventHandler {
 
 	@SubscribeEvent
 	public static void onCriticalHit(CriticalHitEvent event) {
-		AttackCache cache = new AttackCache();
+		if (event.getTarget().getLevel().isClientSide())
+			return;
+		AttackCache cache = CACHE.get(event.getTarget().getUUID());
+		if (cache == null) cache = new AttackCache();
 		CACHE.put(event.getTarget().getUUID(), cache);
 		cache.pushCrit(event);
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onAttackPre(LivingAttackEvent event) {
+		if (event.getEntity().getLevel().isClientSide())
+			return;
 		if (CACHE.size() > 1000) {
 			L2Library.LOGGER.error("attack cache too large: " + CACHE.size());
 			CACHE.clear();
@@ -71,6 +78,8 @@ public class AttackEventHandler {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onAttackPost(LivingAttackEvent event) {
+		if (event.getEntity().getLevel().isClientSide())
+			return;
 		AttackCache cache = CACHE.get(event.getEntity().getUUID());
 		if (cache != null && cache.getStage() == Stage.HURT_PRE) {
 			if (cache.recursive > 0) {
@@ -83,6 +92,8 @@ public class AttackEventHandler {
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onActuallyHurtPre(LivingHurtEvent event) {
+		if (event.getEntity().getLevel().isClientSide())
+			return;
 		AttackCache cache = CACHE.get(event.getEntity().getUUID());
 		if (cache != null && cache.getStage() == Stage.HURT_POST)
 			cache.pushHurtPre(event);
@@ -90,6 +101,8 @@ public class AttackEventHandler {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onActuallyHurtPost(LivingHurtEvent event) {
+		if (event.getEntity().getLevel().isClientSide())
+			return;
 		AttackCache cache = CACHE.get(event.getEntity().getUUID());
 		if (cache != null && cache.getStage() == Stage.ACTUALLY_HURT_PRE)
 			cache.pushHurtPost(event);
@@ -97,6 +110,8 @@ public class AttackEventHandler {
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onDamagePre(LivingDamageEvent event) {
+		if (event.getEntity().getLevel().isClientSide())
+			return;
 		AttackCache cache = CACHE.get(event.getEntity().getUUID());
 		if (cache != null && cache.getStage() == Stage.ACTUALLY_HURT_POST)
 			cache.pushDamagePre(event);
@@ -104,6 +119,8 @@ public class AttackEventHandler {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onDamagePost(LivingDamageEvent event) {
+		if (event.getEntity().getLevel().isClientSide())
+			return;
 		AttackCache cache = CACHE.get(event.getEntity().getUUID());
 		if (cache != null && cache.getStage() == Stage.DAMAGE_PRE)
 			cache.pushDamagePost(event);
