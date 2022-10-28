@@ -43,12 +43,6 @@ public class BaseBlockEntity extends BlockEntity {
 		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
-	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-		Wrappers.run(() -> TagCodec.fromTag(pkt.getTag(), getClass(), this, SerialClass.SerialField::toClient));
-		super.onDataPacket(net, pkt);
-	}
-
 	@ServerOnly
 	public void sync() {
 		if (level != null) {

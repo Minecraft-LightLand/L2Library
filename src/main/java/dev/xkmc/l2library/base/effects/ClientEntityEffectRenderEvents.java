@@ -61,11 +61,28 @@ public class ClientEntityEffectRenderEvents {
 		MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
 		Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
 		PoseStack stack = event.getPoseStack();
+
+		// cache the previous stack
+		PoseStack posestack = RenderSystem.getModelViewStack();
+		var last = posestack.last();
+		posestack.popPose();
+		RenderSystem.applyModelViewMatrix();
+
 		RenderSystem.disableDepthTest();
 		for (DelayedEntityRender icon : ICONS) {
 			renderIcon(icon.entity(), stack, buffers, icon.rl(), event.getPartialTick(), camera, renderer.entityRenderDispatcher);
 		}
 		buffers.endBatch();
+
+		// restore the previous stack
+		posestack.pushPose();
+		posestack.setIdentity();
+		posestack.last().pose().multiply(last.pose());
+		posestack.last().normal().mul(last.normal());
+		RenderSystem.applyModelViewMatrix();
+
+		RenderSystem.enableDepthTest();
+
 		ICONS.clear();
 	}
 

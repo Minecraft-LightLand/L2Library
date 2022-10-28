@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class BlockImplementor {
@@ -60,10 +62,31 @@ public class BlockImplementor {
 		}
 	}
 
+	@Deprecated
 	@SuppressWarnings("unchecked")
 	public <T extends MultipleBlockMethod> Stream<T> execute(Class<T> cls) {
 		return list.stream().filter(cls::isInstance).map(e -> (T) e);
 	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends MultipleBlockMethod> void forEach(Class<T> cls, Consumer<T> cons) {
+		for (MultipleBlockMethod method : list) {
+			if (cls.isInstance(method)) {
+				cons.accept((T) method);
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends MultipleBlockMethod, U> U reduce(Class<T> cls, U init, BiFunction<U, T, U> func) {
+		for (MultipleBlockMethod method : list) {
+			if (cls.isInstance(method)) {
+				init = func.apply(init, (T) method);
+			}
+		}
+		return init;
+	}
+
 
 	@SuppressWarnings("unchecked")
 	public <T extends SingletonBlockMethod> Optional<T> one(Class<T> cls) {

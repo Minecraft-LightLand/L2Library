@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
@@ -49,8 +50,8 @@ public class DelegateBlockImpl extends DelegateBlock {
 
 	protected DelegateBlockImpl(DelegateBlockProperties p, BlockMethod... impl) {
 		super(handler(construct(p).addImpls(impl)));
-		registerDefaultState(this.impl.execute(DefaultStateBlockMethod.class).reduce(defaultBlockState(),
-				(state, def) -> def.getDefaultState(state), (a, b) -> a));
+		registerDefaultState(this.impl.reduce(DefaultStateBlockMethod.class, defaultBlockState(),
+				(state, def) -> def.getDefaultState(state)));
 	}
 
 	public static BlockImplementor construct(DelegateBlockProperties bb) {
@@ -88,8 +89,8 @@ public class DelegateBlockImpl extends DelegateBlock {
 
 	@Override
 	public final BlockState getStateForPlacement(BlockPlaceContext context) {
-		return impl.execute(PlacementBlockMethod.class).reduce(defaultBlockState(),
-				(state, impl) -> impl.getStateForPlacement(state, context), (a, b) -> a);
+		return impl.reduce(PlacementBlockMethod.class, defaultBlockState(),
+				(state, impl) -> impl.getStateForPlacement(state, context));
 	}
 
 	@Override
@@ -114,13 +115,14 @@ public class DelegateBlockImpl extends DelegateBlock {
 
 	@Override
 	public final void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		impl.forEach(OnReplacedBlockMethod.class, e -> e.onReplaced(state, worldIn, pos, newState, isMoving));
 		if (impl.one(BlockEntityBlockMethod.class).isPresent() && state.getBlock() != newState.getBlock()) {
-			BlockEntity tileentity = worldIn.getBlockEntity(pos);
-			if (tileentity != null) {
-				if (tileentity instanceof Container) {
-					Containers.dropContents(worldIn, pos, (Container) tileentity);
+			BlockEntity entity = worldIn.getBlockEntity(pos);
+			if (entity != null) {
+				if (entity instanceof Container) {
+					Containers.dropContents(worldIn, pos, (Container) entity);
 					worldIn.updateNeighbourForOutputSignal(pos, this);
-				} else if (tileentity instanceof BlockContainer blockContainer) {
+				} else if (entity instanceof BlockContainer blockContainer) {
 					for (Container c : blockContainer.getContainers())
 						Containers.dropContents(worldIn, pos, c);
 					worldIn.updateNeighbourForOutputSignal(pos, this);
@@ -128,7 +130,6 @@ public class DelegateBlockImpl extends DelegateBlock {
 				worldIn.removeBlockEntity(pos);
 			}
 		}
-		impl.execute(OnReplacedBlockMethod.class).forEach(e -> e.onReplaced(state, worldIn, pos, newState, isMoving));
 	}
 
 	@Override
@@ -140,29 +141,29 @@ public class DelegateBlockImpl extends DelegateBlock {
 	protected final void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		impl = TEMP.get();
 		TEMP.set(null);
-		impl.execute(CreateBlockStateBlockMethod.class).forEach(e -> e.createBlockStateDefinition(builder));
+		impl.forEach(CreateBlockStateBlockMethod.class, e -> e.createBlockStateDefinition(builder));
 	}
 
 	@Override
 	public final void neighborChanged(BlockState state, Level world, BlockPos pos, Block nei_block, BlockPos nei_pos, boolean moving) {
-		impl.execute(NeighborUpdateBlockMethod.class).forEach(e -> e.neighborChanged(this, state, world, pos, nei_block, nei_pos, moving));
+		impl.forEach(NeighborUpdateBlockMethod.class, e -> e.neighborChanged(this, state, world, pos, nei_block, nei_pos, moving));
 		super.neighborChanged(state, world, pos, nei_block, nei_pos, moving);
 	}
 
 	@Override
 	public final void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-		impl.execute(RandomTickBlockMethod.class).forEach(e -> e.randomTick(state, world, pos, random));
+		impl.forEach(RandomTickBlockMethod.class, e -> e.randomTick(state, world, pos, random));
 	}
 
 	@Override
 	public final void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-		impl.execute(ScheduleTickBlockMethod.class).forEach(e -> e.tick(state, world, pos, random));
+		impl.forEach(ScheduleTickBlockMethod.class, e -> e.tick(state, world, pos, random));
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public final void animateTick(BlockState state, Level world, BlockPos pos, RandomSource r) {
-		impl.execute(AnimateTickBlockMethod.class).forEach(e -> e.animateTick(state, world, pos, r));
+		impl.forEach(AnimateTickBlockMethod.class, e -> e.animateTick(state, world, pos, r));
 	}
 
 	@Override
@@ -196,7 +197,7 @@ public class DelegateBlockImpl extends DelegateBlock {
 
 	@Override
 	public final void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float height) {
-		if (impl.execute(FallOnBlockMethod.class).reduce(true, (a, e) -> a & e.fallOn(level, state, pos, entity, height), (a, b) -> a & b)) {
+		if (impl.reduce(FallOnBlockMethod.class, true, (a, e) -> a & e.fallOn(level, state, pos, entity, height))) {
 			super.fallOn(level, state, pos, entity, height);
 		}
 	}
@@ -221,7 +222,7 @@ public class DelegateBlockImpl extends DelegateBlock {
 
 	@Override
 	public final void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
-		impl.execute(SetPlacedByBlockMethod.class).forEach(e -> e.setPlacedBy(level, pos, state, entity, stack));
+		impl.forEach(SetPlacedByBlockMethod.class, e -> e.setPlacedBy(level, pos, state, entity, stack));
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -233,6 +234,11 @@ public class DelegateBlockImpl extends DelegateBlock {
 	@Override
 	public final void attack(BlockState state, Level level, BlockPos pos, Player player) {
 		impl.execute(AttackBlockMethod.class).filter(u -> u.attack(state, level, pos, player)).findFirst();
+	}
+
+	@Override
+	public final BlockState updateShape(BlockState selfState, Direction from, BlockState sourceState, LevelAccessor level, BlockPos selfPos, BlockPos sourcePos) {
+		return impl.reduce(ShapeUpdateBlockMethod.class, selfState, (currentState, e) -> e.updateShape(this, currentState, selfState, from, sourceState, level, selfPos, sourcePos));
 	}
 
 	public final BlockImplementor getImpl() {
