@@ -38,6 +38,8 @@ public class PacketHandler {
 
 	private final Function<PacketHandler, LoadedPacket<?>>[] values;
 
+	private int index = 0;
+
 	@SafeVarargs
 	public PacketHandler(ResourceLocation id, int version, Function<PacketHandler, LoadedPacket<?>>... values) {
 		CHANNEL_NAME = id;
@@ -90,7 +92,6 @@ public class PacketHandler {
 	}
 
 	public class LoadedPacket<T extends SimplePacketBase> {
-		private static int index = 0;
 
 		private final BiConsumer<T, FriendlyByteBuf> encoder;
 		private final Function<FriendlyByteBuf, T> decoder;
