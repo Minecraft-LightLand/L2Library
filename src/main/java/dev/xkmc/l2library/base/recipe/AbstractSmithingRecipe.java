@@ -8,6 +8,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.item.crafting.UpgradeRecipe;
 
@@ -16,11 +17,14 @@ import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class AbstractSmithingRecipe<T extends AbstractSmithingRecipe<T>> extends UpgradeRecipe {
+public abstract class AbstractSmithingRecipe<T extends AbstractSmithingRecipe<T>> extends UpgradeRecipe {
 
 	public AbstractSmithingRecipe(ResourceLocation rl, Ingredient left, Ingredient right, ItemStack result) {
 		super(rl, left, right, result);
 	}
+
+	@Override
+	public abstract Serializer<T> getSerializer();
 
 	@FunctionalInterface
 	public interface RecipeFactory<T extends AbstractSmithingRecipe<T>> {

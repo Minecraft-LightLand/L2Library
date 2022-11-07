@@ -21,11 +21,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Objects;
 
 /**
  * To make it tickable, implements TickableBlockEntity <br>
@@ -91,7 +90,7 @@ public class BlockEntityBlockMethodImpl<T extends BlockEntity> implements BlockE
 			if (e instanceof Container) {
 				return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(e);
 			}
-			var lazyCap = e.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+			var lazyCap = e.getCapability(ForgeCapabilities.ITEM_HANDLER);
 			if (lazyCap.resolve().isPresent()) {
 				var cap = lazyCap.resolve().get();
 				return ItemHandlerHelper.calcRedstoneFromInventory(cap);

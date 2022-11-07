@@ -9,6 +9,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -17,7 +18,7 @@ import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class AbstractShapelessRecipe<T extends AbstractShapelessRecipe<T>> extends ShapelessRecipe {
+public abstract class AbstractShapelessRecipe<T extends AbstractShapelessRecipe<T>> extends ShapelessRecipe {
 
 	public AbstractShapelessRecipe(ResourceLocation rl, String group, ItemStack result, NonNullList<Ingredient> ingredients) {
 		super(rl, group, result, ingredients);
@@ -26,6 +27,9 @@ public class AbstractShapelessRecipe<T extends AbstractShapelessRecipe<T>> exten
 	public List<ItemStack> getJEIResult() {
 		return List.of(getResultItem());
 	}
+
+	@Override
+	public abstract Serializer<T> getSerializer();
 
 	@FunctionalInterface
 	public interface RecipeFactory<T extends AbstractShapelessRecipe<T>> {

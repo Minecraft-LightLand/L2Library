@@ -16,11 +16,14 @@ import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class AbstractShapedRecipe<T extends AbstractShapedRecipe<T>> extends ShapedRecipe {
+public abstract class AbstractShapedRecipe<T extends AbstractShapedRecipe<T>> extends ShapedRecipe {
 
 	public AbstractShapedRecipe(ResourceLocation rl, String group, int w, int h, NonNullList<Ingredient> ingredients, ItemStack result) {
 		super(rl, group, w, h, ingredients, result);
 	}
+
+	@Override
+	public abstract Serializer<T> getSerializer();
 
 	@FunctionalInterface
 	public interface RecipeFactory<T extends AbstractShapedRecipe<T>> {
