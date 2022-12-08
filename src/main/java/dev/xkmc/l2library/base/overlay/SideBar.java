@@ -1,0 +1,70 @@
+package dev.xkmc.l2library.base.overlay;
+
+import dev.xkmc.l2library.util.Proxy;
+import net.minecraft.client.gui.screens.Screen;
+
+public abstract class SideBar {
+
+	protected final int max_time;
+	protected final int max_ease;
+
+	protected float prev = 0;
+	protected float idle = 0;
+	protected float ease_time = 0;
+	protected float prev_time = -1;
+
+	public SideBar(int duration, int ease){
+		this.max_time = duration;
+		this.max_ease = ease;
+	}
+
+	public abstract int getSignature();
+
+	public abstract boolean isScreenOn();
+
+	protected boolean ease(float pTick) {
+		if (!isScreenOn()) {
+			prev = 0;
+			idle = 0;
+			ease_time = 0;
+			prev_time = -1;
+			return false;
+		}
+		float current_time = Proxy.getClientPlayer().tickCount + pTick;
+		float time_diff = prev_time < 0 ? 0 : (current_time - prev_time);
+		prev_time = current_time;
+
+		int signature = getSignature();
+		if (signature != prev || Screen.hasShiftDown()) {
+			prev = signature;
+			idle = 0;
+		} else {
+			idle += time_diff;
+		}
+		if (idle < max_time) {
+			if (ease_time < max_ease) {
+				ease_time += time_diff;
+				if (ease_time > max_ease) {
+					ease_time = max_ease;
+				}
+			}
+		} else {
+			if (ease_time > 0) {
+				ease_time -= time_diff;
+				if (ease_time < 0) {
+					ease_time = 0;
+				}
+			}
+		}
+		return ease_time > 0;
+	}
+
+	protected int getXOffset(int width) {
+		return 0;
+	}
+
+	protected int getYOffset(int height) {
+		return 0;
+	}
+
+}

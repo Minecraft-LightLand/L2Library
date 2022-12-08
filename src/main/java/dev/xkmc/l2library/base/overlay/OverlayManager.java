@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.base.menu;
+package dev.xkmc.l2library.base.overlay;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

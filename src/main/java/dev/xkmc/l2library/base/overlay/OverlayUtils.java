@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.base.menu;
+package dev.xkmc.l2library.base.overlay;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -34,15 +34,12 @@ public class OverlayUtils extends GuiComponent {
 		return Math.round((screenHeight - h) / 2f);
 	}
 
-	public void renderLongText(ForgeGui gui, PoseStack stack, List<Component> list) {
+	public void renderLongText(ForgeGui gui, PoseStack stack, int x0, int y0, int maxWidth, List<Component> list) {
 		Font font = gui.getFont();
 		int tooltipTextWidth = list.stream().mapToInt(font::width).max().orElse(0);
-		int maxWidth = screenWidth / 4;
 		List<FormattedCharSequence> ans = list.stream().flatMap(text -> font.split(text, maxWidth).stream()).toList();
-		int h = ans.size() * 12;
+		int h = ans.size() * 12 - 2;
 		int w = Math.min(tooltipTextWidth, maxWidth);
-		int x0 = getX(w);
-		int y0 = getY(h);
 
 		int y1 = y0;
 		Tesselator tesselator = Tesselator.getInstance();
@@ -62,6 +59,7 @@ public class OverlayUtils extends GuiComponent {
 		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
+		RenderSystem.disableDepthTest();
 		BufferUploader.drawWithShader(bufferbuilder.end());
 		RenderSystem.enableTexture();
 		for (FormattedCharSequence text : ans) {
@@ -70,6 +68,35 @@ public class OverlayUtils extends GuiComponent {
 		}
 		RenderSystem.enableDepthTest();
 		RenderSystem.disableBlend();
+	}
+
+	public void renderLongText(ForgeGui gui, PoseStack stack, List<Component> list) {
+		Font font = gui.getFont();
+		int tooltipTextWidth = list.stream().mapToInt(font::width).max().orElse(0);
+		int maxWidth = screenWidth / 4;
+		List<FormattedCharSequence> ans = list.stream().flatMap(text -> font.split(text, maxWidth).stream()).toList();
+		int h = ans.size() * 12;
+		int w = Math.min(tooltipTextWidth, maxWidth);
+		int x0 = getX(w);
+		int y0 = getY(h);
+		renderLongText(gui, stack, x0, y0, maxWidth, list);
+	}
+
+	public static void drawRect(BufferBuilder builder, int x, int y, int w, int h, int r, int g, int b, int a) {
+		fillRect(builder, x - 1, y - 1, w + 2, 1, r, g, b, a);
+		fillRect(builder, x - 1, y - 1, 1, h + 2, r, g, b, a);
+		fillRect(builder, x - 1, y + h, w + 2, 1, r, g, b, a);
+		fillRect(builder, x + w, y - 1, 1, h + 2, r, g, b, a);
+	}
+
+	public static void fillRect(BufferBuilder builder, int x, int y, int w, int h, int r, int g, int b, int a) {
+		RenderSystem.setShader(GameRenderer::getPositionColorShader);
+		builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+		builder.vertex(x, y, 0.0D).color(r, g, b, a).endVertex();
+		builder.vertex(x, y + h, 0.0D).color(r, g, b, a).endVertex();
+		builder.vertex(x + w, y + h, 0.0D).color(r, g, b, a).endVertex();
+		builder.vertex(x + w, y, 0.0D).color(r, g, b, a).endVertex();
+		BufferUploader.drawWithShader(builder.end());
 	}
 
 }

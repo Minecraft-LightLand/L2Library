@@ -1,6 +1,6 @@
 package dev.xkmc.l2library.init.events;
 
-import dev.xkmc.l2library.base.menu.OverlayManager;
+import dev.xkmc.l2library.base.overlay.OverlayManager;
 import dev.xkmc.l2library.base.menu.SpriteManager;
 import dev.xkmc.l2library.serial.network.PacketHandlerWithConfig;
 import dev.xkmc.l2library.util.raytrace.EntityTarget;
