@@ -3,6 +3,7 @@ package dev.xkmc.l2library.base.overlay;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
+import dev.xkmc.l2library.init.L2LibraryConfig;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
@@ -14,9 +15,13 @@ import java.util.List;
 
 public class OverlayUtils extends GuiComponent {
 
+	private static int getBGColor() {
+		return (int) (Math.round(L2LibraryConfig.CLIENT.infoAlpha.get() * 255)) << 24 | 0x100010;
+	}
+
 	public final int screenWidth, screenHeight;
 
-	public int bg = 0xf0100010;
+	public int bg = getBGColor();
 	public int bs = 0x505000FF;
 	public int be = 0x5028007f;
 	public int tc = 0xFFFFFFFF;
@@ -43,7 +48,7 @@ public class OverlayUtils extends GuiComponent {
 	 * y margin: 4 on either side
 	 * row height: 10
 	 * row spacing: 2
-	 * */
+	 */
 	public void renderLongText(ForgeGui gui, PoseStack stack, int x0, int y0, int maxWidth, List<Component> list) {
 		Font font = gui.getFont();
 		int tooltipTextWidth = list.stream().mapToInt(font::width).max().orElse(0);
@@ -84,7 +89,7 @@ public class OverlayUtils extends GuiComponent {
 	}
 
 	public void renderLongText(ForgeGui gui, PoseStack stack, List<Component> list) {
-		renderLongText(gui, stack, -1,-1,-1, list);
+		renderLongText(gui, stack, -1, -1, -1, list);
 	}
 
 	public static void drawRect(BufferBuilder builder, int x, int y, int w, int h, int r, int g, int b, int a) {

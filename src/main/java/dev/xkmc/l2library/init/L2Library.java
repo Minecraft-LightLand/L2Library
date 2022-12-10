@@ -64,6 +64,7 @@ public class L2Library {
 		bus.addListener(PacketHandler::setup);
 		bus.addListener(L2Library::setup);
 		bus.addListener(L2Library::registerRecipeSerializers);
+		L2LibraryConfig.init();
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> L2Client.onCtorClient(bus, MinecraftForge.EVENT_BUS));
 	}
 
