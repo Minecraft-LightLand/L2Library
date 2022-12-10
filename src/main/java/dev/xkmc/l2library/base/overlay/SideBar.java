@@ -1,19 +1,18 @@
 package dev.xkmc.l2library.base.overlay;
 
-import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.client.gui.screens.Screen;
 
 public abstract class SideBar {
 
-	protected final int max_time;
-	protected final int max_ease;
+	protected final float max_time;
+	protected final float max_ease;
 
 	protected float prev = 0;
 	protected float idle = 0;
 	protected float ease_time = 0;
 	protected float prev_time = -1;
 
-	public SideBar(int duration, int ease){
+	public SideBar(float duration, float ease) {
 		this.max_time = duration;
 		this.max_ease = ease;
 	}
@@ -22,7 +21,7 @@ public abstract class SideBar {
 
 	public abstract boolean isScreenOn();
 
-	protected boolean ease(float pTick) {
+	protected boolean ease(float current_time) {
 		if (!isScreenOn()) {
 			prev = 0;
 			idle = 0;
@@ -30,7 +29,6 @@ public abstract class SideBar {
 			prev_time = -1;
 			return false;
 		}
-		float current_time = Proxy.getClientPlayer().tickCount + pTick;
 		float time_diff = prev_time < 0 ? 0 : (current_time - prev_time);
 		prev_time = current_time;
 

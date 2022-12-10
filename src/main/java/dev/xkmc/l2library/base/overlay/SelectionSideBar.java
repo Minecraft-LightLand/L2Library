@@ -16,7 +16,7 @@ import java.util.List;
 
 public abstract class SelectionSideBar extends SideBar implements IGuiOverlay {
 
-	public SelectionSideBar(int duration, int ease) {
+	public SelectionSideBar(float duration, float ease) {
 		super(duration, ease);
 	}
 
@@ -24,13 +24,15 @@ public abstract class SelectionSideBar extends SideBar implements IGuiOverlay {
 
 	public abstract boolean isAvailable(ItemStack stack);
 
+	public abstract boolean onCenter();
+
 	public void initRender() {
 
 	}
 
 	@Override
 	public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int width, int height) {
-		if (!ease(partialTick))
+		if (!ease(gui.getGuiTicks() + partialTick))
 			return;
 		initRender();
 		gui.setupOverlayRenderState(true, false);
@@ -43,19 +45,19 @@ public abstract class SelectionSideBar extends SideBar implements IGuiOverlay {
 		int dy = getYOffset(height);
 		for (int i = 0; i < list.size(); i++) {
 			ItemStack stack = list.get(i);
-			int x = width / 2 + 18 * 3 + 1 + dx;
-			int y = height / 2 - 81 + 18 * i + 1 + dy;
+			int y = 18 * i + dy;
 			if (selected == i) {
 				boolean shift = Minecraft.getInstance().options.keyShift.isDown();
-				renderSelection(x, y, shift ? 127 : 64, isAvailable(stack));
-				if (!stack.isEmpty()) {
-					new OverlayUtils(width, height).renderLongText(gui, poseStack, x + 22, y + 3, width,
-							List.of(stack.getHoverName()));
+				renderSelection(dx, y, shift ? 127 : 64, isAvailable(stack));
+				if (!stack.isEmpty() && ease_time == max_ease) {
+					boolean onCenter = onCenter();
+					TextBox box = new TextBox(width, height, onCenter ? 0 : 2, 1, onCenter ? dx + 22 : dx - 6, y + 8, -1);
+					box.renderLongText(gui, poseStack, List.of(stack.getHoverName()));
 				}
 			}
 			if (!stack.isEmpty()) {
-				renderer.renderAndDecorateItem(stack, x, y);
-				renderer.renderGuiItemDecorations(font, stack, x, y);
+				renderer.renderAndDecorateItem(stack, dx, y);
+				renderer.renderGuiItemDecorations(font, stack, dx, y);
 			}
 		}
 	}

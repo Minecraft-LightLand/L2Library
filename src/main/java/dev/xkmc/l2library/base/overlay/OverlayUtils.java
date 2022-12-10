@@ -34,13 +34,26 @@ public class OverlayUtils extends GuiComponent {
 		return Math.round((screenHeight - h) / 2f);
 	}
 
+	public int getMaxWidth() {
+		return screenWidth / 4;
+	}
+
+	/**
+	 * x margin: 4 on either side
+	 * y margin: 4 on either side
+	 * row height: 10
+	 * row spacing: 2
+	 * */
 	public void renderLongText(ForgeGui gui, PoseStack stack, int x0, int y0, int maxWidth, List<Component> list) {
 		Font font = gui.getFont();
 		int tooltipTextWidth = list.stream().mapToInt(font::width).max().orElse(0);
-		List<FormattedCharSequence> ans = list.stream().flatMap(text -> font.split(text, maxWidth).stream()).toList();
+		if (maxWidth < 0) maxWidth = getMaxWidth();
+		int finalMaxWidth = maxWidth;
+		List<FormattedCharSequence> ans = list.stream().flatMap(text -> font.split(text, finalMaxWidth).stream()).toList();
 		int h = ans.size() * 12 - 2;
 		int w = Math.min(tooltipTextWidth, maxWidth);
-
+		if (x0 < 0) x0 = getX(w);
+		if (y0 < 0) y0 = getY(h);
 		int y1 = y0;
 		Tesselator tesselator = Tesselator.getInstance();
 		BufferBuilder bufferbuilder = tesselator.getBuilder();
@@ -71,15 +84,7 @@ public class OverlayUtils extends GuiComponent {
 	}
 
 	public void renderLongText(ForgeGui gui, PoseStack stack, List<Component> list) {
-		Font font = gui.getFont();
-		int tooltipTextWidth = list.stream().mapToInt(font::width).max().orElse(0);
-		int maxWidth = screenWidth / 4;
-		List<FormattedCharSequence> ans = list.stream().flatMap(text -> font.split(text, maxWidth).stream()).toList();
-		int h = ans.size() * 12;
-		int w = Math.min(tooltipTextWidth, maxWidth);
-		int x0 = getX(w);
-		int y0 = getY(h);
-		renderLongText(gui, stack, x0, y0, maxWidth, list);
+		renderLongText(gui, stack, -1,-1,-1, list);
 	}
 
 	public static void drawRect(BufferBuilder builder, int x, int y, int w, int h, int r, int g, int b, int a) {
