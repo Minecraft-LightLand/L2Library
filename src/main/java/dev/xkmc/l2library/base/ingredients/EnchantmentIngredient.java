@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 
 @SerialClass
@@ -35,7 +36,7 @@ public class EnchantmentIngredient extends BaseIngredient<EnchantmentIngredient>
 	}
 
 	public boolean test(ItemStack stack) {
-		return stack.getEnchantmentLevel(this.enchantment) >= this.min_level;
+		return EnchantmentHelper.getEnchantments(stack).getOrDefault(this.enchantment, 0) >= this.min_level;
 	}
 
 	public Serializer<EnchantmentIngredient> getSerializer() {
