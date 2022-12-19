@@ -43,12 +43,12 @@ public abstract class SelectionSideBar extends SideBar implements IGuiOverlay {
 		Font font = gui.getMinecraft().font;
 		int dx = getXOffset(width);
 		int dy = getYOffset(height);
+		boolean shift = Minecraft.getInstance().options.keyShift.isDown();
 		for (int i = 0; i < list.size(); i++) {
 			ItemStack stack = list.get(i);
 			int y = 18 * i + dy;
+			renderSelection(dx, y, shift ? 127 : 64, isAvailable(stack), selected == i);
 			if (selected == i) {
-				boolean shift = Minecraft.getInstance().options.keyShift.isDown();
-				renderSelection(dx, y, shift ? 127 : 64, isAvailable(stack));
 				if (!stack.isEmpty() && ease_time == max_ease) {
 					boolean onCenter = onCenter();
 					TextBox box = new TextBox(width, height, onCenter ? 0 : 2, 1, onCenter ? dx + 22 : dx - 6, y + 8, -1);
@@ -62,7 +62,7 @@ public abstract class SelectionSideBar extends SideBar implements IGuiOverlay {
 		}
 	}
 
-	public void renderSelection(int x, int y, int a, boolean available) {
+	public void renderSelection(int x, int y, int a, boolean available, boolean selected) {
 		RenderSystem.disableDepthTest();
 		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
@@ -71,7 +71,8 @@ public abstract class SelectionSideBar extends SideBar implements IGuiOverlay {
 		BufferBuilder builder = tex.getBuilder();
 		if (available) {
 			OverlayUtils.fillRect(builder, x, y, 16, 16, 255, 255, 255, a);
-			OverlayUtils.drawRect(builder, x, y, 16, 16, 0xff, 0xaa, 0, 255);
+			if (selected)
+				OverlayUtils.drawRect(builder, x, y, 16, 16, 0xff, 0xaa, 0, 255);
 		} else {
 			OverlayUtils.fillRect(builder, x, y, 16, 16, 255, 0, 0, a);
 		}

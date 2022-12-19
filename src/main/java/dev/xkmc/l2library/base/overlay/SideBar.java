@@ -7,7 +7,8 @@ public abstract class SideBar {
 	protected final float max_time;
 	protected final float max_ease;
 
-	protected float prev = 0;
+	protected int prev = 0;
+
 	protected float idle = 0;
 	protected float ease_time = 0;
 	protected float prev_time = -1;
