@@ -5,6 +5,7 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -37,6 +38,10 @@ public class AdvancementGenerator {
 		}
 
 		public Entry root(String id, Item item, CriterionBuilder builder, String title, String desc) {
+			return root(id, item.getDefaultInstance(), builder, title, desc);
+		}
+
+		public Entry root(String id, ItemStack item, CriterionBuilder builder, String title, String desc) {
 			if (root == null) {
 				root = new Entry(new EntryData(id, item, builder, title, desc), null);
 			}
@@ -67,6 +72,10 @@ public class AdvancementGenerator {
 			}
 
 			public Entry create(String id, Item item, CriterionBuilder builder, String title, String desc) {
+				return create(id, item.getDefaultInstance(), builder, title, desc);
+			}
+
+			public Entry create(String id, ItemStack item, CriterionBuilder builder, String title, String desc) {
 				Entry sub = new Entry(new EntryData(id, item, builder, title, desc), this);
 				children.add(sub);
 				return sub;
@@ -94,7 +103,7 @@ public class AdvancementGenerator {
 			}
 
 			private void build() {
-				var builder = Advancement.Builder.advancement().display(data.item.asItem(),
+				var builder = Advancement.Builder.advancement().display(data.item,
 						pvd.title(modid, "advancements." + tab + "." + data.id, data.title),
 						pvd.desc(modid, "advancements." + tab + "." + data.id, data.desc),
 						rl, type, showToast, announce, hidden);
@@ -117,7 +126,7 @@ public class AdvancementGenerator {
 
 	}
 
-	private record EntryData(String id, Item item, CriterionBuilder builder, String title, String desc) {
+	private record EntryData(String id, ItemStack item, CriterionBuilder builder, String title, String desc) {
 
 	}
 
