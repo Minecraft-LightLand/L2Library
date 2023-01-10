@@ -47,6 +47,15 @@ public class EffectSyncEvents {
 		}
 	}
 
+
+	@SubscribeEvent
+	public static void onPotionRemoveEvent(MobEffectEvent.Remove event) {
+		if (event.getEffectInstance() != null && TRACKED.contains(event.getEffectInstance().getEffect())) {
+			onEffectDisappear(event.getEffectInstance().getEffect(), event.getEntity());
+		}
+	}
+
+
 	@SubscribeEvent
 	public static void onPotionExpiryEvent(MobEffectEvent.Expired event) {
 		if (event.getEffectInstance() != null && TRACKED.contains(event.getEffectInstance().getEffect())) {

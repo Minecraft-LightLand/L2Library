@@ -20,7 +20,6 @@ import net.minecraftforge.fml.DistExecutor;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.TreeMap;
-import java.util.function.Consumer;
 
 @SerialClass
 public class SpriteManager {
@@ -97,12 +96,12 @@ public class SpriteManager {
 	/**
 	 * configure the coordinate of the slot
 	 */
-	public <T extends Slot> void getSlot(String key, SlotFactory<T> fac, Consumer<Slot> con) {
+	public <T extends Slot> void getSlot(String key, SlotFactory<T> fac, SlotAcceptor con) {
 		check();
 		Rect c = getComp(key);
 		for (int j = 0; j < c.ry; j++)
 			for (int i = 0; i < c.rx; i++)
-				con.accept(fac.getSlot(c.x + i * c.w, c.y + j * c.h));
+				con.addSlot(key, i, j, fac.getSlot(c.x + i * c.w, c.y + j * c.h));
 	}
 
 	public int getWidth() {
@@ -141,6 +140,12 @@ public class SpriteManager {
 	public interface SlotFactory<T extends Slot> {
 
 		T getSlot(int x, int y);
+
+	}
+
+	public interface SlotAcceptor {
+
+		void addSlot(String name, int i, int j, Slot slot);
 
 	}
 

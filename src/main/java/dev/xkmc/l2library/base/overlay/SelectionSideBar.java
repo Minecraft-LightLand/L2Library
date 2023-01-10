@@ -71,10 +71,11 @@ public abstract class SelectionSideBar extends SideBar implements IGuiOverlay {
 		BufferBuilder builder = tex.getBuilder();
 		if (available) {
 			OverlayUtils.fillRect(builder, x, y, 16, 16, 255, 255, 255, a);
-			if (selected)
-				OverlayUtils.drawRect(builder, x, y, 16, 16, 0xff, 0xaa, 0, 255);
 		} else {
 			OverlayUtils.fillRect(builder, x, y, 16, 16, 255, 0, 0, a);
+		}
+		if (selected) {
+			OverlayUtils.drawRect(builder, x, y, 16, 16, 255, 170, 0, 255);
 		}
 		RenderSystem.enableTexture();
 		RenderSystem.enableDepthTest();
