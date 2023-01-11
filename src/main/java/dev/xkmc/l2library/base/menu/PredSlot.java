@@ -62,7 +62,7 @@ public class PredSlot extends Slot {
 	@Override
 	public boolean mayPickup(Player player) {
 		if (isOutputLocked()) return false;
-		return pickup != null && pickup.getAsBoolean();
+		return pickup == null || pickup.getAsBoolean();
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package dev.xkmc.l2library.base.overlay;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.screens.Screen;
 
 public abstract class SideBar {
@@ -22,6 +24,10 @@ public abstract class SideBar {
 
 	public abstract boolean isScreenOn();
 
+	protected boolean isOnHold() {
+		return Minecraft.getInstance().options.keyShift.isDown();
+	}
+
 	protected boolean ease(float current_time) {
 		if (!isScreenOn()) {
 			prev = 0;
@@ -34,7 +40,7 @@ public abstract class SideBar {
 		prev_time = current_time;
 
 		int signature = getSignature();
-		if (signature != prev || Screen.hasShiftDown()) {
+		if (signature != prev || isOnHold()) {
 			prev = signature;
 			idle = 0;
 		} else {
