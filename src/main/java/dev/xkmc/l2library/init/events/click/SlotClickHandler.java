@@ -18,7 +18,7 @@ public abstract class SlotClickHandler {
 		this.id = rl;
 	}
 
-	final void slotClickToServer(int index, int slot, int wid) {
+	protected final void slotClickToServer(int index, int slot, int wid) {
 		L2Library.PACKET_HANDLER.toServer(new SlotClickToServer(id, index, slot, wid));
 	}
 
