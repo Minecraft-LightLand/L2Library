@@ -1,7 +1,7 @@
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 
-package dev.xkmc.l2library.base.worldgen;
+package dev.xkmc.l2library.init.events.click;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

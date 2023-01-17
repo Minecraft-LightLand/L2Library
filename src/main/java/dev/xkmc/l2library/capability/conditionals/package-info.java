@@ -1,7 +1,7 @@
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 
-package dev.xkmc.l2library.capability;
+package dev.xkmc.l2library.capability.conditionals;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

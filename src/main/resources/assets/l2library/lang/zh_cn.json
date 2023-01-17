@@ -6,5 +6,8 @@
     "menu.tabs.attribute.add": "加法乘区: %s",
     "menu.tabs.attribute.mult_base": "乘法乘区: %s",
     "menu.tabs.attribute.mult_all": "独立乘法乘区: %s",
-    "menu.tabs.attribute.format": "(%s%s)x(1%s)x%s=%s"
+    "menu.tabs.attribute.format": "(%s%s)x(1%s)x%s=%s",
+    "generic.attack_range": "攻击距离",
+    "generic.reachDistance": "触及距离",
+    "forge.swimSpeed": "游泳速度"
 }

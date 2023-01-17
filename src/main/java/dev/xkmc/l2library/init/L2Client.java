@@ -6,6 +6,7 @@ import dev.xkmc.l2library.base.tabs.contents.TabInventory;
 import dev.xkmc.l2library.base.tabs.core.TabRegistry;
 import dev.xkmc.l2library.base.tabs.core.TabToken;
 import dev.xkmc.l2library.init.events.GenericEventHandler;
+import dev.xkmc.l2library.init.events.click.SlotClickEventHandler;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -20,6 +21,7 @@ public class L2Client {
 		bus.addListener(L2Client::client);
 		bus.addListener(GenericEventHandler::clientReloadListeners);
 		eventBus.addListener(TabInventory::guiPostInit);
+		eventBus.addListener(SlotClickEventHandler::onScreenRightClick);
 	}
 
 	public static void client(FMLClientSetupEvent event) {

@@ -5,9 +5,11 @@ import dev.xkmc.l2library.serial.codec.JsonCodec;
 import dev.xkmc.l2library.serial.codec.PacketCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.NonNullList;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 
@@ -19,7 +21,7 @@ import java.util.Objects;
 public abstract class AbstractShapedRecipe<T extends AbstractShapedRecipe<T>> extends ShapedRecipe {
 
 	public AbstractShapedRecipe(ResourceLocation rl, String group, int w, int h, NonNullList<Ingredient> ingredients, ItemStack result) {
-		super(rl, group, w, h, ingredients, result);
+		super(rl, group, CraftingBookCategory.MISC, w, h, ingredients, result);
 	}
 
 	@Override

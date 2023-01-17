@@ -22,6 +22,7 @@ apply plugin: 'org.spongepowered.mixin'
 version = "${ll_version}"
 group = 'dev.kxmc.l2library' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'l2library'
+jarJar.enable()
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
@@ -89,15 +90,9 @@ repositories {
         name 'Progwml6 maven'
         url 'https://dvs1.progwml6.com/files/maven'
     }
+    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
     maven {
-        // Location of the maven for vazkii's mods
-        name 'blamejared'
-        url 'https://maven.blamejared.com'
-    }
-    maven {
-        // Location of the maven for mixed mappings, Registrate, and Flywheel
-        name 'tterrag maven'
-        url 'https://maven.tterrag.com/'
+        url = "https://maven.theillusivec4.top/"
     }
     maven {
         url 'https://www.cursemaven.com'
@@ -105,43 +100,26 @@ repositories {
             includeGroup "curse.maven"
         }
     }
-    maven {
-        url "https://maven.architectury.dev/"
-    }
-    maven { url "https://maven.bai.lol" }
-    maven {
-        url "https://maven.saps.dev/minecraft"
-        content {
-            includeGroup "dev.latvian.mods"
-            includeGroup "dev.ftb.mods"
-        }
-    }
-    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
-    maven {
-        url = "https://maven.theillusivec4.top/"
-    }
-
+    mavenLocal()
     flatDir{
         dirs 'libs'
     }
-}
-
-configurations {
-    shade
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
-    //def registrate = "com.tterrag.registrate:Registrate:${registrate_version}"
-    def registrate = "local.libs.registrate:Registrate-MC1.19:1.2.0"
-    implementation fg.deobf(registrate)
-    shade registrate
+    implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
+    jarJar(group: 'com.tterrag.registrate', name: 'Registrate', version: "[MC1.19.3,MC1.20)")
 
     implementation fg.deobf("mezz.jei:jei-${jei_minecraft_version}:${jei_version}")
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
 
+    runtimeOnly fg.deobf('curse.maven:wthit-forge-455982:4297548')
+    runtimeOnly fg.deobf('curse.maven:badpackets-615134:4162675')
+    runtimeOnly fg.deobf('curse.maven:attributefix-280510:4325842')
+    runtimeOnly fg.deobf('curse.maven:max-health-fix-492246:4326612')
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
@@ -159,18 +137,9 @@ jar {
     }
 }
 
-shadowJar {
-    classifier = ''
-    configurations = [project.configurations.shade]
-    relocate 'com.tterrag.registrate', 'dev.xkmc.l2library.repack.registrate'
-}
-
 reobf {
-    shadowJar {}
+    jarJar { }
 }
-
-build.dependsOn shadowJar
-build.dependsOn reobfShadowJar
 
 // Example configuration to allow publishing using the maven-publish plugin
 // This is the preferred method to reobfuscate your jar file
@@ -191,6 +160,19 @@ publishing {
     }
 }
 
+tasks.jarJar.finalizedBy('reobfJarJar')
+
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+tasks.jarJar.configure {
+    // remove '-all' from jarJar jar file
+    classifier ''
+}
+
+jar {
+    // this now conflicts with jarJar as filenames are the same
+    // append a `-slim` to this jar, as this jar contains no pre-packaged libs
+    classifier 'slim'
 }

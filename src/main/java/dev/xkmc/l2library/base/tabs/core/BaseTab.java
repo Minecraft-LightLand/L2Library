@@ -9,6 +9,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.function.Supplier;
+
 public abstract class BaseTab<T extends BaseTab<T>> extends Button {
 
 	private final static ResourceLocation TEXTURE = new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
@@ -19,7 +21,7 @@ public abstract class BaseTab<T extends BaseTab<T>> extends Button {
 
 	@SuppressWarnings("unchecked")
 	public BaseTab(TabToken<T> token, TabManager manager, ItemStack stack, Component title) {
-		super(0, 0, 28, 32, title, b -> ((T) b).onTabClicked());
+		super(0, 0, 28, 32, title, b -> ((T) b).onTabClicked(), Supplier::get);
 		this.stack = stack;
 		this.token = token;
 		this.manager = manager;
@@ -37,9 +39,10 @@ public abstract class BaseTab<T extends BaseTab<T>> extends Button {
 			RenderSystem.enableBlend();
 			RenderSystem.setShader(GameRenderer::getPositionTexShader);
 			RenderSystem.setShaderTexture(0, TEXTURE);
-			token.type.draw(stack, manager.getScreen(), x, y, manager.selected == token, token.index);
+			token.type.draw(stack, manager.getScreen(), getX(), getY(), manager.selected == token, token.index);
 			RenderSystem.defaultBlendFunc();
-			token.type.drawIcon(x, y, token.index, Minecraft.getInstance().getItemRenderer(), this.stack);
+			token.type.drawIcon(getX(), getY()
+					, token.index, Minecraft.getInstance().getItemRenderer(), this.stack);
 		}
 		if (this.token.index == TabRegistry.getTabs().size() - 1) { // draw on last
 			manager.onToolTipRender(stack, mouseX, mouseY);

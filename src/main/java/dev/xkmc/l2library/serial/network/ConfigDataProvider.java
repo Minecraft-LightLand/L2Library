@@ -6,10 +6,10 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class ConfigDataProvider implements DataProvider {
 
@@ -27,17 +27,15 @@ public abstract class ConfigDataProvider implements DataProvider {
 	public abstract void add(Map<String, BaseConfig> map);
 
 	@Override
-	public void run(CachedOutput cache) {
-		Path folder = generator.getOutputFolder();
-		add(map);
-		map.forEach((k, v) -> {
-			try {
+	public CompletableFuture<?> run(CachedOutput cache) {
+		return CompletableFuture.runAsync(() -> {
+			Path folder = generator.getPackOutput().getOutputFolder();
+			add(map);
+			map.forEach((k, v) -> {
 				JsonElement elem = JsonCodec.toJson(v, BaseConfig.class);
 				Path path = folder.resolve(folder_path + k + ".json");
 				DataProvider.saveStable(cache, elem, path);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			});
 		});
 	}
 

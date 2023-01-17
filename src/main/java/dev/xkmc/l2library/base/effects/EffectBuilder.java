@@ -35,11 +35,6 @@ public class EffectBuilder {
 		return this;
 	}
 
-	public EffectBuilder setNoCounter(boolean noCounter) {
-		ins.noCounter = noCounter;
-		return this;
-	}
-
 	public EffectBuilder setShowIcon(boolean showIcon) {
 		ins.showIcon = showIcon;
 		return this;

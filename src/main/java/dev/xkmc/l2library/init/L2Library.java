@@ -7,12 +7,13 @@ import dev.xkmc.l2library.base.ingredients.EnchantmentIngredient;
 import dev.xkmc.l2library.base.ingredients.MobEffectIngredient;
 import dev.xkmc.l2library.base.ingredients.PotionIngredient;
 import dev.xkmc.l2library.base.tabs.contents.AttributeEntry;
+import dev.xkmc.l2library.capability.conditionals.ConditionalData;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityEvents;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
-import dev.xkmc.l2library.idea.infmaze.worldgen.MazeDimension;
-import dev.xkmc.l2library.init.events.attack.AttackEventHandler;
 import dev.xkmc.l2library.init.events.GenericEventHandler;
+import dev.xkmc.l2library.init.events.attack.AttackEventHandler;
+import dev.xkmc.l2library.init.events.click.SlotClickToServer;
 import dev.xkmc.l2library.serial.handler.Handlers;
 import dev.xkmc.l2library.serial.network.PacketHandler;
 import dev.xkmc.l2library.serial.network.SyncPacket;
@@ -48,13 +49,13 @@ public class L2Library {
 			e -> e.create(SyncPacket.class, PLAY_TO_CLIENT),
 			e -> e.create(EffectToClient.class, PLAY_TO_CLIENT),
 			e -> e.create(PlayerCapToClient.class, PLAY_TO_CLIENT),
-			e -> e.create(TargetSetPacket.class, PLAY_TO_SERVER));
+			e -> e.create(TargetSetPacket.class, PLAY_TO_SERVER),
+			e -> e.create(SlotClickToServer.class, PLAY_TO_SERVER));
 
 	public L2Library() {
 		Handlers.register();
 		FMLJavaModLoadingContext ctx = FMLJavaModLoadingContext.get();
 		IEventBus bus = ctx.getModEventBus();
-		bus.addListener(MazeDimension::register);
 		MinecraftForge.EVENT_BUS.register(GenericEventHandler.class);
 		MinecraftForge.EVENT_BUS.register(EffectSyncEvents.class);
 		MinecraftForge.EVENT_BUS.register(PlayerCapabilityEvents.class);
@@ -65,6 +66,7 @@ public class L2Library {
 		bus.addListener(L2Library::setup);
 		bus.addListener(L2Library::registerRecipeSerializers);
 		L2LibraryConfig.init();
+		ConditionalData.register();
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> L2Client.onCtorClient(bus, MinecraftForge.EVENT_BUS));
 	}
 

@@ -1,7 +1,7 @@
 package dev.xkmc.l2library.util.math;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -16,7 +16,7 @@ public class RenderUtils {
 			matrix.pushPose();
 			double offset = (Math.sin(time * 2 * Math.PI / 40.0) - 3) / 16;
 			matrix.translate(0.5, height + offset, 0.5);
-			matrix.mulPose(Vector3f.YP.rotationDegrees(time * 4.5f));
+			matrix.mulPose(Axis.YP.rotationDegrees(time * 4.5f));
 			Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, light,
 					overlay, matrix, buffer, 0);
 			matrix.popPose();

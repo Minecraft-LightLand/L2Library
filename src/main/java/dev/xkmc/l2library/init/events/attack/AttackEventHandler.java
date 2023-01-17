@@ -31,6 +31,8 @@ public class AttackEventHandler {
 			return;
 		AttackCache cache = new AttackCache();
 		CACHE.put(event.getTarget().getUUID(), cache);
+		ItemStack stack = event.getEntity().getMainHandItem();
+		cache.setupAttackerProfile(event.getEntity(), stack);
 		cache.pushPlayer(event);
 	}
 
@@ -68,12 +70,12 @@ public class AttackEventHandler {
 			cache = new AttackCache();
 			CACHE.put(id, cache);
 		}
-		cache.pushAttackPre(event);
 		DamageSource source = event.getSource();
 		if (source.getEntity() instanceof LivingEntity entity) { // direct damage only
 			ItemStack stack = entity.getMainHandItem();
 			cache.setupAttackerProfile(entity, stack);
 		}
+		cache.pushAttackPre(event);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)

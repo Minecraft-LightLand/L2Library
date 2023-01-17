@@ -9,10 +9,11 @@ import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
@@ -26,7 +27,7 @@ public class CustomShapedBuilder<T extends AbstractShapedRecipe<T>> extends Shap
 	private final RegistryEntry<AbstractShapedRecipe.Serializer<T>> serializer;
 
 	public CustomShapedBuilder(RegistryEntry<AbstractShapedRecipe.Serializer<T>> serializer, ItemLike result, int count) {
-		super(result, count);
+		super(RecipeCategory.MISC, result, count);
 		this.serializer = serializer;
 	}
 
@@ -35,11 +36,9 @@ public class CustomShapedBuilder<T extends AbstractShapedRecipe<T>> extends Shap
 		this.advancement.parent(new ResourceLocation("recipes/root"))
 				.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
 				.rewards(AdvancementRewards.Builder.recipe(id)).requirements(RequirementsStrategy.OR);
-		CreativeModeTab group = this.result.getItemCategory();
-		String folder = (group == null ? "nil" : group.getRecipeFolderName()) + "/";
 		pvd.accept(new Result(id, this.result, this.count, this.group == null ? "" : this.group,
 				this.rows, this.key, this.advancement, new ResourceLocation(id.getNamespace(),
-				"recipes/" + folder + id.getPath())));
+				"recipes/" + id.getPath())));
 	}
 
 	public CustomShapedBuilder<T> unlockedBy(RegistrateRecipeProvider pvd, ItemLike item) {
@@ -48,7 +47,7 @@ public class CustomShapedBuilder<T extends AbstractShapedRecipe<T>> extends Shap
 		return this;
 	}
 
-	public void addAdditional(JsonObject obj){
+	public void addAdditional(JsonObject obj) {
 
 	}
 
@@ -56,7 +55,7 @@ public class CustomShapedBuilder<T extends AbstractShapedRecipe<T>> extends Shap
 
 		public Result(ResourceLocation id, Item result, int count, String group, List<String> pattern,
 					  Map<Character, Ingredient> key, Advancement.Builder advancement, ResourceLocation path) {
-			super(id, result, count, group, pattern, key, advancement, path);
+			super(id, result, count, group, CraftingBookCategory.MISC, pattern, key, advancement, path);
 		}
 
 		@Override

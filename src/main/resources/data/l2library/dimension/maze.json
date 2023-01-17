@@ -1,6 +1,0 @@
-{
-    "type": "l2library:maze",
-    "generator": {
-      "type": "l2library:maze_chunkgen"
-    }
-  }

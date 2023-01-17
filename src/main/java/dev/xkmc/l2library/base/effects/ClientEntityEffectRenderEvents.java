@@ -77,7 +77,7 @@ public class ClientEntityEffectRenderEvents {
 		// restore the previous stack
 		posestack.pushPose();
 		posestack.setIdentity();
-		posestack.last().pose().multiply(last.pose());
+		posestack.last().pose().mul(last.pose());
 		posestack.last().normal().mul(last.normal());
 		RenderSystem.applyModelViewMatrix();
 

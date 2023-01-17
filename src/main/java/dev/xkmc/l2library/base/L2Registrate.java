@@ -55,19 +55,6 @@ public class L2Registrate extends AbstractRegistrate<L2Registrate> {
 		return new RegistryInstance<>(Suppliers.memoize(() -> RegistryManager.ACTIVE.getRegistry(key)), key);
 	}
 
-	public <E extends NamedEntry<E>> L2Registrate.RegistryInstance<E> newDatapackRegistry(String id, Class<E> cls, Codec<E> codec) {
-		ResourceKey<Registry<E>> key = this.makeRegistry(id, () ->
-				new RegistryBuilder<E>().dataPackRegistry(codec)
-						.onCreate((r, s) -> new RLClassHandler<StringTag, E>(cls, () -> r)));
-		return new RegistryInstance<>(Suppliers.memoize(() -> RegistryManager.ACTIVE.getRegistry(key)), key);
-	}
-
-
-	public <E extends NamedEntry<E>> L2Registrate.RegistryInstance<E> newDatapackRegistry(String id, Class<E> cls, Supplier<E> sup) {
-		return newDatapackRegistry(id, cls, Codec.unit(sup));
-	}
-
-
 	public record RegistryInstance<E extends NamedEntry<E>>(Supplier<IForgeRegistry<E>> supplier,
 															ResourceKey<Registry<E>> key) implements Supplier<IForgeRegistry<E>> {
 

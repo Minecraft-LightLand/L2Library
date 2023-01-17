@@ -50,23 +50,23 @@ public class TabManager {
 		guiLeft -= 56;
 		for (TabToken<?> token : TabRegistry.getTabs()) {
 			BaseTab<?> tab = token.create(this);
-			tab.x = guiLeft + (token.index + 2) * 28;
-			tab.y = guiTop - 28;
+			tab.setX(guiLeft + (token.index + 2) * 28);
+			tab.setY(guiTop - 28);
 			adder.accept(tab);
 			list.add(tab);
 		}
 
 		if (TabRegistry.getTabs().size() > TabType.MAX_TABS) {
-			adder.accept(new Button(guiLeft, guiTop - 50, 20, 20,
+			adder.accept(Button.builder(
 					Component.literal("<"), b -> {
-				tabPage = Math.max(tabPage - 1, 0);
-				updateVisibility();
-			}));
-			adder.accept(new Button(guiLeft + 252 - 20, guiTop - 50, 20, 20,
+						tabPage = Math.max(tabPage - 1, 0);
+						updateVisibility();
+					}).bounds(guiLeft, guiTop - 50, 20, 20).build());
+			adder.accept(Button.builder(
 					Component.literal(">"), b -> {
-				tabPage = Math.min(tabPage + 1, maxPages);
-				updateVisibility();
-			}));
+						tabPage = Math.min(tabPage + 1, maxPages);
+						updateVisibility();
+					}).bounds(guiLeft + 252 - 20, guiTop - 50, 20, 20).build());
 			maxPages = TabRegistry.getTabs().size() / TabType.MAX_TABS;
 		}
 
