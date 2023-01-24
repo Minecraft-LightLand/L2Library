@@ -22,7 +22,7 @@ public abstract class BaseContainerScreen<T extends BaseContainerMenu<T>> extend
 	}
 
 	protected boolean click(int btn) {
-		if (menu.clickMenuButton(Proxy.getClientPlayer(), btn)) {
+		if (menu.clickMenuButton(Proxy.getClientPlayer(), btn) && Minecraft.getInstance().gameMode !=null) {
 			Minecraft.getInstance().gameMode.handleInventoryButtonClick(this.menu.containerId, btn);
 			return true;
 		}

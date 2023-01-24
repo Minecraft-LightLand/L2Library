@@ -23,6 +23,8 @@ public class PredSlot extends Slot {
 	@Nullable
 	private BooleanSupplier inputLockPred;
 
+	private int max = 64;
+
 	private boolean changed = false;
 	private boolean lockInput = false, lockOutput = false;
 
@@ -51,6 +53,16 @@ public class PredSlot extends Slot {
 	public PredSlot setPickup(BooleanSupplier pickup) {
 		this.pickup = pickup;
 		return this;
+	}
+
+	public PredSlot setMax(int max) {
+		this.max = max;
+		return this;
+	}
+
+	@Override
+	public int getMaxStackSize() {
+		return Math.min(max, super.getMaxStackSize());
 	}
 
 	@Override

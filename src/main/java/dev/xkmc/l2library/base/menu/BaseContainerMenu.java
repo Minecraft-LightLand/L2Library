@@ -42,10 +42,22 @@ public class BaseContainerMenu<T extends BaseContainerMenu<T>> extends AbstractC
 
 		protected final T parent;
 		private boolean updating = false;
+		private int max = 64;
 
 		public BaseContainer(int size, T menu) {
 			super(size);
 			parent = menu;
+		}
+
+
+		public BaseContainer<T> setMax(int max) {
+			this.max = max;
+			return this;
+		}
+
+		@Override
+		public int getMaxStackSize() {
+			return Math.min(max, super.getMaxStackSize());
 		}
 
 		@Override
@@ -194,14 +206,14 @@ public class BaseContainerMenu<T extends BaseContainerMenu<T>> extends AbstractC
 	/**
 	 * get a slot as PredSlot, as most slots should be
 	 */
-	protected PredSlot getAsPredSlot(String name, int i, int j) {
+	public PredSlot getAsPredSlot(String name, int i, int j) {
 		return (PredSlot) getSlot(name, i, j);
 	}
 
 	/**
 	 * get a slot as PredSlot, as most slots should be
 	 */
-	protected PredSlot getAsPredSlot(String name) {
+	public PredSlot getAsPredSlot(String name) {
 		return (PredSlot) getSlot(name, 0, 0);
 	}
 
@@ -209,12 +221,13 @@ public class BaseContainerMenu<T extends BaseContainerMenu<T>> extends AbstractC
 	public ItemStack quickMoveStack(Player pl, int id) {
 		ItemStack stack = slots.get(id).getItem();
 		int n = container.getContainerSize();
+		boolean moved;
 		if (id >= 36) {
-			moveItemStackTo(stack, 0, 36, true);
+			moved = moveItemStackTo(stack, 0, 36, true);
 		} else {
-			moveItemStackTo(stack, 36, 36 + n, false);
+			moved = moveItemStackTo(stack, 36, 36 + n, false);
 		}
-		container.setChanged();
+		if (moved) slots.get(id).setChanged();
 		return ItemStack.EMPTY;
 	}
 
