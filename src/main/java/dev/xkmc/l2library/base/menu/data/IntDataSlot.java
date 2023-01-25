@@ -13,11 +13,11 @@ public class IntDataSlot {
 	}
 
 	public int get() {
-		return hi.get() << 16 | lo.get();
+		return hi.get() << 16 | Short.toUnsignedInt((short) lo.get());
 	}
 
 	public void set(int pc) {
-		lo.set(pc & 0xFFFF);
+		lo.set((short) (pc & 0xFFFF));
 		hi.set(pc >> 16);
 	}
 

@@ -95,6 +95,14 @@ public class PredSlot extends Slot {
 		return false;
 	}
 
+	public boolean clearDirty() {
+		if (changed) {
+			changed = false;
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * eject the content of this slot if the item is no longer allowed
 	 */
