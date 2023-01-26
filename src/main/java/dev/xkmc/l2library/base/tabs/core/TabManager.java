@@ -2,6 +2,7 @@ package dev.xkmc.l2library.base.tabs.core;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.xkmc.l2library.base.tabs.contents.BaseTextScreen;
+import dev.xkmc.l2library.init.L2LibraryConfig;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -29,6 +30,8 @@ public class TabManager {
 
 	public void init(Consumer<AbstractWidget> adder, TabToken<?> selected) {
 		list.clear();
+		if (!L2LibraryConfig.CLIENT.showTabs.get())
+			return;
 		this.selected = selected;
 		int guiLeft, guiTop;
 		if (screen instanceof InventoryScreen inv) {
