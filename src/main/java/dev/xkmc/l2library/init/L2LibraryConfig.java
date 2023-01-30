@@ -13,6 +13,8 @@ public class L2LibraryConfig {
 		public final ForgeConfigSpec.IntValue infoAnchor;
 		public final ForgeConfigSpec.DoubleValue infoMaxWidth;
 
+		public final ForgeConfigSpec.BooleanValue showTabs;
+
 		Client(ForgeConfigSpec.Builder builder) {
 			infoAlpha = builder.comment("Info background transparency. 1 means opaque.")
 					.defineInRange("infoAlpha", 0.5, 0, 1);
@@ -20,6 +22,9 @@ public class L2LibraryConfig {
 					.defineInRange("infoAnchor", 1, 0, 2);
 			infoMaxWidth = builder.comment("Info max with. 0.5 means half screen. default: 0.3")
 					.defineInRange("infoMaxWidth", 0.3, 0, 0.5);
+
+			showTabs = builder.comment("Show inventory tabs")
+					.define("showTabs", true);
 		}
 
 	}
