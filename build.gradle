@@ -90,6 +90,9 @@ repositories {
         name 'blamejared'
         url 'https://maven.blamejared.com'
     }
+    maven { // Registrate
+        url "https://maven.tterrag.com/"
+    }
     maven {
         url = "https://maven.theillusivec4.top/"
     }
