@@ -13,7 +13,7 @@ import java.util.Optional;
 public class JsonContext extends TreeContext<JsonElement, JsonObject, JsonArray> {
 
 	public JsonContext() {
-		super(Optional.of(Pair.of(Optional.of(JsonNull.INSTANCE), Optional.empty())));
+		super(Optional.of(Pair.of(JsonNull.INSTANCE, Optional.empty())));
 	}
 
 	@Override

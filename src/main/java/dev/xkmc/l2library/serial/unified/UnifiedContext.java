@@ -14,19 +14,8 @@ import java.util.Optional;
 
 public abstract class UnifiedContext<E, O, A> {
 
-	private final Map<Marker<?>, Object> map = new HashMap<>();
-
 	protected UnifiedContext() {
 
-	}
-
-	protected <T> void setMarker(Marker<T> marker, T mark) {
-		map.put(marker, mark);
-	}
-
-	@Nullable
-	public <T> T getMarker(Marker<T> marker) {
-		return Wrappers.cast(map.get(marker));
 	}
 
 	public abstract boolean hasSpecialHandling(Class<?> cls);
@@ -47,7 +36,7 @@ public abstract class UnifiedContext<E, O, A> {
 	 * Optional.of(Pair.of(..., Optional.empty())) : fast return
 	 * Optional.of(Pair.of(..., Optional.of(...))) : class override
 	 */
-	public abstract Optional<Pair<Optional<E>, Optional<ClassCache>>> writeRealClass(TypeInfo cls, Object obj) throws Exception;
+	public abstract Optional<Pair<E, Optional<ClassCache>>> writeRealClass(TypeInfo cls, @Nullable Object obj) throws Exception;
 
 	public abstract boolean shouldRead(O obj, FieldCache field) throws Exception;
 

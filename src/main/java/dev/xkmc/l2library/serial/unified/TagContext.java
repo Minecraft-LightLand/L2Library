@@ -4,32 +4,37 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.serial.handler.Handlers;
-import dev.xkmc.l2library.serial.wrapper.ClassCache;
 import dev.xkmc.l2library.serial.wrapper.FieldCache;
 import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.world.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
 public class TagContext extends TreeContext<Tag, CompoundTag, ListTag> {
 
+	private static final CompoundTag NULL = new CompoundTag();
+
+	static {
+		NULL.putBoolean("_null", true);
+	}
+
 	private final Predicate<SerialClass.SerialField> pred;
 
 	public TagContext(Predicate<SerialClass.SerialField> pred) {
-		super(Optional.of(Pair.of(Optional.empty(), Optional.empty())));
+		super(Optional.of(Pair.of(NULL, Optional.empty())));
 		this.pred = pred;
 	}
 
 	@Override
-	public Optional<Either<Optional<Object>, TypeInfo>> fetchRealClass(Tag e, TypeInfo def) throws Exception {
-		if (e == null) {
-			return Optional.of(Either.left(def.getAsClass() == ItemStack.class ? Optional.of(ItemStack.EMPTY) : Optional.empty()));
+	public Optional<Either<Optional<Object>, TypeInfo>> fetchRealClass(@Nullable Tag e, TypeInfo def) throws Exception {
+		if (e == null || e instanceof CompoundTag tag && tag.contains("_null")) {
+			return Optional.of(Either.left(Optional.empty()));
 		}
 		if (e instanceof CompoundTag obj) {
 			if (obj.contains("_class")) {
@@ -49,7 +54,8 @@ public class TagContext extends TreeContext<Tag, CompoundTag, ListTag> {
 			Object mkey = key.getAsClass() == String.class ? str :
 					key.getAsClass().isEnum() ? Enum.valueOf((Class) key.getAsClass(), str) :
 							Handlers.NBT_MAP.get(key.getAsClass()).fromTag(StringTag.valueOf(str));
-			map.put(mkey, UnifiedCodec.deserializeValue(this, ctag.get(str), val, null));
+			Tag t = ctag.get(str);
+			map.put(mkey, UnifiedCodec.deserializeValue(this, t == null ? NULL : t, val, null));
 		}
 		return map;
 	}
@@ -71,12 +77,13 @@ public class TagContext extends TreeContext<Tag, CompoundTag, ListTag> {
 
 	@Override
 	public boolean shouldRead(CompoundTag obj, FieldCache field) throws Exception {
-		return pred.test(field.getSerialAnnotation()) && obj.contains(field.getName());
+		return pred.test(field.getSerialAnnotation());
 	}
 
 	@Override
 	public Tag retrieve(CompoundTag obj, String field) {
-		return obj.get(field);
+		Tag t = obj.get(field);
+		return t == null ? NULL : t;
 	}
 
 	@Override
@@ -110,7 +117,7 @@ public class TagContext extends TreeContext<Tag, CompoundTag, ListTag> {
 	}
 
 	@Override
-	public void addField(CompoundTag obj, String str, Tag e) {
+	public void addField(CompoundTag obj, String str, @Nullable Tag e) {
 		if (e != null) {
 			obj.put(str, e);
 		}

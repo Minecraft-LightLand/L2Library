@@ -9,6 +9,7 @@ import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import dev.xkmc.l2library.util.code.Wrappers;
 import net.minecraft.network.FriendlyByteBuf;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class PacketContext extends SingletonContext<FriendlyByteBuf> {
@@ -44,22 +45,22 @@ public class PacketContext extends SingletonContext<FriendlyByteBuf> {
 	}
 
 	@Override
-	public Optional<Pair<Optional<FriendlyByteBuf>, Optional<ClassCache>>> writeRealClass(TypeInfo cls, Object obj) throws Exception {
+	public Optional<Pair<FriendlyByteBuf, Optional<ClassCache>>> writeRealClass(TypeInfo cls, @Nullable Object obj) throws Exception {
 		if (obj == null) {
 			instance.writeByte(0);
-			return Optional.of(Pair.of(Optional.of(instance), Optional.empty()));
+			return Optional.of(Pair.of(instance, Optional.empty()));
 		}
 		Optional<Wrappers.ExcSup<FriendlyByteBuf>> special = UnifiedCodec.serializeSpecial(this, cls, obj);
 		if (special.isPresent()) {
 			instance.writeByte(1);
-			return Optional.of(Pair.of(Optional.ofNullable(special.get().get()), Optional.empty()));
+			return Optional.of(Pair.of(special.get().get(), Optional.empty()));
 		}
 		if (obj.getClass() != cls.getAsClass()) {
 			ClassCache cache = ClassCache.get(obj.getClass());
 			if (cache.getSerialAnnotation() != null) {
 				instance.writeByte(2);
 				instance.writeUtf(obj.getClass().getName());
-				return Optional.of(Pair.of(Optional.of(instance), Optional.of(cache)));
+				return Optional.of(Pair.of(instance, Optional.of(cache)));
 			}
 		}
 		instance.writeByte(1);

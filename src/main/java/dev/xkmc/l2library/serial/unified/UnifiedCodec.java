@@ -32,7 +32,7 @@ public class UnifiedCodec {
 	}
 
 	public static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
-	O serializeObject(C ctx, O ans, ClassCache cls, Object obj) throws Exception {
+	O serializeObject(C ctx, O ans, ClassCache cls, @Nullable Object obj) throws Exception {
 		if (DEBUG) {
 			try {
 				return serializeObjectImpl(ctx, ans, cls, obj);
@@ -43,6 +43,7 @@ public class UnifiedCodec {
 		return serializeObjectImpl(ctx, ans, cls, obj);
 	}
 
+	@Nullable
 	public static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
 	Object deserializeValue(C ctx, E e, TypeInfo cls, @Nullable Object ans) throws Exception {
 		var real = ctx.fetchRealClass(e, cls);
@@ -83,19 +84,19 @@ public class UnifiedCodec {
 		}
 		var real = ctx.writeRealClass(cls, obj);
 		if (real.isPresent()) {
-			Optional<E> first = real.get().getFirst();
+			E first = real.get().getFirst();
 			Optional<ClassCache> second = real.get().getSecond();
 			if (second.isEmpty()) {
-				return first.orElse(null);
+				return first;
 			}
-			O o = first.map(ctx::castAsMap).orElseGet(ctx::createMap);
+			O o = ctx.castAsMap(first);
 			return serializeObject(ctx, o, second.get(), obj);
 		}
 		return serializeObject(ctx, ctx.createMap(), cls.toCache(), obj);
 	}
 
 	private static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
-	O serializeObjectImpl(C ctx, O ans, ClassCache cls, Object obj) throws Exception {
+	O serializeObjectImpl(C ctx, O ans, ClassCache cls, @Nullable Object obj) throws Exception {
 		if (cls.getSerialAnnotation() == null)
 			throw new Exception("cannot serialize " + cls);
 		while (cls.getSerialAnnotation() != null) {
@@ -182,7 +183,7 @@ public class UnifiedCodec {
 	}
 
 	static <C extends UnifiedContext<E, O, A>, E, O extends E, A extends E>
-	Optional<Wrappers.ExcSup<E>> serializeSpecial(C ctx, TypeInfo cls, @Nullable Object obj) throws Exception {
+	Optional<Wrappers.ExcSup<E>> serializeSpecial(C ctx, TypeInfo cls, Object obj) {
 		if (ctx.hasSpecialHandling(cls.getAsClass())) {
 			return Optional.of(() -> ctx.serializeSpecial(cls.getAsClass(), obj));
 		}

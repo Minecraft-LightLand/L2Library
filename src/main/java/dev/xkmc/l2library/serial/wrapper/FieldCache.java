@@ -4,6 +4,7 @@ import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.serial.config.ConfigCollect;
 import dev.xkmc.l2library.util.code.LazyExc;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 
 public class FieldCache {
@@ -21,6 +22,7 @@ public class FieldCache {
 		this.field.setAccessible(true);
 	}
 
+	@Nullable
 	public SerialClass.SerialField getSerialAnnotation() throws Exception {
 		return serial.get();
 	}
@@ -33,11 +35,11 @@ public class FieldCache {
 		return name;
 	}
 
-	public Object get(Object ans) throws Exception {
+	public Object get(@Nullable Object ans) throws Exception {
 		return field.get(ans);
 	}
 
-	public void set(Object target, Object value) throws Exception {
+	public void set(Object target, @Nullable Object value) throws Exception {
 		field.set(target, value);
 	}
 

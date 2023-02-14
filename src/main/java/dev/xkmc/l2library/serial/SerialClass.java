@@ -17,8 +17,14 @@ public @interface SerialClass {
 	@Target(FIELD)
 	@interface SerialField {
 
+		/**
+		 * default false. If this is false, value will not be serialized to NBT that is sent to client
+		 */
 		boolean toClient() default false;
 
+		/**
+		 * default false. For Capability only. If this is false, value will not be serialized to NBT that is sent to other clients
+		 */
 		boolean toTracking() default false;
 
 	}

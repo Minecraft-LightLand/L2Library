@@ -3,6 +3,7 @@ package dev.xkmc.l2library.serial.wrapper;
 import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.util.code.LazyExc;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Method;
 
 public class MethodCache {
@@ -15,6 +16,7 @@ public class MethodCache {
 		serial = new LazyExc<>(() -> method.getAnnotation(SerialClass.OnInject.class));
 	}
 
+	@Nullable
 	public SerialClass.OnInject getInjectAnnotation() throws Exception {
 		return serial.get();
 	}
