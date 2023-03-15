@@ -77,7 +77,7 @@ public class TagContext extends TreeContext<Tag, CompoundTag, ListTag> {
 
 	@Override
 	public boolean shouldRead(CompoundTag obj, FieldCache field) throws Exception {
-		return pred.test(field.getSerialAnnotation());
+		return pred.test(field.getSerialAnnotation()) && obj.contains(field.getName());
 	}
 
 	@Override
