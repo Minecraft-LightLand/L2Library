@@ -37,11 +37,11 @@ enum TabType {
 
 		int ty = selected ? this.textureY + this.height : this.textureY;
 		int h = selected ? this.height : this.height - 4;
-		screen.blit(stack, x, y, tx, ty, this.width, h);
+		GuiComponent.blit(stack, x, y, tx, ty, this.width, h);
 	}
 
-	public void drawIcon(int x, int y, int index, ItemRenderer renderer, ItemStack stack) {
-		renderer.renderAndDecorateFakeItem(stack, x + 6, y + 9);
+	public void drawIcon(PoseStack poseStack, int x, int y, int index, ItemRenderer renderer, ItemStack stack) {
+		renderer.renderAndDecorateFakeItem(poseStack, stack, x + 6, y + 9);
 	}
 
 	public int getX(int index) {

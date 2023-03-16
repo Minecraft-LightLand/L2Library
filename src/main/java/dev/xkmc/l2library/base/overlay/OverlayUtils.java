@@ -74,12 +74,10 @@ public class OverlayUtils extends GuiComponent {
 		fillGradient(matrix4f, bufferbuilder, x0 + w + 2, y1 - 3 + 1, x0 + w + 3, y1 + h + 3 - 1, 400, bs, be);
 		fillGradient(matrix4f, bufferbuilder, x0 - 3, y1 - 3, x0 + w + 3, y1 - 3 + 1, 400, bs, bs);
 		fillGradient(matrix4f, bufferbuilder, x0 - 3, y1 + h + 2, x0 + w + 3, y1 + h + 3, 400, be, be);
-		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.disableDepthTest();
 		BufferUploader.drawWithShader(bufferbuilder.end());
-		RenderSystem.enableTexture();
 		for (FormattedCharSequence text : ans) {
 			font.draw(stack, text, x0, y0, tc);
 			y0 += 12;

@@ -25,7 +25,7 @@ public abstract class AbstractShapelessRecipe<T extends AbstractShapelessRecipe<
 	}
 
 	public List<ItemStack> getJEIResult() {
-		return List.of(getResultItem());
+		return List.of(result);
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public abstract class AbstractShapelessRecipe<T extends AbstractShapelessRecipe<
 
 		public T fromJson(ResourceLocation id, JsonObject obj) {
 			ShapelessRecipe r = super.fromJson(id, obj);
-			return factory.create(r.getId(), r.getGroup(), r.getResultItem(), r.getIngredients());
+			return factory.create(r.getId(), r.getGroup(), r.result, r.getIngredients());
 		}
 
 		public T fromNetwork(ResourceLocation id, FriendlyByteBuf obj) {
@@ -56,7 +56,7 @@ public abstract class AbstractShapelessRecipe<T extends AbstractShapelessRecipe<
 			if (r == null) {
 				return null;
 			}
-			return factory.create(r.getId(), r.getGroup(), r.getResultItem(), r.getIngredients());
+			return factory.create(r.getId(), r.getGroup(), r.result, r.getIngredients());
 		}
 
 		public void toJson(T recipe, JsonObject obj) {

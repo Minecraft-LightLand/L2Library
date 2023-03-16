@@ -9,28 +9,34 @@ import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.UpgradeRecipeBuilder;
+import net.minecraft.data.recipes.SmithingTransformRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class CustomSmithingBuilder<T extends AbstractSmithingRecipe<T>> extends UpgradeRecipeBuilder {
+public class CustomSmithingBuilder<T extends AbstractSmithingRecipe<T>> extends SmithingTransformRecipeBuilder implements IExtendedRecipe{
 
 	private final RegistryEntry<AbstractSmithingRecipe.Serializer<T>> serializer;
 
 	public CustomSmithingBuilder(RegistryEntry<AbstractSmithingRecipe.Serializer<T>> serializer, Ingredient left, Ingredient right, Item result) {
-		super(serializer.get(), left, right, RecipeCategory.MISC, result);
+		super(serializer.get(), Ingredient.EMPTY, left, right, RecipeCategory.MISC, result);
 		this.serializer = serializer;
 	}
 
-	public void save(Consumer<FinishedRecipe> p_200485_1_, ResourceLocation p_200485_2_) {
-		this.ensureValid(p_200485_2_);
-		this.advancement.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(p_200485_2_)).rewards(AdvancementRewards.Builder.recipe(p_200485_2_)).requirements(RequirementsStrategy.OR);
-		p_200485_1_.accept(new Result(p_200485_2_, new ResourceLocation(p_200485_2_.getNamespace(), "recipes/" + p_200485_2_.getPath())));
+	public void save(Consumer<FinishedRecipe> pvd, ResourceLocation id) {
+		this.ensureValid(id);
+		this.advancement.parent(new ResourceLocation("recipes/root"))
+				.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
+				.rewards(AdvancementRewards.Builder.recipe(id)).requirements(RequirementsStrategy.OR);
+		pvd.accept(new ExtendedRecipeResult(new SmithingTransformRecipeBuilder.Result(id,
+				getType(), Ingredient.EMPTY, base, addition, result, advancement,
+				new ResourceLocation(id.getNamespace(), "recipes/" + id.getPath())),
+				this));
 	}
 
 	public CustomSmithingBuilder<T> unlockedBy(RegistrateRecipeProvider pvd, ItemLike item) {
@@ -39,27 +45,12 @@ public class CustomSmithingBuilder<T extends AbstractSmithingRecipe<T>> extends 
 		return this;
 	}
 
-
 	public void addAdditional(JsonObject obj) {
 	}
 
-	class Result extends UpgradeRecipeBuilder.Result {
-
-		public Result(ResourceLocation id, ResourceLocation folder) {
-			super(id, serializer.get(), base, addition, result, advancement, folder);
-		}
-
-		@Override
-		public void serializeRecipeData(JsonObject obj) {
-			super.serializeRecipeData(obj);
-			addAdditional(obj);
-		}
-
-		@Override
-		public RecipeSerializer<?> getType() {
-			return serializer.get();
-		}
+	@Override
+	public RecipeSerializer<?> getType() {
+		return serializer.get();
 	}
-
 
 }

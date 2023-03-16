@@ -68,7 +68,7 @@ public class PacketHandler {
 	}
 
 	public void toClientPlayer(SimplePacketBase packet, ServerPlayer e) {
-		channel.sendTo(packet, e.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
+		channel.sendTo(packet, e.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
 	}
 
 	public void toAllClient(SimplePacketBase packet) {

@@ -8,19 +8,17 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShapelessRecipe;
-import net.minecraft.world.item.crafting.UpgradeRecipe;
+import net.minecraft.world.item.crafting.SmithingTransformRecipe;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public abstract class AbstractSmithingRecipe<T extends AbstractSmithingRecipe<T>> extends UpgradeRecipe {
+public abstract class AbstractSmithingRecipe<T extends AbstractSmithingRecipe<T>> extends SmithingTransformRecipe {
 
 	public AbstractSmithingRecipe(ResourceLocation rl, Ingredient left, Ingredient right, ItemStack result) {
-		super(rl, left, right, result);
+		super(rl, Ingredient.EMPTY, left, right, result);
 	}
 
 	@Override
@@ -33,7 +31,7 @@ public abstract class AbstractSmithingRecipe<T extends AbstractSmithingRecipe<T>
 
 	}
 
-	public static class Serializer<T extends AbstractSmithingRecipe<T>> extends UpgradeRecipe.Serializer {
+	public static class Serializer<T extends AbstractSmithingRecipe<T>> extends SmithingTransformRecipe.Serializer {
 
 		private final RecipeFactory<T> factory;
 
@@ -42,17 +40,17 @@ public abstract class AbstractSmithingRecipe<T extends AbstractSmithingRecipe<T>
 		}
 
 		public T fromJson(ResourceLocation id, JsonObject obj) {
-			UpgradeRecipe r = super.fromJson(id, obj);
-			return factory.create(r.getId(), r.base, r.addition, r.getResultItem());
+			SmithingTransformRecipe r = super.fromJson(id, obj);
+			return factory.create(r.getId(), r.base, r.addition, r.result);
 		}
 
 
 		public T fromNetwork(ResourceLocation id, FriendlyByteBuf obj) {
-			UpgradeRecipe r = super.fromNetwork(id, obj);
+			SmithingTransformRecipe r = super.fromNetwork(id, obj);
 			if (r == null) {
 				return null;
 			}
-			return factory.create(r.getId(), r.base, r.addition, r.getResultItem());
+			return factory.create(r.getId(), r.base, r.addition, r.result);
 		}
 
 
@@ -75,7 +73,7 @@ public abstract class AbstractSmithingRecipe<T extends AbstractSmithingRecipe<T>
 		}
 
 		@Override
-		public void toNetwork(FriendlyByteBuf buf, UpgradeRecipe rec) {
+		public void toNetwork(FriendlyByteBuf buf, SmithingTransformRecipe rec) {
 			super.toNetwork(buf, rec);
 			PacketCodec.to(buf, rec);
 		}

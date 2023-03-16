@@ -44,7 +44,7 @@ public abstract class AbstractShapedRecipe<T extends AbstractShapedRecipe<T>> ex
 
 		public T fromJson(ResourceLocation id, JsonObject obj) {
 			ShapedRecipe r = super.fromJson(id, obj);
-			return factory.create(r.getId(), r.getGroup(), r.getRecipeWidth(), r.getRecipeHeight(), r.getIngredients(), r.getResultItem());
+			return factory.create(r.getId(), r.getGroup(), r.getRecipeWidth(), r.getRecipeHeight(), r.getIngredients(), r.result);
 		}
 
 		public T fromNetwork(ResourceLocation id, FriendlyByteBuf obj) {
@@ -52,7 +52,7 @@ public abstract class AbstractShapedRecipe<T extends AbstractShapedRecipe<T>> ex
 			if (r == null) {
 				return null;
 			}
-			return factory.create(r.getId(), r.getGroup(), r.getRecipeWidth(), r.getRecipeHeight(), r.getIngredients(), r.getResultItem());
+			return factory.create(r.getId(), r.getGroup(), r.getRecipeWidth(), r.getRecipeHeight(), r.getIngredients(), r.result);
 		}
 
 		public void toJson(T recipe, JsonObject obj) {

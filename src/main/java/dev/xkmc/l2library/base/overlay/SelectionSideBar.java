@@ -56,15 +56,14 @@ public abstract class SelectionSideBar extends SideBar implements IGuiOverlay {
 				}
 			}
 			if (!stack.isEmpty()) {
-				renderer.renderAndDecorateItem(stack, dx, y);
-				renderer.renderGuiItemDecorations(font, stack, dx, y);
+				renderer.renderAndDecorateItem(poseStack, stack, dx, y);
+				renderer.renderGuiItemDecorations(poseStack, font, stack, dx, y);
 			}
 		}
 	}
 
 	public void renderSelection(int x, int y, int a, boolean available, boolean selected) {
 		RenderSystem.disableDepthTest();
-		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		Tesselator tex = Tesselator.getInstance();
@@ -77,7 +76,6 @@ public abstract class SelectionSideBar extends SideBar implements IGuiOverlay {
 		if (selected) {
 			OverlayUtils.drawRect(builder, x, y, 16, 16, 255, 170, 0, 255);
 		}
-		RenderSystem.enableTexture();
 		RenderSystem.enableDepthTest();
 	}
 

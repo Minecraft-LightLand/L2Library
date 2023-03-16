@@ -11,10 +11,11 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 
 import java.util.function.Consumer;
 
-public class ResultTagShapedBuilder extends ShapedRecipeBuilder {
+public class ResultTagShapedBuilder extends ShapedRecipeBuilder implements IExtendedRecipe {
 
 	private final ItemStack stack;
 
@@ -28,22 +29,20 @@ public class ResultTagShapedBuilder extends ShapedRecipeBuilder {
 		this.advancement.parent(new ResourceLocation("recipes/root"))
 				.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
 				.rewards(AdvancementRewards.Builder.recipe(id)).requirements(RequirementsStrategy.OR);
-		pvd.accept(new Result(id, this.group == null ? "" : this.group, new ResourceLocation(id.getNamespace(),
-				"recipes/" + id.getPath())));
+		pvd.accept(new ExtendedRecipeResult(new ShapedRecipeBuilder.Result(id, result, count,
+				this.group == null ? "" : this.group, CraftingBookCategory.MISC, rows, key, advancement,
+				new ResourceLocation(id.getNamespace(), "recipes/" + id.getPath()), false),
+				this));
 	}
 
-	class Result extends ShapedRecipeBuilder.Result {
-
-		public Result(ResourceLocation id, String group, ResourceLocation path) {
-			super(id, result, count, group, CraftingBookCategory.MISC, rows, key, advancement, path);
-		}
-
-		@Override
-		public void serializeRecipeData(JsonObject obj) {
-			super.serializeRecipeData(obj);
-			obj.add("result", StackHelper.serializeForgeItemStack(stack));
-		}
+	@Override
+	public void addAdditional(JsonObject json) {
+		json.add("result", StackHelper.serializeForgeItemStack(stack));
 	}
 
+	@Override
+	public RecipeSerializer<?> getType() {
+		return RecipeSerializer.SHAPED_RECIPE;
+	}
 
 }

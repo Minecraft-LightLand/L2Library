@@ -37,6 +37,7 @@ public class BaseRecipeBuilder<T extends BaseRecipeBuilder<T, Rec, SRec, Inv>, R
 		return getThis();
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	public void save(Consumer<FinishedRecipe> pvd, ResourceLocation id) {
 		this.ensureValid(id);
 		this.advancement.parent(new ResourceLocation("recipes/root"))
@@ -62,6 +63,7 @@ public class BaseRecipeBuilder<T extends BaseRecipeBuilder<T, Rec, SRec, Inv>, R
 
 		}
 
+		@SuppressWarnings("ConstantConditions")
 		@Override
 		public JsonObject serializeRecipe() {
 			JsonObject jsonobject = JsonCodec.toJson(recipe).getAsJsonObject();
@@ -78,7 +80,6 @@ public class BaseRecipeBuilder<T extends BaseRecipeBuilder<T, Rec, SRec, Inv>, R
 			return this.id;
 		}
 
-		@Nullable
 		public JsonObject serializeAdvancement() {
 			return this.advancement.serializeToJson();
 		}

@@ -18,6 +18,7 @@ public class RecSerializer<R extends Recipe<I>, I extends Container> implements 
 		this.cls = cls;
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	@Override
 	public R fromJson(ResourceLocation id, JsonObject json) {
 		return JsonCodec.from(json, cls,
@@ -36,6 +37,7 @@ public class RecSerializer<R extends Recipe<I>, I extends Container> implements 
 		PacketCodec.to(buf, recipe);
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	public R blank() {
 		return Wrappers.get(() -> cls.getConstructor(ResourceLocation.class).newInstance(new ResourceLocation("dummy")));
 	}

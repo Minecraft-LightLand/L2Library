@@ -1,6 +1,7 @@
 package dev.xkmc.l2library.base.recipe;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -32,13 +33,12 @@ public abstract class BaseRecipe<
 	public abstract boolean matches(Inv inv, Level world);
 
 	@Override
-	public abstract ItemStack assemble(Inv inv);
+	public abstract ItemStack assemble(Inv inv, RegistryAccess access);
 
 	@Override
 	public abstract boolean canCraftInDimensions(int r, int c);
 
-	@Override
-	public abstract ItemStack getResultItem();
+	public abstract ItemStack getResultItem(RegistryAccess access);
 
 	@Override
 	public final ResourceLocation getId() {

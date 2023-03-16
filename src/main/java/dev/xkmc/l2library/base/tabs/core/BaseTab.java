@@ -41,7 +41,7 @@ public abstract class BaseTab<T extends BaseTab<T>> extends Button {
 			RenderSystem.setShaderTexture(0, TEXTURE);
 			token.type.draw(stack, manager.getScreen(), getX(), getY(), manager.selected == token, token.index);
 			RenderSystem.defaultBlendFunc();
-			token.type.drawIcon(getX(), getY()
+			token.type.drawIcon(stack, getX(), getY()
 					, token.index, Minecraft.getInstance().getItemRenderer(), this.stack);
 		}
 		if (this.token.index == TabRegistry.getTabs().size() - 1) { // draw on last

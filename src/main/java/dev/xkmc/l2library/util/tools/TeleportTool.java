@@ -9,6 +9,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.Vec3;
@@ -46,11 +47,11 @@ public class TeleportTool {
 	}
 
 	public static void performTeleport(Entity entity, ServerLevel level, double x, double y, double z, float xrot, float yrot) {
-		Set<ClientboundPlayerPositionPacket.RelativeArgument> set = EnumSet.noneOf(ClientboundPlayerPositionPacket.RelativeArgument.class);
+		Set<RelativeMovement> set = EnumSet.noneOf(RelativeMovement.class);
 		float f = Mth.wrapDegrees(xrot);
 		float f1 = Mth.wrapDegrees(yrot);
 		if (entity instanceof ServerPlayer player) {
-			ChunkPos chunkpos = new ChunkPos(new BlockPos(x, y, z));
+			ChunkPos chunkpos = new ChunkPos(BlockPos.containing(x, y, z));
 			level.getChunkSource().addRegionTicket(TicketType.POST_TELEPORT, chunkpos, 1, player.getId());
 			player.stopRiding();
 			if (player.isSleeping()) {
