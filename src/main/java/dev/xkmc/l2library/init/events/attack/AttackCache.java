@@ -9,6 +9,9 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class AttackCache {
@@ -33,6 +36,9 @@ public class AttackCache {
 	private float damage_pre;
 	private float damage_modified;
 	private float damage_dealt;
+
+	private final List<DamageModifier> modifierHurt = new ArrayList<>();
+	private final List<DamageModifier> modifierDealt = new ArrayList<>();
 
 	void pushPlayer(AttackEntityEvent event) {
 		stage = Stage.PLAYER_ATTACK;
@@ -62,10 +68,16 @@ public class AttackCache {
 	void pushHurtPre(LivingHurtEvent event) {
 		stage = Stage.ACTUALLY_HURT_PRE;
 		hurt = event;
-		damage_modified = event.getAmount();
 		damageFrozen = false;
 		AttackEventHandler.LISTENERS.forEach(e -> e.onHurt(this, weapon));
 		damageFrozen = true;
+		damage_modified = event.getAmount();
+		Comparator<DamageModifier> comp = Comparator.comparingInt(e->e.order().ordinal());
+		comp = comp.thenComparingInt(DamageModifier::priority);
+		modifierHurt.sort(comp);
+		for (DamageModifier mod : modifierHurt){
+			damage_modified = mod.modify(damage_modified);
+		}
 		if (damage_modified != event.getAmount()) {
 			event.setAmount(damage_modified);
 		}
@@ -79,8 +91,14 @@ public class AttackCache {
 	void pushDamagePre(LivingDamageEvent event) {
 		stage = Stage.DAMAGE_PRE;
 		damage = event;
-		damage_dealt = event.getAmount();
 		AttackEventHandler.LISTENERS.forEach(e -> e.onDamage(this, weapon));
+		damage_dealt = event.getAmount();
+		Comparator<DamageModifier> comp = Comparator.comparingInt(e->e.order().ordinal());
+		comp = comp.thenComparingInt(DamageModifier::priority);
+		modifierDealt.sort(comp);
+		for (DamageModifier mod : modifierDealt){
+			damage_dealt = mod.modify(damage_dealt);
+		}
 		if (damage_dealt != event.getAmount()) {
 			event.setAmount(damage_dealt);
 		}
@@ -143,34 +161,34 @@ public class AttackCache {
 		return strength;
 	}
 
-	public float getDamageOriginal() {
+	public float getPreDamageOriginal() {
 		if (stage.ordinal() < Stage.HURT_PRE.ordinal())
 			throw new IllegalStateException("dealt damage not calculated yet");
 		return damage_pre;
 	}
 
-	public float getDamageModified() {
-		if (stage.ordinal() < Stage.ACTUALLY_HURT_PRE.ordinal())
+	public float getPreDamage() {
+		if (stage.ordinal() <= Stage.ACTUALLY_HURT_PRE.ordinal())
 			throw new IllegalStateException("dealt damage not calculated yet");
 		return damage_modified;
 	}
 
-	public void setDamageModified(float damage) {
+	public void addHurtModifier(DamageModifier mod) {
 		if (damageFrozen)
 			throw new IllegalStateException("modify hurt damage only on onHurt event.");
-		this.damage_modified = damage;
+		this.modifierHurt.add(mod);
 	}
 
 	public float getDamageDealt() {
-		if (stage.ordinal() < Stage.DAMAGE_PRE.ordinal())
+		if (stage.ordinal() <= Stage.DAMAGE_PRE.ordinal())
 			throw new IllegalStateException("actual damage not calculated yet");
 		return damage_dealt;
 	}
 
-	public void setDamageDealt(float damage) {
+	public void addDealtModifier(DamageModifier mod) {
 		if (stage != Stage.DAMAGE_PRE)
 			throw new IllegalStateException("set actual damage only on onDamage event.");
-		damage_dealt = damage;
+		this.modifierDealt.add(mod);
 	}
 
 }
