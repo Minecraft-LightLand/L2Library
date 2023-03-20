@@ -45,9 +45,9 @@ public class PacketHandlerWithConfig extends PacketHandler {
 	public HashMap<String, BaseConfig> configs = new HashMap<>();
 
 	private final PreparableReloadListener listener;
-	private final List<Runnable> listener_before = new ArrayList<>();
-	private final List<Runnable> listener_after = new ArrayList<>();
 	private final Map<String, CachedConfig<?>> cache = new HashMap<>();
+	final List<Runnable> listener_before = new ArrayList<>();
+	final List<Runnable> listener_after = new ArrayList<>();
 
 	@SafeVarargs
 	public PacketHandlerWithConfig(ResourceLocation id, int version, String config_path, Function<PacketHandler, LoadedPacket<?>>... values) {

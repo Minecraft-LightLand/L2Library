@@ -28,8 +28,11 @@ public class SyncPacket extends SerialPacketBase {
 	@Override
 	public void handle(NetworkEvent.Context ctx) {
 		if (map != null) {
-			PacketHandlerWithConfig.INTERNAL.get(id).configs = map;
+			var handler = PacketHandlerWithConfig.INTERNAL.get(id);
+			handler.listener_before.forEach(Runnable::run);
+			handler.configs = map;
 			map.forEach((k, v) -> v.id = new ResourceLocation(k));
+			handler.listener_after.forEach(Runnable::run);
 		}
 	}
 
