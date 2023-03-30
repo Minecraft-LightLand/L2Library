@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_16",
   "refmap": "l2library.refmap.json",
   "mixins": [
+	"AbstractArrowMixin",
 	"EntityMixin"
   ],
   "client": [

@@ -6,6 +6,7 @@ import dev.xkmc.l2library.block.type.BlockMethod;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -239,6 +241,16 @@ public class DelegateBlockImpl extends DelegateBlock {
 	@Override
 	public final BlockState updateShape(BlockState selfState, Direction from, BlockState sourceState, LevelAccessor level, BlockPos selfPos, BlockPos sourcePos) {
 		return impl.reduce(ShapeUpdateBlockMethod.class, selfState, (currentState, e) -> e.updateShape(this, currentState, selfState, from, sourceState, level, selfPos, sourcePos));
+	}
+
+	@Override
+	public final void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> list, TooltipFlag flag) {
+		impl.forEach(ToolTipBlockMethod.class, e -> e.appendHoverText(stack, level, list, flag));
+	}
+
+	@Override
+	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState old, boolean moving) {
+		impl.forEach(OnPlaceBlockMethod.class, e -> e.onPlace(state, level, pos, old, moving));
 	}
 
 	public final BlockImplementor getImpl() {
