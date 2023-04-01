@@ -1,12 +1,7 @@
 package dev.xkmc.l2library.serial.network;
 
-import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.serial.codec.PacketCodec;
-import dev.xkmc.l2library.serial.codec.TagCodec;
-import dev.xkmc.l2library.serial.unified.UnifiedCodec;
-import io.netty.buffer.Unpooled;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 

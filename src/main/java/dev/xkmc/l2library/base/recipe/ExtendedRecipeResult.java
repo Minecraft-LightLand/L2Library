@@ -1,7 +1,6 @@
 package dev.xkmc.l2library.base.recipe;
 
 import com.google.gson.JsonObject;
-import com.tterrag.registrate.util.entry.RegistryEntry;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;

@@ -5,11 +5,8 @@ import com.mojang.datafixers.util.Pair;
 import dev.xkmc.l2library.serial.wrapper.ClassCache;
 import dev.xkmc.l2library.serial.wrapper.FieldCache;
 import dev.xkmc.l2library.serial.wrapper.TypeInfo;
-import dev.xkmc.l2library.util.code.Wrappers;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 public abstract class UnifiedContext<E, O, A> {

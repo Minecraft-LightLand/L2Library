@@ -1,7 +1,6 @@
 package dev.xkmc.l2library.base.menu.data;
 
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.DataSlot;
 
 public class FloatDataSlot {
 

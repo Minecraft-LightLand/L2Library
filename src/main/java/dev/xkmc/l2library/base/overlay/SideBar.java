@@ -1,8 +1,6 @@
 package dev.xkmc.l2library.base.overlay;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
-import net.minecraft.client.gui.screens.Screen;
 
 public abstract class SideBar {
 

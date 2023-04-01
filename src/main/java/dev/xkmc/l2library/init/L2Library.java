@@ -14,6 +14,8 @@ import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
 import dev.xkmc.l2library.init.events.GenericEventHandler;
 import dev.xkmc.l2library.init.events.attack.AttackEventHandler;
 import dev.xkmc.l2library.init.events.click.SlotClickToServer;
+import dev.xkmc.l2library.init.events.damage.DamageTypeRoot;
+import dev.xkmc.l2library.init.materials.source.MaterialDamageTypeMultiplex;
 import dev.xkmc.l2library.serial.handler.Handlers;
 import dev.xkmc.l2library.serial.network.PacketHandler;
 import dev.xkmc.l2library.serial.network.SyncPacket;
@@ -25,6 +27,7 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -65,8 +68,10 @@ public class L2Library {
 		bus.addListener(PacketHandler::setup);
 		bus.addListener(L2Library::setup);
 		bus.addListener(L2Library::registerRecipeSerializers);
+		bus.addListener(L2Library::gatherData);
 		L2LibraryConfig.init();
 		ConditionalData.register();
+		MaterialDamageTypeMultiplex.register();
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> L2Client.onCtorClient(bus, MinecraftForge.EVENT_BUS));
 	}
 
@@ -76,7 +81,12 @@ public class L2Library {
 		}
 	}
 
+	public static void gatherData(GatherDataEvent event) {
+		MaterialDamageTypeMultiplex.gatherData(event);
+	}
+
 	public static void setup(FMLCommonSetupEvent event) {
+		DamageTypeRoot.generateAll();
 		event.enqueueWork(() -> {
 			AttributeEntry.add(() -> Attributes.MAX_HEALTH, false, 1000);
 			AttributeEntry.add(() -> Attributes.ARMOR, false, 2000);

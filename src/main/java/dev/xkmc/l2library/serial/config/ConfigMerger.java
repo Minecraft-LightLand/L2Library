@@ -63,7 +63,7 @@ public class ConfigMerger<T extends BaseConfig> implements Function<Stream<Map.E
 								col.addAll((Collection) ent.getValue());
 							}
 						}
-					} else if(Map.class.isAssignableFrom(sub.getAsClass())){
+					} else if (Map.class.isAssignableFrom(sub.getAsClass())) {
 						for (T t : list) {
 							Map map = (Map) field.get(t);
 							for (Object e : map.entrySet()) {

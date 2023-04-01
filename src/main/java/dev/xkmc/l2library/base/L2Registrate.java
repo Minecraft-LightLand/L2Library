@@ -1,7 +1,6 @@
 package dev.xkmc.l2library.base;
 
 import com.google.common.base.Suppliers;
-import com.mojang.serialization.Codec;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
@@ -10,7 +9,6 @@ import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import com.tterrag.registrate.util.nullness.NonnullType;
 import dev.xkmc.l2library.serial.handler.RLClassHandler;
 import net.minecraft.core.Registry;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;

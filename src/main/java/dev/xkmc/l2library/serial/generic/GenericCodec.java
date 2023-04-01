@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 
 public abstract class GenericCodec {
 
-	protected GenericCodec(){
+	protected GenericCodec() {
 		Handlers.LIST.add(this);
 	}
 

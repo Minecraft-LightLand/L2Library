@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.xkmc.l2library.base.menu.SpriteManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -104,7 +105,7 @@ public class StackedRenderHandle {
 		int index = toggled ? 1 : disabled ? 2 : 0;
 		int x = SLOT_X_OFFSET + current_x * SLOT_SIZE;
 		int u = SPRITE_OFFSET + index * SLOT_SIZE;
-		scr.blit(stack, x, current_y, u, 0, SLOT_SIZE, SLOT_SIZE);
+		GuiComponent.blit(stack, x, current_y, u, 0, SLOT_SIZE, SLOT_SIZE);
 		var ans = new CellEntry(x + 1, current_y + 1, 16, 16);
 		current_x++;
 		if (current_x == 9) {

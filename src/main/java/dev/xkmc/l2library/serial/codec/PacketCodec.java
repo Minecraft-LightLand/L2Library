@@ -4,7 +4,6 @@ import dev.xkmc.l2library.serial.unified.PacketContext;
 import dev.xkmc.l2library.serial.unified.UnifiedCodec;
 import dev.xkmc.l2library.serial.wrapper.TypeInfo;
 import dev.xkmc.l2library.util.code.Wrappers;
-import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 
 import javax.annotation.Nullable;

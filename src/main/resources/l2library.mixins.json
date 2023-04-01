@@ -6,6 +6,7 @@
   "refmap": "l2library.refmap.json",
   "mixins": [
 	"AbstractArrowMixin",
+	"DamageSourcesMixin",
 	"EntityMixin"
   ],
   "client": [

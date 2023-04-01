@@ -8,6 +8,7 @@ import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.serial.codec.JsonCodec;
 import dev.xkmc.l2library.util.code.Wrappers;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.resources.ResourceLocation;
@@ -190,7 +191,7 @@ public class SpriteManager {
 		public void draw(PoseStack mat, String c, String s) {
 			Rect cr = getComp(c);
 			Rect sr = getSide(s);
-			scr.blit(mat, x + cr.x, y + cr.y, sr.x, sr.y, sr.w, sr.h);
+			GuiComponent.blit(mat, x + cr.x, y + cr.y, sr.x, sr.y, sr.w, sr.h);
 		}
 
 		/**
@@ -199,7 +200,7 @@ public class SpriteManager {
 		public void draw(PoseStack mat, String c, String s, int xoff, int yoff) {
 			Rect cr = getComp(c);
 			Rect sr = getSide(s);
-			scr.blit(mat, x + cr.x + xoff, y + cr.y + yoff, sr.x, sr.y, sr.w, sr.h);
+			GuiComponent.blit(mat, x + cr.x + xoff, y + cr.y + yoff, sr.x, sr.y, sr.w, sr.h);
 		}
 
 		/**
@@ -212,7 +213,7 @@ public class SpriteManager {
 			Rect cr = getComp(c);
 			Rect sr = getSide(s);
 			int dh = sr.h * prog / max;
-			scr.blit(mat, x + cr.x, y + cr.y + sr.h - dh, sr.x, sr.y + sr.h - dh, sr.w, dh);
+			GuiComponent.blit(mat, x + cr.x, y + cr.y + sr.h - dh, sr.x, sr.y + sr.h - dh, sr.w, dh);
 		}
 
 		/**
@@ -225,7 +226,7 @@ public class SpriteManager {
 			Rect cr = getComp(c);
 			Rect sr = getSide(s);
 			int dw = sr.w * prog / max;
-			scr.blit(mat, x + cr.x, y + cr.y, sr.x, sr.y, dw, sr.h);
+			GuiComponent.blit(mat, x + cr.x, y + cr.y, sr.x, sr.y, dw, sr.h);
 		}
 
 		/**
@@ -246,7 +247,7 @@ public class SpriteManager {
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			scr.renderBackground(mat);
 			RenderSystem.setShaderTexture(0, texture);
-			scr.blit(mat, x, y, 0, 0, w, h);
+			GuiComponent.blit(mat, x, y, 0, 0, w, h);
 		}
 
 		private void circularBlit(PoseStack mat, int sx, int sy, int ix, int iy, int w, int h, int iw, int ih) {
@@ -260,7 +261,7 @@ public class SpriteManager {
 				int y0 = yb, y1 = h, y2 = sy;
 				while (y1 > 0) {
 					int dy = Math.min(y1, ih - y0);
-					scr.blit(mat, x2, y2, x0, y0, x1, y1);
+					GuiComponent.blit(mat, x2, y2, x0, y0, x1, y1);
 					y1 -= dy;
 					y0 += dy;
 					y2 += dy;

@@ -5,7 +5,6 @@ import dev.xkmc.l2library.serial.codec.JsonCodec;
 import dev.xkmc.l2library.serial.codec.PacketCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.NonNullList;
-import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;

@@ -21,8 +21,7 @@ public class AttackCache {
 	private boolean damageFrozen = true;
 
 	private Stage stage = Stage.PREINIT;
-	private AttackEntityEvent player;
-	private CriticalHitEvent crit;
+	private PlayerAttackCache player;
 	private LivingAttackEvent attack;
 	private LivingHurtEvent hurt;
 	private LivingDamageEvent damage;
@@ -32,26 +31,12 @@ public class AttackCache {
 
 	private ItemStack weapon = ItemStack.EMPTY;
 
-	private float strength = -1;
 	private float damage_pre;
 	private float damage_modified;
 	private float damage_dealt;
 
 	private final List<DamageModifier> modifierHurt = new ArrayList<>();
 	private final List<DamageModifier> modifierDealt = new ArrayList<>();
-
-	void pushPlayer(AttackEntityEvent event) {
-		stage = Stage.PLAYER_ATTACK;
-		player = event;
-		strength = event.getEntity().getAttackStrengthScale(1);
-		AttackEventHandler.LISTENERS.forEach(e -> e.onPlayerAttack(this));
-	}
-
-	void pushCrit(CriticalHitEvent event) {
-		stage = Stage.CRITICAL_HIT;
-		crit = event;
-		AttackEventHandler.LISTENERS.forEach(e -> e.onCriticalHit(this));
-	}
 
 	void pushAttackPre(LivingAttackEvent event) {
 		stage = Stage.HURT_PRE;
@@ -72,10 +57,10 @@ public class AttackCache {
 		AttackEventHandler.LISTENERS.forEach(e -> e.onHurt(this, weapon));
 		damageFrozen = true;
 		damage_modified = event.getAmount();
-		Comparator<DamageModifier> comp = Comparator.comparingInt(e->e.order().ordinal());
+		Comparator<DamageModifier> comp = Comparator.comparingInt(e -> e.order().ordinal());
 		comp = comp.thenComparingInt(DamageModifier::priority);
 		modifierHurt.sort(comp);
-		for (DamageModifier mod : modifierHurt){
+		for (DamageModifier mod : modifierHurt) {
 			damage_modified = mod.modify(damage_modified);
 		}
 		if (damage_modified != event.getAmount()) {
@@ -93,10 +78,10 @@ public class AttackCache {
 		damage = event;
 		AttackEventHandler.LISTENERS.forEach(e -> e.onDamage(this, weapon));
 		damage_dealt = event.getAmount();
-		Comparator<DamageModifier> comp = Comparator.comparingInt(e->e.order().ordinal());
+		Comparator<DamageModifier> comp = Comparator.comparingInt(e -> e.order().ordinal());
 		comp = comp.thenComparingInt(DamageModifier::priority);
 		modifierDealt.sort(comp);
-		for (DamageModifier mod : modifierDealt){
+		for (DamageModifier mod : modifierDealt) {
 			damage_dealt = mod.modify(damage_dealt);
 		}
 		if (damage_dealt != event.getAmount()) {
@@ -122,12 +107,12 @@ public class AttackCache {
 
 	@Nullable
 	public AttackEntityEvent getPlayerAttackEntityEvent() {
-		return player;
+		return player == null ? null : player.getPlayerAttackEntityEvent();
 	}
 
 	@Nullable
 	public CriticalHitEvent getCriticalHitEvent() {
-		return crit;
+		return player == null ? null : player.getCriticalHitEvent();
 	}
 
 	@Nullable
@@ -158,7 +143,7 @@ public class AttackCache {
 	}
 
 	public float getStrength() {
-		return strength;
+		return player == null ? 1 : player.getStrength();
 	}
 
 	public float getPreDamageOriginal() {
@@ -191,4 +176,9 @@ public class AttackCache {
 		this.modifierDealt.add(mod);
 	}
 
+	public void setupPlayer(PlayerAttackCache prev) {
+		player = prev;
+		if (attacker == null) attacker = prev.getAttacker();
+		if (weapon.isEmpty()) weapon = prev.getWeapon();
+	}
 }

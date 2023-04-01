@@ -6,14 +6,12 @@ import com.tterrag.registrate.providers.RegistrateItemModelProvider;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import dev.xkmc.l2library.base.L2Registrate;
-import dev.xkmc.l2library.init.materials.api.IMatToolType;
-import dev.xkmc.l2library.init.materials.api.IMatVanillaType;
-import dev.xkmc.l2library.init.materials.api.ITool;
-import dev.xkmc.l2library.init.materials.api.ToolConfig;
+import dev.xkmc.l2library.init.materials.api.*;
+import dev.xkmc.l2library.init.materials.generic.GenericArmorItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -26,6 +24,7 @@ import java.util.function.BiFunction;
 public record GenItemVanillaType(String modid, L2Registrate registrate) {
 
 	public static final ToolConfig TOOL_GEN = new ToolConfig(GenItemVanillaType::genGenericTool);
+	public static final ArmorConfig ARMOR_GEN = new ArmorConfig((mat, slot, prop) -> new GenericArmorItem(mat.getArmorMaterial(), slot, prop, mat.getExtraArmorConfig()));
 
 	public static Item genGenericTool(IMatToolType mat, ITool tool, Item.Properties prop) {
 		int dmg = mat.getToolStats().getDamage(tool) - 1;
@@ -50,14 +49,14 @@ public record GenItemVanillaType(String modid, L2Registrate registrate) {
 		for (int i = 0; i < n; i++) {
 			IMatVanillaType mat = mats[i];
 			String id = mat.getID();
-			BiFunction<String, EquipmentSlot, ItemBuilder> armor_gen = (str, slot) ->
+			BiFunction<String, ArmorItem.Type, ItemBuilder> armor_gen = (str, slot) ->
 					registrate.item(id + "_" + str, p -> mat.getArmorConfig().sup().get(mat, slot, p))
 							.model((ctx, pvd) -> generatedModel(ctx, pvd, id, str))
 							.defaultLang();
-			ans[i][3] = armor_gen.apply("helmet", EquipmentSlot.HEAD).tag(Tags.Items.ARMORS_HELMETS).register();
-			ans[i][2] = armor_gen.apply("chestplate", EquipmentSlot.CHEST).tag(Tags.Items.ARMORS_CHESTPLATES).register();
-			ans[i][1] = armor_gen.apply("leggings", EquipmentSlot.LEGS).tag(Tags.Items.ARMORS_LEGGINGS).register();
-			ans[i][0] = armor_gen.apply("boots", EquipmentSlot.FEET).tag(Tags.Items.ARMORS_BOOTS).register();
+			ans[i][3] = armor_gen.apply("helmet", ArmorItem.Type.HELMET).tag(Tags.Items.ARMORS_HELMETS).register();
+			ans[i][2] = armor_gen.apply("chestplate", ArmorItem.Type.CHESTPLATE).tag(Tags.Items.ARMORS_CHESTPLATES).register();
+			ans[i][1] = armor_gen.apply("leggings", ArmorItem.Type.LEGGINGS).tag(Tags.Items.ARMORS_LEGGINGS).register();
+			ans[i][0] = armor_gen.apply("boots", ArmorItem.Type.BOOTS).tag(Tags.Items.ARMORS_BOOTS).register();
 			BiFunction<String, Tools, ItemEntry> tool_gen = (str, tool) ->
 					registrate.item(id + "_" + str, p -> mat.getToolConfig().sup().get(mat, tool, p))
 							.model((ctx, pvd) -> handHeld(ctx, pvd, id, str)).tag(tool.tag)

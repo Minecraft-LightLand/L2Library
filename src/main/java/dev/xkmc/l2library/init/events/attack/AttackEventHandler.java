@@ -1,7 +1,10 @@
 package dev.xkmc.l2library.init.events.attack;
 
 import dev.xkmc.l2library.init.L2Library;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
@@ -14,6 +17,7 @@ import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -23,14 +27,15 @@ public class AttackEventHandler {
 
 	public static final ArrayList<AttackListener> LISTENERS = new ArrayList<>();
 
+	private static final HashMap<UUID, PlayerAttackCache> PLAYER = new HashMap<>();
 	private static final HashMap<UUID, AttackCache> CACHE = new HashMap<>();
 
 	@SubscribeEvent
 	public static void onPlayerAttack(AttackEntityEvent event) {
-		if (event.getTarget().getLevel().isClientSide())
+		if (event.getEntity().getLevel().isClientSide())
 			return;
-		AttackCache cache = new AttackCache();
-		CACHE.put(event.getTarget().getUUID(), cache);
+		PlayerAttackCache cache = new PlayerAttackCache();
+		PLAYER.put(event.getEntity().getUUID(), cache);
 		ItemStack stack = event.getEntity().getMainHandItem();
 		cache.setupAttackerProfile(event.getEntity(), stack);
 		cache.pushPlayer(event);
@@ -38,11 +43,11 @@ public class AttackEventHandler {
 
 	@SubscribeEvent
 	public static void onCriticalHit(CriticalHitEvent event) {
-		if (event.getTarget().getLevel().isClientSide())
+		if (event.getEntity().getLevel().isClientSide())
 			return;
-		AttackCache cache = CACHE.get(event.getTarget().getUUID());
-		if (cache == null) cache = new AttackCache();
-		CACHE.put(event.getTarget().getUUID(), cache);
+		PlayerAttackCache cache = PLAYER.get(event.getEntity().getUUID());
+		if (cache == null) cache = new PlayerAttackCache();
+		PLAYER.put(event.getTarget().getUUID(), cache);
 		cache.pushCrit(event);
 	}
 
@@ -62,14 +67,18 @@ public class AttackEventHandler {
 			return;
 		}
 		boolean replace = cache == null;
+		PlayerAttackCache prev = null;
 		if (!replace)
 			replace = cache.getStage().ordinal() >= Stage.HURT_PRE.ordinal();
-		if (!replace && cache.getPlayerAttackEntityEvent() != null && event.getSource().getEntity() != null)
-			replace = event.getSource().getEntity() != cache.getPlayerAttackEntityEvent().getEntity();
+		Entity attacker = event.getSource().getEntity();
+		if (!replace && attacker != null && PLAYER.containsKey(attacker.getUUID()))
+			prev = PLAYER.get(attacker.getUUID());
 		if (replace) {
 			cache = new AttackCache();
 			CACHE.put(id, cache);
 		}
+		if (prev != null)
+			cache.setupPlayer(prev);
 		DamageSource source = event.getSource();
 		if (source.getEntity() instanceof LivingEntity entity) { // direct damage only
 			ItemStack stack = entity.getMainHandItem();
@@ -136,6 +145,18 @@ public class AttackEventHandler {
 	@SubscribeEvent
 	public static void onServerTick(TickEvent.ServerTickEvent event) {
 		CACHE.clear();
+	}
+
+	@Nullable
+	public static ResourceKey<DamageType> onDamageSourceCreate(CreateSourceEvent event) {
+		if (event.getAttacker().getLevel().isClientSide())
+			return null;
+		if (PLAYER.containsKey(event.getAttacker().getUUID())) {
+			event.setPlayerAttackCache(PLAYER.get(event.getAttacker().getUUID()));
+		}
+		LISTENERS.forEach(e -> e.onCreateSource(event));
+		if (event.getResult() == null) return null;
+		return event.getResult().type();
 	}
 
 }

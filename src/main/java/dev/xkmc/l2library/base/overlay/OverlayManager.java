@@ -7,6 +7,7 @@ import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.serial.codec.JsonCodec;
 import dev.xkmc.l2library.util.code.Wrappers;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -127,7 +128,7 @@ public class OverlayManager {
 		 */
 		public void draw(String c) {
 			Rect cr = getComp(c);
-			gui.blit(stack, x + cr.sx, y + cr.sy, cr.tx, cr.ty, cr.w, cr.h);
+			GuiComponent.blit(stack, x + cr.sx, y + cr.sy, cr.tx, cr.ty, cr.w, cr.h);
 		}
 
 		/**
@@ -135,7 +136,7 @@ public class OverlayManager {
 		 */
 		public void draw(String c, int dx, int dy) {
 			Rect cr = getComp(c);
-			gui.blit(stack, x + cr.sx + dx, y + cr.sy + dy, cr.tx, cr.ty, cr.w, cr.h);
+			GuiComponent.blit(stack, x + cr.sx + dx, y + cr.sy + dy, cr.tx, cr.ty, cr.w, cr.h);
 		}
 
 		/**
@@ -143,7 +144,7 @@ public class OverlayManager {
 		 */
 		public void blit(String c, int sx, int sy, int tx, int ty, int dw, int dh) {
 			Rect cr = getComp(c);
-			gui.blit(stack, x + cr.sx + sx, y + cr.sy + sy, cr.tx + tx, cr.ty + ty, cr.w + dw, cr.h + dh);
+			GuiComponent.blit(stack, x + cr.sx + sx, y + cr.sy + sy, cr.tx + tx, cr.ty + ty, cr.w + dw, cr.h + dh);
 		}
 
 		/**
@@ -155,7 +156,7 @@ public class OverlayManager {
 				return;
 			Rect cr = getComp(c);
 			int dh = cr.h * prog / max;
-			gui.blit(stack, x + cr.sx, y + cr.sy + cr.h - dh, cr.tx, cr.ty + cr.h - dh, cr.w, dh);
+			GuiComponent.blit(stack, x + cr.sx, y + cr.sy + cr.h - dh, cr.tx, cr.ty + cr.h - dh, cr.w, dh);
 		}
 
 		/**
@@ -168,7 +169,7 @@ public class OverlayManager {
 			Rect cr = getComp(c);
 			prog = Math.min(prog, max);
 			int dw = (int) Math.floor(cr.w * prog / max);
-			gui.blit(stack, x + cr.sx, y + cr.sy, cr.tx, cr.ty, dw, cr.h);
+			GuiComponent.blit(stack, x + cr.sx, y + cr.sy, cr.tx, cr.ty, dw, cr.h);
 		}
 
 		public void drawRightLeft(String c, double prog, double max) {
@@ -177,7 +178,7 @@ public class OverlayManager {
 			Rect cr = getComp(c);
 			prog = Math.min(prog, max);
 			int dw = (int) Math.floor(cr.w * prog / max);
-			gui.blit(stack, x + cr.sx + cr.w - dw, y + cr.sy, cr.tx + cr.w - dw, cr.ty, dw, cr.h);
+			GuiComponent.blit(stack, x + cr.sx + cr.w - dw, y + cr.sy, cr.tx + cr.w - dw, cr.ty, dw, cr.h);
 		}
 
 	}
