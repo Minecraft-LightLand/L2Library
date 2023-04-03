@@ -1,5 +1,7 @@
 package dev.xkmc.l2library.init;
 
+import com.tterrag.registrate.providers.ProviderType;
+import com.tterrag.registrate.providers.RegistrateLangProvider;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import dev.xkmc.l2library.base.L2Registrate;
 import dev.xkmc.l2library.base.effects.EffectToClient;
@@ -74,6 +76,7 @@ public class L2Library {
 		L2LibraryConfig.init();
 		ConditionalData.register();
 		MaterialDamageTypeMultiplex.register();
+		REGISTRATE.addDataGenerator(ProviderType.LANG, LangData::genLang);
 	}
 
 	@SubscribeEvent

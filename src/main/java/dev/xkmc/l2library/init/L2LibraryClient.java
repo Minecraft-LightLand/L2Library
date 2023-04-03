@@ -7,7 +7,6 @@ import dev.xkmc.l2library.base.tabs.contents.TabInventory;
 import dev.xkmc.l2library.base.tabs.core.TabRegistry;
 import dev.xkmc.l2library.base.tabs.core.TabToken;
 import dev.xkmc.l2library.init.events.listeners.BaseJsonReloadListener;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
@@ -24,10 +23,8 @@ public class L2LibraryClient {
 	@SubscribeEvent
 	public static void client(FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
-			TAB_INVENTORY = TabRegistry.registerTab(TabInventory::new, () -> Items.CRAFTING_TABLE,
-					Component.translatable("menu.tabs.inventory"));
-			TAB_ATTRIBUTE = TabRegistry.registerTab(TabAttributes::new, () -> Items.IRON_SWORD,
-					Component.translatable("menu.tabs.attribute"));
+			TAB_INVENTORY = TabRegistry.registerTab(TabInventory::new, () -> Items.CRAFTING_TABLE, LangData.INVENTORY.get());
+			TAB_ATTRIBUTE = TabRegistry.registerTab(TabAttributes::new, () -> Items.IRON_SWORD, LangData.ATTRIBUTE.get());
 		});
 		CuriosScreenCompat.onClientInit();
 	}

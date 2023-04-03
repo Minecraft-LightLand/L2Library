@@ -1,0 +1,13 @@
+{
+  "attribute.name.bow_strength": "ɥʇbuǝɹʇS ʍoᗺ",
+  "attribute.name.crit_damage": "ǝbɐɯɐᗡ ʇıɹƆ",
+  "attribute.name.crit_rate": "ǝʇɐᴚ ʇıɹƆ",
+  "menu.tabs.attribute": "sǝʇnqıɹʇʇⱯ",
+  "menu.tabs.attribute.add": "%s :uoıʇıppⱯ",
+  "menu.tabs.attribute.base": "%s :ǝnןɐʌ ǝsɐᗺ",
+  "menu.tabs.attribute.detail": "sןıɐʇǝp ʍoɥs oʇ ʇɟıɥS ssǝɹԀ",
+  "menu.tabs.attribute.format": "%s=%sx)%sƖ(x)%s%s(",
+  "menu.tabs.attribute.mult_all": "%s :ןɐʇoʇ ʎןdıʇןnW",
+  "menu.tabs.attribute.mult_base": "%s :ǝsɐᗺ ʎןdıʇןnW",
+  "menu.tabs.inventory": "ʎɹoʇuǝʌuI"
+}
