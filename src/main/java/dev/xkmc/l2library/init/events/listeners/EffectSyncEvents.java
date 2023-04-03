@@ -1,44 +1,21 @@
-package dev.xkmc.l2library.base.effects;
+package dev.xkmc.l2library.init.events.listeners;
 
+import dev.xkmc.l2library.base.effects.EffectToClient;
 import dev.xkmc.l2library.init.L2Library;
-import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.*;
 
+@Mod.EventBusSubscriber(modid = L2Library.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class EffectSyncEvents {
 
-	public static final Map<UUID, Map<MobEffect, Integer>> EFFECT_MAP = new HashMap<>();
 	public static final Set<MobEffect> TRACKED = new HashSet<>();
-
-	@OnlyIn(Dist.CLIENT)
-	@SubscribeEvent
-	public static void clientTick(TickEvent.ClientTickEvent event) {
-		if (Proxy.getClientPlayer() == null) {
-			EFFECT_MAP.clear();
-		}
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public static void sync(EffectToClient eff) {
-		Map<MobEffect, Integer> set = EFFECT_MAP.get(eff.entity);
-		if (eff.exist) {
-			if (set == null) {
-				EFFECT_MAP.put(eff.entity, set = new HashMap<>());
-			}
-			set.put(eff.effect, eff.level);
-		} else if (set != null) {
-			set.remove(eff.effect);
-		}
-	}
 
 	@SubscribeEvent
 	public static void onPotionAddedEvent(MobEffectEvent.Added event) {

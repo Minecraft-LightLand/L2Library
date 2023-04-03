@@ -1,5 +1,6 @@
 package dev.xkmc.l2library.base.effects;
 
+import dev.xkmc.l2library.init.events.listeners.ClientEffectRenderEvents;
 import dev.xkmc.l2library.serial.SerialClass;
 import dev.xkmc.l2library.serial.network.SerialPacketBase;
 import net.minecraft.world.effect.MobEffect;
@@ -32,6 +33,6 @@ public class EffectToClient extends SerialPacketBase {
 
 	@Override
 	public void handle(NetworkEvent.Context context) {
-		EffectSyncEvents.sync(this);
+		ClientEffectRenderEvents.sync(this);
 	}
 }

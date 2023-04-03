@@ -6,26 +6,29 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
-@SuppressWarnings("unused")
+@Mod.EventBusSubscriber(modid = L2Library.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class AttackEventHandler {
 
-	public static final ArrayList<AttackListener> LISTENERS = new ArrayList<>();
+	public static final Map<Integer, AttackListener> LISTENERS = new TreeMap<>();
 
 	private static final HashMap<UUID, PlayerAttackCache> PLAYER = new HashMap<>();
 	private static final HashMap<UUID, AttackCache> CACHE = new HashMap<>();
@@ -41,14 +44,29 @@ public class AttackEventHandler {
 		cache.pushPlayer(event);
 	}
 
-	@SubscribeEvent
-	public static void onCriticalHit(CriticalHitEvent event) {
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void onCriticalHitFirst(CriticalHitEvent event) {
 		if (event.getEntity().getLevel().isClientSide())
 			return;
 		PlayerAttackCache cache = PLAYER.get(event.getEntity().getUUID());
 		if (cache == null) cache = new PlayerAttackCache();
 		PLAYER.put(event.getTarget().getUUID(), cache);
 		cache.pushCrit(event);
+	}
+
+	@SubscribeEvent
+	public static void onEntityJoin(EntityJoinLevelEvent event) {
+		if (event.getEntity() instanceof AbstractArrow arrow) {
+			if (arrow.getOwner() instanceof Player player) {
+				double cr = player.getAttributeValue(L2Library.CRIT_RATE.get());
+				double cd = player.getAttributeValue(L2Library.CRIT_DMG.get());
+				double strength = player.getAttributeValue(L2Library.BOW_STRENGTH.get());
+				if (arrow.isCritArrow() && player.getRandom().nextDouble() < cr) {
+					strength *= (1 + cd);
+				}
+				arrow.setBaseDamage((float) (arrow.getBaseDamage() * strength));
+			}
+		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -145,6 +163,7 @@ public class AttackEventHandler {
 	@SubscribeEvent
 	public static void onServerTick(TickEvent.ServerTickEvent event) {
 		CACHE.clear();
+		PLAYER.clear();
 	}
 
 	@Nullable
@@ -154,7 +173,7 @@ public class AttackEventHandler {
 		if (PLAYER.containsKey(event.getAttacker().getUUID())) {
 			event.setPlayerAttackCache(PLAYER.get(event.getAttacker().getUUID()));
 		}
-		LISTENERS.forEach(e -> e.onCreateSource(event));
+		LISTENERS.values().forEach(e -> e.onCreateSource(event));
 		if (event.getResult() == null) return null;
 		return event.getResult().type();
 	}

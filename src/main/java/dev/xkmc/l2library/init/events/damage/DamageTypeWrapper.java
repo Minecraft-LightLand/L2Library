@@ -4,6 +4,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageType;
 
+import java.util.function.Supplier;
+
 public interface DamageTypeWrapper {
 
 	ResourceKey<DamageType> type();
@@ -16,4 +18,7 @@ public interface DamageTypeWrapper {
 
 	default void gen(DamageWrapperTagProvider gen, HolderLookup.Provider pvd) {
 	}
+
+	Supplier<DamageType> getObject();
+
 }

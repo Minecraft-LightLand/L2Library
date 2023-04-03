@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageType;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public class DamageTypeRoot implements DamageTypeWrapper {
 
@@ -29,14 +30,16 @@ public class DamageTypeRoot implements DamageTypeWrapper {
 
 	private final ResourceKey<DamageType> type;
 	private final Set<DamageState> states;
+	private final Supplier<DamageType> sup;
 
 	private boolean frozen = false;
 	private Object2IntArrayMap<DamageState> keys;
 	private DamageTypeWrapper[] wrapper;
 
-	public DamageTypeRoot(ResourceKey<DamageType> type) {
+	public DamageTypeRoot(ResourceKey<DamageType> type, Supplier<DamageType> sup) {
 		this.type = type;
 		this.states = DamageState.newSet();
+		this.sup = sup;
 		ROOTS.put(type, this);
 	}
 
@@ -85,6 +88,11 @@ public class DamageTypeRoot implements DamageTypeWrapper {
 	@Override
 	public DamageTypeWrapper enable(DamageState state) {
 		return get(0, state);
+	}
+
+	@Override
+	public Supplier<DamageType> getObject() {
+		return sup;
 	}
 
 	public void generate(GenConfig config) {

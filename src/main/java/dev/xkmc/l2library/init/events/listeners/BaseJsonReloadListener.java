@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.init.events;
+package dev.xkmc.l2library.init.events.listeners;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

@@ -2,7 +2,7 @@ package dev.xkmc.l2library.base.tabs.contents;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.xkmc.l2library.base.tabs.core.TabManager;
-import dev.xkmc.l2library.init.L2Client;
+import dev.xkmc.l2library.init.L2LibraryClient;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -28,7 +28,7 @@ public class AttributeScreen extends BaseTextScreen {
 	@Override
 	public void init() {
 		super.init();
-		new TabManager(this).init(this::addRenderableWidget, L2Client.TAB_ATTRIBUTE);
+		new TabManager(this).init(this::addRenderableWidget, L2LibraryClient.TAB_ATTRIBUTE);
 	}
 
 	@Override

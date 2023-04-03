@@ -10,6 +10,7 @@ import net.minecraft.world.damagesource.DamageType;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.TreeSet;
+import java.util.function.Supplier;
 
 public final class DamageTypeVariant implements DamageTypeWrapper {
 
@@ -84,5 +85,10 @@ public final class DamageTypeVariant implements DamageTypeWrapper {
 		for (TagKey<DamageType> tag : tags) {
 			gen.tag(tag).add(type);
 		}
+	}
+
+	@Override
+	public Supplier<DamageType> getObject() {
+		return root().getObject();
 	}
 }

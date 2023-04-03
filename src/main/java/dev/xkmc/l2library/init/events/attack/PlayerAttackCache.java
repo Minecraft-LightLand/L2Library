@@ -24,14 +24,14 @@ public class PlayerAttackCache {
 		stage = Stage.PLAYER_ATTACK;
 		player = event;
 		strength = event.getEntity().getAttackStrengthScale(1);
-		AttackEventHandler.LISTENERS.forEach(e -> e.onPlayerAttack(this));
+		AttackEventHandler.LISTENERS.values().forEach(e -> e.onPlayerAttack(this));
 	}
 
 	void pushCrit(CriticalHitEvent event) {
 		stage = Stage.CRITICAL_HIT;
 		crit = event;
 		boolean handled = false;
-		for (AttackListener e : AttackEventHandler.LISTENERS) {
+		for (AttackListener e : AttackEventHandler.LISTENERS.values()) {
 			handled |= e.onCriticalHit(this, event);
 		}
 		if (handled) {
