@@ -25,10 +25,10 @@ import java.util.concurrent.CompletableFuture;
 public class MaterialDamageTypeMultiplex extends TagsProvider<DamageType> {
 
 	public static final DamageTypeRoot PLAYER_ATTACK = new DamageTypeRoot(DamageTypes.PLAYER_ATTACK,
-			() -> new DamageType("player", 0.1F));
+			(type) -> new DamageType("player", 0.1F));
 
 	public static final DamageTypeRoot MOB_ATTACK = new DamageTypeRoot(DamageTypes.MOB_ATTACK,
-			() -> new DamageType("mob", 0.1F));
+			(type) -> new DamageType("mob", 0.1F));
 
 	public static final TagKey<DamageType> MATERIAL_MUX = TagKey.create(Registries.DAMAGE_TYPE,
 			new ResourceLocation(L2Library.MODID, "material_mux"));

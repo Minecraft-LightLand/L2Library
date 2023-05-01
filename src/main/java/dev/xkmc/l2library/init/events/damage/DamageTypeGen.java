@@ -17,7 +17,7 @@ public class DamageTypeGen extends DatapackBuiltinEntriesProvider {
 				.add(Registries.DAMAGE_TYPE, ctx -> {
 					DamageTypeRoot.generateAll();
 					for (DamageTypeWrapper wrapper : list) {
-						ctx.register(wrapper.type(), wrapper.getObject().get());
+						ctx.register(wrapper.type(), wrapper.getObject());
 					}
 				}), Set.of(modid));
 	}

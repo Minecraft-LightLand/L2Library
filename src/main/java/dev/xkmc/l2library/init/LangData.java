@@ -12,7 +12,9 @@ public enum LangData {
 	ADD("menu.tabs.attribute.add", "Addition: %s", 1),
 	MULT_BASE("menu.tabs.attribute.mult_base", "Multiply Base: %s", 1),
 	MULT_TOTAL("menu.tabs.attribute.mult_all", "Multiply total: %s", 1),
-	FORMAT("menu.tabs.attribute.format", "(%s%s)x(1%s)x%s=%s", 5);
+	FORMAT("menu.tabs.attribute.format", "(%s%s)x(1%s)x%s=%s", 5),
+	ARMOR_IMMUNE("l2library.tooltip.tool.immune", "Immune to: ", 0),
+	;
 
 	private final String key, def;
 	private final int arg;

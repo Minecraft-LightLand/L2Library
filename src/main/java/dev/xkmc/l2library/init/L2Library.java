@@ -1,25 +1,27 @@
 package dev.xkmc.l2library.init;
 
 import com.tterrag.registrate.providers.ProviderType;
-import com.tterrag.registrate.providers.RegistrateLangProvider;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import dev.xkmc.l2library.base.L2Registrate;
 import dev.xkmc.l2library.base.effects.EffectToClient;
 import dev.xkmc.l2library.base.ingredients.EnchantmentIngredient;
 import dev.xkmc.l2library.base.ingredients.MobEffectIngredient;
 import dev.xkmc.l2library.base.ingredients.PotionIngredient;
+import dev.xkmc.l2library.base.overlay.select.SetSelectedToServer;
 import dev.xkmc.l2library.base.tabs.contents.AttributeEntry;
 import dev.xkmc.l2library.capability.conditionals.ConditionalData;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
+import dev.xkmc.l2library.init.data.L2ConfigManager;
 import dev.xkmc.l2library.init.events.attack.AttackEventHandler;
-import dev.xkmc.l2library.init.events.listeners.GeneralEventHandler;
 import dev.xkmc.l2library.init.events.click.SlotClickToServer;
 import dev.xkmc.l2library.init.events.damage.DamageTypeRoot;
 import dev.xkmc.l2library.init.events.listeners.GeneralAttackListener;
+import dev.xkmc.l2library.init.events.listeners.GeneralEventHandler;
 import dev.xkmc.l2library.init.materials.source.MaterialDamageTypeMultiplex;
 import dev.xkmc.l2library.serial.handler.Handlers;
 import dev.xkmc.l2library.serial.network.PacketHandler;
+import dev.xkmc.l2library.serial.network.PacketHandlerWithConfig;
 import dev.xkmc.l2library.serial.network.SyncPacket;
 import dev.xkmc.l2library.util.raytrace.TargetSetPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -54,12 +56,14 @@ public class L2Library {
 	public static final String MODID = "l2library";
 	public static final Logger LOGGER = LogManager.getLogger();
 
-	public static final PacketHandler PACKET_HANDLER = new PacketHandler(new ResourceLocation(MODID, "main"), 1,
+	public static final PacketHandlerWithConfig PACKET_HANDLER = new PacketHandlerWithConfig(new ResourceLocation(MODID, "main"), 1,
+			"l2library_config",
 			e -> e.create(SyncPacket.class, PLAY_TO_CLIENT),
 			e -> e.create(EffectToClient.class, PLAY_TO_CLIENT),
 			e -> e.create(PlayerCapToClient.class, PLAY_TO_CLIENT),
 			e -> e.create(TargetSetPacket.class, PLAY_TO_SERVER),
-			e -> e.create(SlotClickToServer.class, PLAY_TO_SERVER));
+			e -> e.create(SlotClickToServer.class, PLAY_TO_SERVER),
+			e -> e.create(SetSelectedToServer.class, PLAY_TO_SERVER));
 
 	public static final L2Registrate REGISTRATE = new L2Registrate(MODID);
 	public static final RegistryEntry<Attribute> CRIT_RATE = REGISTRATE.simple("crit_rate", ForgeRegistries.ATTRIBUTES.getRegistryKey(), () -> new RangedAttribute("attribute.name.crit_rate", 0, 0, 1).setSyncable(true));
@@ -74,6 +78,7 @@ public class L2Library {
 		bus.register(L2Library.class);
 		bus.addListener(PacketHandler::setup);
 		L2LibraryConfig.init();
+		L2ConfigManager.register();;
 		ConditionalData.register();
 		MaterialDamageTypeMultiplex.register();
 		REGISTRATE.addDataGenerator(ProviderType.LANG, LangData::genLang);

@@ -48,6 +48,7 @@ public class OverlayUtils extends GuiComponent {
 	 * y margin: 4 on either side
 	 * row height: 10
 	 * row spacing: 2
+	 * FIXME add client tooltip
 	 */
 	public void renderLongText(ForgeGui gui, PoseStack stack, int x0, int y0, int maxWidth, List<Component> list) {
 		Font font = gui.getFont();

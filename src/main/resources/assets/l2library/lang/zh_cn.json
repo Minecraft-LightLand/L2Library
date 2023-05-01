@@ -12,5 +12,6 @@
     "attribute.name.bow_strength": "弓箭伤害",
     "generic.attack_range": "攻击距离",
     "generic.reachDistance": "触及距离",
-    "forge.swimSpeed": "游泳速度"
+    "forge.swimSpeed": "游泳速度",
+    "l2library.tooltip.tool.immune": "免疫: "
 }

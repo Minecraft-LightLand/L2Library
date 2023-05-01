@@ -88,7 +88,7 @@ public final class DamageTypeVariant implements DamageTypeWrapper {
 	}
 
 	@Override
-	public Supplier<DamageType> getObject() {
-		return root().getObject();
+	public DamageType getObject() {
+		return root().sup.apply(this);
 	}
 }
