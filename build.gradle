@@ -10,10 +10,6 @@ buildscript {
     }
 }
 
-plugins {
-    id 'com.github.johnrengelman.shadow' version "${shadow_version}"
-}
-
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
@@ -122,13 +118,15 @@ dependencies {
 
     jarJar(group: 'com.tterrag.registrate', name: 'Registrate', version: "[MC1.19.3,MC1.20)")
 
-    compileOnly fg.deobf("mezz.jei:jei-${jei_minecraft_version}:${jei_version}")
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
+    implementation fg.deobf("mezz.jei:jei-${jei_minecraft_version}:${jei_version}")
+    implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
 
-    //runtimeOnly fg.deobf('curse.maven:wthit-forge-455982:4297548')
-    //runtimeOnly fg.deobf('curse.maven:badpackets-615134:4162675')
-    //runtimeOnly fg.deobf('curse.maven:attributefix-280510:4325842')
-    //runtimeOnly fg.deobf('curse.maven:max-health-fix-492246:4326612')
+    runtimeOnly fg.deobf("dev.xkmc.l2backpack:l2backpack:2.1.1")
+
+    runtimeOnly fg.deobf('curse.maven:wthit-forge-455982:4512108')
+    runtimeOnly fg.deobf('curse.maven:badpackets-615134:4438956')
+    runtimeOnly fg.deobf('curse.maven:attributefix-280510:4445193')
+    runtimeOnly fg.deobf('curse.maven:max-health-fix-492246:4447240')
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

@@ -10,6 +10,7 @@ import dev.xkmc.l2library.init.materials.generic.GenericTieredItem;
 import dev.xkmc.l2library.init.materials.source.MaterialDamageTypeMultiplex;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
+import net.minecraftforge.eventbus.api.Event;
 
 public class GeneralAttackListener implements AttackListener {
 
@@ -18,8 +19,11 @@ public class GeneralAttackListener implements AttackListener {
 		Player player = event.getEntity();
 		double cr = player.getAttributeValue(L2Library.CRIT_RATE.get());
 		double cd = player.getAttributeValue(L2Library.CRIT_DMG.get());
-		if (player.getRandom().nextDouble() < cr) {
-			event.setDamageModifier((float) (event.getDamageModifier() * (1 + cd)));
+		if (event.isVanillaCritical()) {
+			event.setDamageModifier((float) (event.getDamageModifier() + cd - 0.5));
+		} else if (player.getRandom().nextDouble() < cr) {
+			event.setDamageModifier((float) (event.getDamageModifier() + cd - 0.5));
+			event.setResult(Event.Result.ALLOW);
 			return true;
 		}
 		return false;

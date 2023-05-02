@@ -9,7 +9,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 enum TabType {
-	ABOVE(0, 0, 28, 32);
+	ABOVE(0, 0, 26, 32);
 
 	public static final int MAX_TABS = 8;
 	private final int textureX;
@@ -27,9 +27,9 @@ enum TabType {
 	public void draw(PoseStack stack, GuiComponent screen, int x, int y, boolean selected, int index) {
 		index = index % MAX_TABS;
 		int tx = this.textureX;
-		if (index > 0) {
-			tx += this.width;
-		}
+		//if (index > 0)
+		tx += this.width;
+
 
 		if (index == MAX_TABS - 1) {
 			tx += this.width;

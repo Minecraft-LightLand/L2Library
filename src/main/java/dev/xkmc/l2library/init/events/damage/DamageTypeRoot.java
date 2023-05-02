@@ -11,6 +11,10 @@ public class DamageTypeRoot implements DamageTypeWrapper {
 
 	public static final TreeMap<ResourceKey<DamageType>, DamageTypeRoot> ROOTS = new TreeMap<>();
 
+	public static DamageTypeRoot of(ResourceKey<DamageType> key) {
+		return ROOTS.get(key);
+	}
+
 	private static final TreeMap<String, GenConfig> GEN = new TreeMap<>();
 	private static boolean generated = false;
 

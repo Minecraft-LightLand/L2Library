@@ -50,10 +50,10 @@ public class TabManager {
 			guiLeft = (screen.width - 176) / 2;
 			guiTop = (screen.height - 166) / 2;
 		}
-		guiLeft -= 56;
+		guiLeft -= 49;
 		for (TabToken<?> token : TabRegistry.getTabs()) {
 			BaseTab<?> tab = token.create(this);
-			tab.setX(guiLeft + (token.index + 2) * 28);
+			tab.setX(guiLeft + (token.index + 2) * 26);
 			tab.setY(guiTop - 28);
 			adder.accept(tab);
 			list.add(tab);

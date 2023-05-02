@@ -21,7 +21,7 @@ public abstract class BaseTab<T extends BaseTab<T>> extends Button {
 
 	@SuppressWarnings("unchecked")
 	public BaseTab(TabToken<T> token, TabManager manager, ItemStack stack, Component title) {
-		super(0, 0, 28, 32, title, b -> ((T) b).onTabClicked(), Supplier::get);
+		super(0, 0, 26, 32, title, b -> ((T) b).onTabClicked(), Supplier::get);
 		this.stack = stack;
 		this.token = token;
 		this.manager = manager;
@@ -33,7 +33,7 @@ public abstract class BaseTab<T extends BaseTab<T>> extends Button {
 		manager.getScreen().renderTooltip(stack, getMessage(), x, y);
 	}
 
-	public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+	public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 		if (this.visible) {
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			RenderSystem.enableBlend();

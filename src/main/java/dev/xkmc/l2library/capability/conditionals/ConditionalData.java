@@ -29,6 +29,13 @@ public class ConditionalData extends PlayerCapabilityTemplate<ConditionalData> {
 
 	@SerialClass.SerialField
 	public HashMap<TokenKey<?>, ConditionalToken> data = new HashMap<>();
+	@SerialClass.SerialField
+	public int tickSinceDeath = 0;
+
+	@Override
+	public void onClone(boolean isWasDeath) {
+		tickSinceDeath = 0;
+	}
 
 	public <T extends ConditionalToken, C extends Context> T getOrCreateData(TokenProvider<T, C> setEffect, C ent) {
 		return Wrappers.cast(data.computeIfAbsent(setEffect.getKey(), e -> setEffect.getData(ent)));
@@ -41,6 +48,10 @@ public class ConditionalData extends PlayerCapabilityTemplate<ConditionalData> {
 
 	@Override
 	public void tick() {
+		tickSinceDeath++;
+		if (tickSinceDeath < 60 && player.getHealth() < player.getMaxHealth()) {
+			player.setHealth(player.getMaxHealth());
+		}
 		data.entrySet().removeIf(e -> e.getValue().tick(player));
 	}
 

@@ -115,8 +115,8 @@ public class L2Library {
 			AttributeEntry.add(() -> Attributes.MOVEMENT_SPEED, false, 5000);
 			AttributeEntry.add(() -> Attributes.ATTACK_DAMAGE, false, 6000);
 			AttributeEntry.add(() -> Attributes.ATTACK_SPEED, false, 7000);
-			AttributeEntry.add(ForgeMod.REACH_DISTANCE, false, 8000);
-			AttributeEntry.add(ForgeMod.ATTACK_RANGE, false, 9000);
+			AttributeEntry.add(ForgeMod.BLOCK_REACH, false, 8000);
+			AttributeEntry.add(ForgeMod.ENTITY_REACH, false, 9000);
 			AttributeEntry.add(() -> Attributes.LUCK, false, 10000);
 			AttributeEntry.add(CRIT_RATE, true, 11000);
 			AttributeEntry.add(CRIT_DMG, true, 12000);
