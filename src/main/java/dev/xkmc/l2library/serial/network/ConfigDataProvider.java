@@ -7,7 +7,9 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -28,15 +30,15 @@ public abstract class ConfigDataProvider implements DataProvider {
 
 	@Override
 	public CompletableFuture<?> run(CachedOutput cache) {
-		return CompletableFuture.runAsync(() -> {
-			Path folder = generator.getPackOutput().getOutputFolder();
-			add(map);
-			map.forEach((k, v) -> {
-				JsonElement elem = JsonCodec.toJson(v, BaseConfig.class);
-				Path path = folder.resolve(folder_path + k + ".json");
-				DataProvider.saveStable(cache, elem, path);
-			});
+		Path folder = generator.getPackOutput().getOutputFolder();
+		add(map);
+		List<CompletableFuture<?>> list = new ArrayList<>();
+		map.forEach((k, v) -> {
+			JsonElement elem = JsonCodec.toJson(v, BaseConfig.class);
+			Path path = folder.resolve(folder_path + k + ".json");
+			list.add(DataProvider.saveStable(cache, elem, path));
 		});
+		return CompletableFuture.allOf(list.toArray(CompletableFuture[]::new));
 	}
 
 	@Override
