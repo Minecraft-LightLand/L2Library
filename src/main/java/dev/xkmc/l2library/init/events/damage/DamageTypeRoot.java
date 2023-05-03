@@ -2,6 +2,7 @@ package dev.xkmc.l2library.init.events.damage;
 
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 
 import java.util.*;
@@ -32,7 +33,9 @@ public class DamageTypeRoot implements DamageTypeWrapper {
 		}
 	}
 
+	private final String source;
 	private final ResourceKey<DamageType> type;
+	protected final List<TagKey<DamageType>> inherent;
 	protected final Set<DamageState> states;
 	protected final Function<DamageTypeWrapper, DamageType> sup;
 
@@ -40,7 +43,9 @@ public class DamageTypeRoot implements DamageTypeWrapper {
 	private Object2IntArrayMap<DamageState> keys;
 	private DamageTypeWrapper[] wrapper;
 
-	public DamageTypeRoot(ResourceKey<DamageType> type, Function<DamageTypeWrapper, DamageType> sup) {
+	public DamageTypeRoot(String source, ResourceKey<DamageType> type, List<TagKey<DamageType>> inherent, Function<DamageTypeWrapper, DamageType> sup) {
+		this.source = source;
+		this.inherent = inherent;
 		this.type = type;
 		this.states = DamageState.newSet();
 		this.sup = sup;
@@ -95,8 +100,18 @@ public class DamageTypeRoot implements DamageTypeWrapper {
 	}
 
 	@Override
+	public DamageTypeWrapper toRoot() {
+		return this;
+	}
+
+	@Override
 	public DamageType getObject() {
 		return sup.apply(this);
+	}
+
+	@Override
+	public Set<DamageState> states() {
+		return Set.of();
 	}
 
 	public void generate(GenConfig config) {
@@ -112,13 +127,22 @@ public class DamageTypeRoot implements DamageTypeWrapper {
 			copy.addAll(ctx.set());
 			DamageTypeWrapper ans = new DamageTypeVariant(ctx.config().modid(), this, key, ctx.set());
 			wrapper[key] = ans;
-			if (gen == Generate.ALLOW) {
+			boolean shouldGen = gen == Generate.ALLOW;
+			if (copy.size() > 0 && ctx.config.modid.equals(source)) {
+				shouldGen |= gen == Generate.DEFAULT;
+			}
+			if (shouldGen) {
 				ctx.config().gen().add(ans);
 			}
 			return;
 		}
 		DamageState st = ctx.list().get(i);
 		generate(ctx, gen, key, i + 1);
+		for (DamageState old : ctx.set()) {
+			if (old.overrides(st) || st.overrides(old)) {
+				gen = Generate.DENY;
+			}
+		}
 		if (!ctx.config().support().contains(st.getId().getNamespace())) {
 			gen = Generate.DENY;
 		}

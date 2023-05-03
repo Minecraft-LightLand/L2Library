@@ -23,10 +23,11 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class DamageTypeAndTagsGen {
 
-	public record DamageTypeTagGroup(TagKey<DamageType>... tags) {
+	public record DamageTypeTagGroup(TagKey<DamageType>[] tags) {
 
 		@SafeVarargs
-		public DamageTypeTagGroup {
+		public static DamageTypeTagGroup of(TagKey<DamageType>... tags) {
+			return new DamageTypeTagGroup(tags);
 		}
 
 	}

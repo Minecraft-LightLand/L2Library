@@ -8,6 +8,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 
 import java.util.Comparator;
+import java.util.Set;
 import java.util.TreeSet;
 
 public final class DamageTypeVariant implements DamageTypeWrapper {
@@ -15,10 +16,12 @@ public final class DamageTypeVariant implements DamageTypeWrapper {
 	private final ResourceKey<DamageType> type;
 	private final DamageTypeRoot root;
 	private final int key;
+	private final TreeSet<DamageState> enabledStates;
 
 	public DamageTypeVariant(String modid, DamageTypeRoot root, int key, TreeSet<DamageState> set) {
 		this.root = root;
 		this.key = key;
+		this.enabledStates = set;
 		StringBuilder name = new StringBuilder(root.type().location().getPath());
 		for (DamageState state : set) {
 			name.append("-").append(state.getId().getPath());
@@ -45,6 +48,11 @@ public final class DamageTypeVariant implements DamageTypeWrapper {
 		return root.get(key, state);
 	}
 
+	@Override
+	public DamageTypeWrapper toRoot() {
+		return root;
+	}
+
 	public DamageTypeRoot root() {
 		return root;
 	}
@@ -52,6 +60,7 @@ public final class DamageTypeVariant implements DamageTypeWrapper {
 	@Override
 	public void gen(DamageWrapperTagProvider gen, HolderLookup.Provider pvd) {
 		TreeSet<TagKey<DamageType>> tags = new TreeSet<>(Comparator.comparing(TagKey::location));
+		tags.addAll(root.inherent);
 		for (DamageState state : root.states) {
 			if (isEnabled(state)) {
 				state.gatherTags(tags::add);
@@ -65,5 +74,10 @@ public final class DamageTypeVariant implements DamageTypeWrapper {
 	@Override
 	public DamageType getObject() {
 		return root().sup.apply(this);
+	}
+
+	@Override
+	public Set<DamageState> states() {
+		return enabledStates;
 	}
 }

@@ -7,6 +7,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.level.Level;
 
+import java.util.Set;
+
 public interface DamageTypeWrapper {
 
 	ResourceKey<DamageType> type();
@@ -21,9 +23,12 @@ public interface DamageTypeWrapper {
 
 	DamageTypeWrapper enable(DamageState state);
 
+	DamageTypeWrapper toRoot();
+
 	default void gen(DamageWrapperTagProvider gen, HolderLookup.Provider pvd) {
 	}
 
 	DamageType getObject();
 
+	Set<DamageState> states();
 }

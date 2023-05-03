@@ -84,8 +84,18 @@ public class CreateSourceEvent {
 		if (result.isEnabled(state)) return;
 		DamageTypeWrapper next = result.enable(state);
 		if (!registry.containsKey(next.type())) {
-			L2Library.LOGGER.warn("DamageType " + result.type().location() + " cannot enable state " + state.getId());
-			return;
+			boolean all = true;
+			boolean covered = false;
+			for (DamageState old : result.states()) {
+				all &= state.overrides(old);
+				covered |= old.overrides(state);
+			}
+			if (all) {
+				next = result.toRoot().enable(state);
+			} else if (!covered) {
+				L2Library.LOGGER.warn("DamageType " + result.type().location() + " cannot enable state " + state.getId());
+				return;
+			}
 		}
 		result = next;
 	}
