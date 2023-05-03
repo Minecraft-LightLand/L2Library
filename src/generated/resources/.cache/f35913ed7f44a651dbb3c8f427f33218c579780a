@@ -1,3 +1,7 @@
-// 1.19.4	2023-04-03T12:42:00.661617	Tags for minecraft:damage_type mod id l2library
+// 1.19.4	2023-05-03T11:30:13.403132	Tags for minecraft:damage_type mod id l2library
 05a20898df478c105db606ac27ae4426b68031f4 data/forge/tags/damage_type/is_magic.json
 b57c109ecfae9adbfd0a70a88d4e1addf3b12776 data/l2library/tags/damage_type/material_mux.json
+198aceff62302d8eeea06616a70c99b267c5ec7e data/minecraft/tags/damage_type/bypasses_armor.json
+28396d80acdbdf2c4aff24abceaf806267300b0c data/minecraft/tags/damage_type/bypasses_effects.json
+28396d80acdbdf2c4aff24abceaf806267300b0c data/minecraft/tags/damage_type/bypasses_enchantments.json
+28396d80acdbdf2c4aff24abceaf806267300b0c data/minecraft/tags/damage_type/bypasses_resistance.json

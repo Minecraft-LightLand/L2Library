@@ -7,7 +7,7 @@ import dev.xkmc.l2library.init.events.attack.PlayerAttackCache;
 import dev.xkmc.l2library.init.events.damage.DefaultDamageState;
 import dev.xkmc.l2library.init.materials.generic.ExtraToolConfig;
 import dev.xkmc.l2library.init.materials.generic.GenericTieredItem;
-import dev.xkmc.l2library.init.data.MaterialDamageTypeMultiplex;
+import dev.xkmc.l2library.init.data.L2DamageTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -32,7 +32,7 @@ public class GeneralAttackListener implements AttackListener {
 	@Override
 	public void onCreateSource(CreateSourceEvent event) {
 		if (event.getAttacker().getMainHandItem().getItem() instanceof GenericTieredItem gen) {
-			if (event.getRegistry().getHolderOrThrow(event.getOriginal()).is(MaterialDamageTypeMultiplex.MATERIAL_MUX)) {
+			if (event.getRegistry().getHolderOrThrow(event.getOriginal()).is(L2DamageTypes.MATERIAL_MUX)) {
 				ExtraToolConfig config = gen.getExtraConfig();
 				if (config.bypassMagic) event.enable(DefaultDamageState.BYPASS_MAGIC);
 				if (config.bypassArmor) event.enable(DefaultDamageState.BYPASS_ARMOR);

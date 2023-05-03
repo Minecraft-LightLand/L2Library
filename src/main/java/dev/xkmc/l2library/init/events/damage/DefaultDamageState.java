@@ -1,6 +1,7 @@
 package dev.xkmc.l2library.init.events.damage;
 
 import dev.xkmc.l2library.init.L2Library;
+import dev.xkmc.l2library.init.data.L2DamageTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
@@ -11,7 +12,7 @@ import java.util.function.Consumer;
 
 public enum DefaultDamageState implements DamageState {
 	BYPASS_ARMOR(DamageTypeTags.BYPASSES_ARMOR),
-	BYPASS_MAGIC(DamageTypeTags.BYPASSES_EFFECTS, DamageTypeTags.BYPASSES_ENCHANTMENTS);
+	BYPASS_MAGIC(L2DamageTypes.BYPASS_MAGIC.tags());
 
 	private final TagKey<DamageType>[] tags;
 

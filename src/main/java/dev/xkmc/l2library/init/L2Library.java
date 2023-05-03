@@ -13,10 +13,9 @@ import dev.xkmc.l2library.capability.conditionals.ConditionalData;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
 import dev.xkmc.l2library.init.data.L2ConfigManager;
-import dev.xkmc.l2library.init.data.MaterialDamageTypeMultiplex;
+import dev.xkmc.l2library.init.data.L2DamageTypes;
 import dev.xkmc.l2library.init.events.attack.AttackEventHandler;
 import dev.xkmc.l2library.init.events.click.SlotClickToServer;
-import dev.xkmc.l2library.init.data.DamageTypeGen;
 import dev.xkmc.l2library.init.events.damage.DamageTypeRoot;
 import dev.xkmc.l2library.init.events.listeners.GeneralAttackListener;
 import dev.xkmc.l2library.init.events.listeners.GeneralEventHandler;
@@ -82,7 +81,7 @@ public class L2Library {
 		L2LibraryConfig.init();
 		L2ConfigManager.register();
 		ConditionalData.register();
-		MaterialDamageTypeMultiplex.register();
+		L2DamageTypes.register();
 		REGISTRATE.addDataGenerator(ProviderType.LANG, LangData::genLang);
 	}
 
@@ -106,9 +105,7 @@ public class L2Library {
 		PackOutput output = event.getGenerator().getPackOutput();
 		var pvd = event.getLookupProvider();
 		var helper = event.getExistingFileHelper();
-
-		event.getGenerator().addProvider(gen, new DamageTypeGen(output, pvd));
-		event.getGenerator().addProvider(gen, new MaterialDamageTypeMultiplex(output, pvd, helper));
+		new L2DamageTypes(output, pvd, helper).generate(gen, event.getGenerator());
 	}
 
 	@SubscribeEvent

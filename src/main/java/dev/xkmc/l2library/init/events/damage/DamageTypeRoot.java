@@ -33,7 +33,7 @@ public class DamageTypeRoot implements DamageTypeWrapper {
 	}
 
 	private final ResourceKey<DamageType> type;
-	private final Set<DamageState> states;
+	protected final Set<DamageState> states;
 	protected final Function<DamageTypeWrapper, DamageType> sup;
 
 	private boolean frozen = false;
