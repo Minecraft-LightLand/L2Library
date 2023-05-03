@@ -13,17 +13,19 @@ import dev.xkmc.l2library.capability.conditionals.ConditionalData;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
 import dev.xkmc.l2library.init.data.L2ConfigManager;
+import dev.xkmc.l2library.init.data.MaterialDamageTypeMultiplex;
 import dev.xkmc.l2library.init.events.attack.AttackEventHandler;
 import dev.xkmc.l2library.init.events.click.SlotClickToServer;
+import dev.xkmc.l2library.init.data.DamageTypeGen;
 import dev.xkmc.l2library.init.events.damage.DamageTypeRoot;
 import dev.xkmc.l2library.init.events.listeners.GeneralAttackListener;
 import dev.xkmc.l2library.init.events.listeners.GeneralEventHandler;
-import dev.xkmc.l2library.init.materials.source.MaterialDamageTypeMultiplex;
 import dev.xkmc.l2library.serial.handler.Handlers;
 import dev.xkmc.l2library.serial.network.PacketHandler;
 import dev.xkmc.l2library.serial.network.PacketHandlerWithConfig;
 import dev.xkmc.l2library.serial.network.SyncPacket;
 import dev.xkmc.l2library.util.raytrace.TargetSetPacket;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -78,7 +80,7 @@ public class L2Library {
 		bus.register(L2Library.class);
 		bus.addListener(PacketHandler::setup);
 		L2LibraryConfig.init();
-		L2ConfigManager.register();;
+		L2ConfigManager.register();
 		ConditionalData.register();
 		MaterialDamageTypeMultiplex.register();
 		REGISTRATE.addDataGenerator(ProviderType.LANG, LangData::genLang);
@@ -100,14 +102,20 @@ public class L2Library {
 
 	@SubscribeEvent
 	public static void gatherData(GatherDataEvent event) {
-		MaterialDamageTypeMultiplex.gatherData(event);
+		boolean gen = event.includeServer();
+		PackOutput output = event.getGenerator().getPackOutput();
+		var pvd = event.getLookupProvider();
+		var helper = event.getExistingFileHelper();
+
+		event.getGenerator().addProvider(gen, new DamageTypeGen(output, pvd));
+		event.getGenerator().addProvider(gen, new MaterialDamageTypeMultiplex(output, pvd, helper));
 	}
 
 	@SubscribeEvent
 	public static void setup(FMLCommonSetupEvent event) {
 		DamageTypeRoot.generateAll();
 		event.enqueueWork(() -> {
-			AttackEventHandler.LISTENERS.put(0, new GeneralAttackListener());
+			AttackEventHandler.register(0, new GeneralAttackListener());
 			AttributeEntry.add(() -> Attributes.MAX_HEALTH, false, 1000);
 			AttributeEntry.add(() -> Attributes.ARMOR, false, 2000);
 			AttributeEntry.add(() -> Attributes.ARMOR_TOUGHNESS, false, 3000);

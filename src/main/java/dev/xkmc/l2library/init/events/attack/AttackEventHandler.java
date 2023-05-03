@@ -17,7 +17,6 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -28,7 +27,26 @@ import java.util.*;
 @Mod.EventBusSubscriber(modid = L2Library.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class AttackEventHandler {
 
+	/**
+	 * use register instead
+	 */
+	@Deprecated
 	public static final Map<Integer, AttackListener> LISTENERS = new TreeMap<>();
+
+	/**
+	 * 0000 - L2Library 		General Attack Listener: crit calculation, create source
+	 * 3000 - L2Artifacts		Artifact damage boost
+	 * 5000 - L2Complements		Listen only, for material drops
+	 */
+	public static void register(int priority, AttackListener entry) {
+		while (LISTENERS.containsKey(priority))
+			priority++;
+		LISTENERS.put(priority, entry);
+	}
+
+	public static Collection<AttackListener> getListeners() {
+		return LISTENERS.values();
+	}
 
 	private static final HashMap<UUID, PlayerAttackCache> PLAYER = new HashMap<>();
 	private static final HashMap<UUID, AttackCache> CACHE = new HashMap<>();
@@ -173,7 +191,7 @@ public class AttackEventHandler {
 		if (PLAYER.containsKey(event.getAttacker().getUUID())) {
 			event.setPlayerAttackCache(PLAYER.get(event.getAttacker().getUUID()));
 		}
-		LISTENERS.values().forEach(e -> e.onCreateSource(event));
+		getListeners().forEach(e -> e.onCreateSource(event));
 		if (event.getResult() == null) return null;
 		return event.getResult().type();
 	}

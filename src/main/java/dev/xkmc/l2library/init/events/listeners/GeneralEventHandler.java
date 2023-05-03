@@ -2,14 +2,20 @@ package dev.xkmc.l2library.init.events.listeners;
 
 import dev.xkmc.l2library.base.menu.SpriteManager;
 import dev.xkmc.l2library.init.L2Library;
+import dev.xkmc.l2library.init.materials.generic.GenericArmorItem;
 import dev.xkmc.l2library.serial.network.PacketHandlerWithConfig;
 import dev.xkmc.l2library.util.raytrace.RayTraceUtil;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -27,6 +33,22 @@ public class GeneralEventHandler {
 					strength *= (1 + cd);
 				}
 				arrow.setBaseDamage((float) (arrow.getBaseDamage() * strength));
+			}
+		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public static void onPotionTest(MobEffectEvent.Applicable event) {
+		for (EquipmentSlot slot : EquipmentSlot.values()) {
+			if (slot.getType() != EquipmentSlot.Type.ARMOR) continue;
+			ItemStack stack = event.getEntity().getItemBySlot(slot);
+			if (!stack.isEmpty()) {
+				if (stack.getItem() instanceof GenericArmorItem armor) {
+					if (armor.getConfig().immuneToEffect(stack, armor, event.getEffectInstance())) {
+						event.setResult(Event.Result.DENY);
+						return;
+					}
+				}
 			}
 		}
 	}

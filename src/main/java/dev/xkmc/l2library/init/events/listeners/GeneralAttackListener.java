@@ -7,7 +7,7 @@ import dev.xkmc.l2library.init.events.attack.PlayerAttackCache;
 import dev.xkmc.l2library.init.events.damage.DefaultDamageState;
 import dev.xkmc.l2library.init.materials.generic.ExtraToolConfig;
 import dev.xkmc.l2library.init.materials.generic.GenericTieredItem;
-import dev.xkmc.l2library.init.materials.source.MaterialDamageTypeMultiplex;
+import dev.xkmc.l2library.init.data.MaterialDamageTypeMultiplex;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.eventbus.api.Event;

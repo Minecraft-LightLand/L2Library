@@ -43,7 +43,7 @@ public class AttackCache {
 		attack = event;
 		target = attack.getEntity();
 		damage_pre = event.getAmount();
-		AttackEventHandler.LISTENERS.values().forEach(e -> e.onAttack(this, weapon));
+		AttackEventHandler.getListeners().forEach(e -> e.onAttack(this, weapon));
 	}
 
 	void pushAttackPost(LivingAttackEvent event) {
@@ -54,7 +54,7 @@ public class AttackCache {
 		stage = Stage.ACTUALLY_HURT_PRE;
 		hurt = event;
 		damageFrozen = false;
-		AttackEventHandler.LISTENERS.values().forEach(e -> e.onHurt(this, weapon));
+		AttackEventHandler.getListeners().forEach(e -> e.onHurt(this, weapon));
 		damageFrozen = true;
 		damage_modified = event.getAmount();
 		Comparator<DamageModifier> comp = Comparator.comparingInt(e -> e.order().ordinal());
@@ -66,7 +66,7 @@ public class AttackCache {
 		if (damage_modified != event.getAmount()) {
 			event.setAmount(damage_modified);
 		}
-		AttackEventHandler.LISTENERS.values().forEach(e -> e.onHurtMaximized(this, weapon));
+		AttackEventHandler.getListeners().forEach(e -> e.onHurtMaximized(this, weapon));
 	}
 
 	void pushHurtPost(LivingHurtEvent event) {
@@ -76,7 +76,7 @@ public class AttackCache {
 	void pushDamagePre(LivingDamageEvent event) {
 		stage = Stage.DAMAGE_PRE;
 		damage = event;
-		AttackEventHandler.LISTENERS.values().forEach(e -> e.onDamage(this, weapon));
+		AttackEventHandler.getListeners().forEach(e -> e.onDamage(this, weapon));
 		damage_dealt = event.getAmount();
 		Comparator<DamageModifier> comp = Comparator.comparingInt(e -> e.order().ordinal());
 		comp = comp.thenComparingInt(DamageModifier::priority);
@@ -93,7 +93,7 @@ public class AttackCache {
 		stage = Stage.DAMAGE_POST;
 		damage = event;
 		damage_dealt = event.getAmount();
-		AttackEventHandler.LISTENERS.values().forEach(e -> e.onDamageFinalized(this, weapon));
+		AttackEventHandler.getListeners().forEach(e -> e.onDamageFinalized(this, weapon));
 	}
 
 	void setupAttackerProfile(LivingEntity entity, ItemStack stack) {
