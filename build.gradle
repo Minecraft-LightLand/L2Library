@@ -121,12 +121,22 @@ dependencies {
     implementation fg.deobf("mezz.jei:jei-${jei_minecraft_version}:${jei_version}")
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
 
-    runtimeOnly fg.deobf("dev.xkmc.l2backpack:l2backpack:2.1.1")
+    implementation fg.deobf("dev.xkmc.l2complements:l2complements:2.1.0.1")
+    implementation fg.deobf('dev.xkmc.modulargolems:modulargolems:2.1.0')
+    runtimeOnly fg.deobf("dev.xkmc.l2backpack:l2backpack:2.1.1.2")
+    runtimeOnly fg.deobf("dev.xkmc.l2artifacts:l2artifacts:2.1.2")
+    runtimeOnly fg.deobf("dev.xkmc.l2archery:l2archery:2.1.1")
+    implementation fg.deobf("dev.xkmc.l2weaponry:l2weaponry:2.1.0.0")
 
     runtimeOnly fg.deobf('curse.maven:wthit-forge-455982:4512108')
     runtimeOnly fg.deobf('curse.maven:badpackets-615134:4438956')
     runtimeOnly fg.deobf('curse.maven:attributefix-280510:4445193')
     runtimeOnly fg.deobf('curse.maven:max-health-fix-492246:4447240')
+
+    runtimeOnly fg.deobf('curse.maven:bookshelf-228525:4454755')
+    runtimeOnly fg.deobf('curse.maven:enchantment-descriptions-250419:4445054')
+    runtimeOnly fg.deobf('curse.maven:appleskin-248787:4440123')
+    implementation fg.deobf('curse.maven:the-twilight-forest-227639:4516391')
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

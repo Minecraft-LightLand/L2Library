@@ -122,17 +122,18 @@ public class DamageTypeRoot implements DamageTypeWrapper {
 
 	private void generate(GenContext ctx, Generate gen, int key, int i) {
 		if (i == ctx.list().size()) {
-			if (wrapper[key] != null) return;
 			TreeSet<DamageState> copy = DamageState.newSet();
 			copy.addAll(ctx.set());
 			DamageTypeWrapper ans = new DamageTypeVariant(ctx.config().modid(), this, key, ctx.set());
-			wrapper[key] = ans;
 			boolean shouldGen = gen == Generate.ALLOW;
 			if (copy.size() > 0 && ctx.config.modid.equals(source)) {
 				shouldGen |= gen == Generate.DEFAULT;
 			}
 			if (shouldGen) {
 				ctx.config().gen().add(ans);
+				wrapper[key] = ans;
+			} else if (wrapper[key] == null) {
+				wrapper[key] = ans;
 			}
 			return;
 		}

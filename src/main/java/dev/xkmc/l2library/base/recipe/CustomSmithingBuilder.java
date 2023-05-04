@@ -18,12 +18,14 @@ import net.minecraft.world.level.ItemLike;
 
 import java.util.function.Consumer;
 
+import static dev.xkmc.l2library.base.recipe.AbstractSmithingRecipe.TEMPLATE_PLACEHOLDER;
+
 public class CustomSmithingBuilder<T extends AbstractSmithingRecipe<T>> extends SmithingTransformRecipeBuilder implements IExtendedRecipe {
 
 	private final RegistryEntry<AbstractSmithingRecipe.Serializer<T>> serializer;
 
 	public CustomSmithingBuilder(RegistryEntry<AbstractSmithingRecipe.Serializer<T>> serializer, Ingredient left, Ingredient right, Item result) {
-		super(serializer.get(), Ingredient.EMPTY, left, right, RecipeCategory.MISC, result);
+		super(serializer.get(), TEMPLATE_PLACEHOLDER, left, right, RecipeCategory.MISC, result);
 		this.serializer = serializer;
 	}
 
@@ -33,7 +35,7 @@ public class CustomSmithingBuilder<T extends AbstractSmithingRecipe<T>> extends 
 				.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
 				.rewards(AdvancementRewards.Builder.recipe(id)).requirements(RequirementsStrategy.OR);
 		pvd.accept(new ExtendedRecipeResult(new SmithingTransformRecipeBuilder.Result(id,
-				getType(), Ingredient.EMPTY, base, addition, result, advancement,
+				getType(), TEMPLATE_PLACEHOLDER, base, addition, result, advancement,
 				new ResourceLocation(id.getNamespace(), "recipes/" + id.getPath())),
 				this));
 	}

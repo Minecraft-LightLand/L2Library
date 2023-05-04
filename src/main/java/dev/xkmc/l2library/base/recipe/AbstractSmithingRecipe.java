@@ -7,6 +7,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SmithingTransformRecipe;
 
@@ -17,8 +18,10 @@ import java.util.Objects;
 @MethodsReturnNonnullByDefault
 public abstract class AbstractSmithingRecipe<T extends AbstractSmithingRecipe<T>> extends SmithingTransformRecipe {
 
+	public static final Ingredient TEMPLATE_PLACEHOLDER = Ingredient.of(Items.PAPER);
+
 	public AbstractSmithingRecipe(ResourceLocation rl, Ingredient left, Ingredient right, ItemStack result) {
-		super(rl, Ingredient.EMPTY, left, right, result);
+		super(rl, TEMPLATE_PLACEHOLDER, left, right, result);
 	}
 
 	@Override

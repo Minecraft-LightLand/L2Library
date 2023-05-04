@@ -92,11 +92,15 @@ public class CreateSourceEvent {
 			}
 			if (all) {
 				next = result.toRoot().enable(state);
-			} else if (!covered) {
+			} else if (covered) {
+				next = result;
+			} else {
 				L2Library.LOGGER.warn("DamageType " + result.type().location() + " cannot enable state " + state.getId());
 				return;
 			}
 		}
 		result = next;
 	}
+
+
 }
