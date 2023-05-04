@@ -1,4 +1,3 @@
-
 package dev.xkmc.l2library.init.materials.api;
 
 import com.google.common.base.Suppliers;

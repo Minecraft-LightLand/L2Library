@@ -5,7 +5,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 
 import java.util.Comparator;
-import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Consumer;
 

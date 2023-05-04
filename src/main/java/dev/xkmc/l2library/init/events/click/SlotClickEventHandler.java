@@ -1,13 +1,11 @@
 package dev.xkmc.l2library.init.events.click;
 
 import dev.xkmc.l2library.init.L2Library;
-import dev.xkmc.l2library.init.events.click.SlotClickHandler;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

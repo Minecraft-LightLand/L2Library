@@ -35,6 +35,7 @@ public class AttackEventHandler {
 
 	/**
 	 * 0000 - L2Library 		General Attack Listener: crit calculation, create source
+	 * 2000 - L2Archery			Arrow source modification
 	 * 3000 - L2Artifacts		Artifact damage boost
 	 * 5000 - L2Complements		Listen only, for material drops
 	 */
