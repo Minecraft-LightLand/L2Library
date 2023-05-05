@@ -4,11 +4,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class ItemSelector extends IItemSelector {
+
+	public static final List<ItemSelector> SELECTORS = new ArrayList<>();
 
 	private final List<ItemStack> list;
 	private final Set<Item> set = new HashSet<>();
@@ -18,6 +21,7 @@ public class ItemSelector extends IItemSelector {
 		for (ItemStack stack : stacks) {
 			set.add(stack.getItem());
 		}
+		SELECTORS.add(this);
 	}
 
 	public boolean test(ItemStack stack) {

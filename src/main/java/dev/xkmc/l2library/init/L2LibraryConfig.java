@@ -16,6 +16,10 @@ public class L2LibraryConfig {
 		public final ForgeConfigSpec.BooleanValue showTabs;
 		public final ForgeConfigSpec.BooleanValue restoreFullHealthOnRespawn;
 
+		public final ForgeConfigSpec.BooleanValue selectionDisplayRequireShift;
+		public final ForgeConfigSpec.BooleanValue selectionScrollRequireShift;
+		public final ForgeConfigSpec.DoubleValue scrollTick;
+
 		Client(ForgeConfigSpec.Builder builder) {
 			infoAlpha = builder.comment("Info background transparency. 1 means opaque.")
 					.defineInRange("infoAlpha", 0.5, 0, 1);
@@ -28,6 +32,13 @@ public class L2LibraryConfig {
 					.define("showTabs", true);
 			restoreFullHealthOnRespawn = builder.comment("Restore full health on respawn")
 					.define("restoreFullHealthOnRespawn", true);
+
+			scrollTick = builder.comment("Scroll sensitivity")
+					.defineInRange("scrollTick", 1, 0.01, 10000);
+			selectionDisplayRequireShift = builder.comment("Render Selection only when pressing shift")
+					.define("selectionDisplayRequireShift", false);
+			selectionScrollRequireShift = builder.comment("Scroll for selection only when pressing shift")
+					.define("selectionScrollRequireShift", true);
 
 		}
 

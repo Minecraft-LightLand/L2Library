@@ -19,6 +19,7 @@ public class AttackCache {
 	int recursive = 0;
 
 	private boolean damageFrozen = true;
+	private boolean damageMaximized = false;
 
 	private Stage stage = Stage.PREINIT;
 	private PlayerAttackCache player;
@@ -66,6 +67,7 @@ public class AttackCache {
 		if (damage_modified != event.getAmount()) {
 			event.setAmount(damage_modified);
 		}
+		damageMaximized = true;
 		AttackEventHandler.getListeners().forEach(e -> e.onHurtMaximized(this, weapon));
 	}
 

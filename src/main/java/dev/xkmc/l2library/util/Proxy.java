@@ -11,10 +11,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class Proxy {
 
+	@Nullable
 	@OnlyIn(Dist.CLIENT)
 	public static LocalPlayer getClientPlayer() {
 		return Minecraft.getInstance().player;
@@ -28,6 +30,7 @@ public class Proxy {
 		return DistExecutor.unsafeRunForDist(() -> Proxy::getClientWorld, () -> () -> Proxy.getServer().map(MinecraftServer::overworld).orElse(null));
 	}
 
+	@Nullable
 	@OnlyIn(Dist.CLIENT)
 	public static ClientLevel getClientWorld() {
 		return Minecraft.getInstance().level;

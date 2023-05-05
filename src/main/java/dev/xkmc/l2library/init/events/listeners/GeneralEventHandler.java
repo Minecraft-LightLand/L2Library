@@ -14,10 +14,13 @@ import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import static dev.xkmc.l2library.base.overlay.select.ItemConvertor.convert;
 
 @Mod.EventBusSubscriber(modid = L2Library.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class GeneralEventHandler {
@@ -70,6 +73,16 @@ public class GeneralEventHandler {
 	@SubscribeEvent
 	public static void serverTick(TickEvent.ServerTickEvent event) {
 		RayTraceUtil.serverTick();
+	}
+
+	@SubscribeEvent
+	public static void addItemToInventory(EntityItemPickupEvent event) {
+		ItemStack prev = event.getItem().getItem();
+		ItemStack next = convert(prev, event.getEntity());
+		if (next != prev) {
+			event.getItem().setItem(next);
+			event.setCanceled(true);
+		}
 	}
 
 }
