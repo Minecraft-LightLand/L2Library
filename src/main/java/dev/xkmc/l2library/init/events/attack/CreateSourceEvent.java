@@ -83,7 +83,7 @@ public class CreateSourceEvent {
 		}
 		if (result.isEnabled(state)) return;
 		DamageTypeWrapper next = result.enable(state);
-		if (!registry.containsKey(next.type())) {
+		if (next == null || !registry.containsKey(next.type())) {
 			boolean all = true;
 			boolean covered = false;
 			for (DamageState old : result.states()) {
@@ -99,7 +99,9 @@ public class CreateSourceEvent {
 				return;
 			}
 		}
-		result = next;
+		if (next != null) {
+			result = next;
+		}
 	}
 
 

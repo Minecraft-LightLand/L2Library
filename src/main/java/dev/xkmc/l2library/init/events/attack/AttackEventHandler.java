@@ -40,7 +40,7 @@ public class AttackEventHandler {
 	 * 4000 - L2Weaponry		Primarily post damage
 	 * 5000 - L2Complements		Listen only, for material drops
 	 */
-	public static void register(int priority, AttackListener entry) {
+	public synchronized static void register(int priority, AttackListener entry) {
 		while (LISTENERS.containsKey(priority))
 			priority++;
 		LISTENERS.put(priority, entry);
@@ -65,7 +65,7 @@ public class AttackEventHandler {
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void onCriticalHitFirst(CriticalHitEvent event) {
+	public static void onCriticalHitFirst(CriticalHitEvent event) {
 		if (event.getEntity().getLevel().isClientSide())
 			return;
 		PlayerAttackCache cache = PLAYER.get(event.getEntity().getUUID());

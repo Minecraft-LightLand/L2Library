@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
@@ -19,7 +20,7 @@ public class DamageTypeRoot implements DamageTypeWrapper {
 	private static final TreeMap<String, GenConfig> GEN = new TreeMap<>();
 	private static boolean generated = false;
 
-	public static void configureGeneration(Set<String> support, String modid, List<DamageTypeWrapper> list) {
+	public synchronized static void configureGeneration(Set<String> support, String modid, List<DamageTypeWrapper> list) {
 		GEN.put(modid, new GenConfig(support, modid, list));
 	}
 
@@ -74,8 +75,10 @@ public class DamageTypeRoot implements DamageTypeWrapper {
 			index++;
 		}
 		wrapper = new DamageTypeWrapper[size];
+		wrapper[0] = this;
 	}
 
+	@Nullable
 	protected DamageTypeWrapper get(int index, DamageState state) {
 		return wrapper[index | 1 << keys.getInt(state)];
 	}
@@ -94,6 +97,7 @@ public class DamageTypeRoot implements DamageTypeWrapper {
 		return false;
 	}
 
+	@Nullable
 	@Override
 	public DamageTypeWrapper enable(DamageState state) {
 		return get(0, state);
@@ -116,6 +120,8 @@ public class DamageTypeRoot implements DamageTypeWrapper {
 
 	public void generate(GenConfig config) {
 		freeze();
+		boolean typeCompatible = config.support().contains(source);
+		if (!typeCompatible) return;
 		List<DamageState> list = new ArrayList<>(states);
 		generate(new GenContext(config, DamageState.newSet(), list), Generate.DEFAULT, 0, 0);
 	}
@@ -132,8 +138,6 @@ public class DamageTypeRoot implements DamageTypeWrapper {
 			if (shouldGen) {
 				ctx.config().gen().add(ans);
 				wrapper[key] = ans;
-			} else if (wrapper[key] == null) {
-				wrapper[key] = ans;
 			}
 			return;
 		}
@@ -144,10 +148,13 @@ public class DamageTypeRoot implements DamageTypeWrapper {
 				gen = Generate.DENY;
 			}
 		}
-		if (!ctx.config().support().contains(st.getId().getNamespace())) {
+		boolean stateCompatible = ctx.config().support().contains(st.getId().getNamespace());
+		boolean stateOrigin = ctx.config.modid.equals(st.getId().getNamespace());
+		boolean typeOrigin = ctx.config.modid.equals(source);
+		if (!stateCompatible) {
 			gen = Generate.DENY;
 		}
-		if (gen == Generate.DEFAULT && st.getId().getNamespace().equals(ctx.config().modid())) {
+		if (gen == Generate.DEFAULT && (typeOrigin || stateOrigin)) {
 			gen = Generate.ALLOW;
 		}
 		ctx.set().add(st);

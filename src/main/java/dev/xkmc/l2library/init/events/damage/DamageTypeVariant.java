@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 
+import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -43,6 +44,7 @@ public final class DamageTypeVariant implements DamageTypeWrapper {
 		return root.isEnabled(key, state);
 	}
 
+	@Nullable
 	@Override
 	public DamageTypeWrapper enable(DamageState state) {
 		return root.get(key, state);
