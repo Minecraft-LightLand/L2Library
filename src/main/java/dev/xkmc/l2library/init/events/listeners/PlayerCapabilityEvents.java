@@ -2,8 +2,8 @@ package dev.xkmc.l2library.init.events.listeners;
 
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
 import dev.xkmc.l2library.init.L2Library;
-import dev.xkmc.l2library.serial.codec.TagCodec;
-import dev.xkmc.l2library.util.code.Wrappers;
+import dev.xkmc.l2serial.serialization.codec.TagCodec;
+import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;

@@ -1,7 +1,7 @@
 package dev.xkmc.l2library.base.tile;
 
-import dev.xkmc.l2library.serial.SerialClass;
-import dev.xkmc.l2library.serial.codec.AliasCollection;
+import dev.xkmc.l2serial.serialization.SerialClass;
+import dev.xkmc.l2serial.serialization.codec.AliasCollection;
 import net.minecraft.core.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;

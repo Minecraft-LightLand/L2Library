@@ -3,7 +3,7 @@ package dev.xkmc.l2library.init.events.listeners;
 import dev.xkmc.l2library.base.menu.SpriteManager;
 import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2library.init.materials.generic.GenericArmorItem;
-import dev.xkmc.l2library.serial.network.PacketHandlerWithConfig;
+import dev.xkmc.l2library.serial.config.PacketHandlerWithConfig;
 import dev.xkmc.l2library.util.raytrace.RayTraceUtil;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;

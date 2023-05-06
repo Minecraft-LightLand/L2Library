@@ -1,7 +1,7 @@
 package dev.xkmc.l2library.init.events.click;
 
-import dev.xkmc.l2library.serial.SerialClass;
-import dev.xkmc.l2library.serial.network.SerialPacketBase;
+import dev.xkmc.l2serial.network.SerialPacketBase;
+import dev.xkmc.l2serial.serialization.SerialClass;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;

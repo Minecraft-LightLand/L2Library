@@ -1,8 +1,8 @@
 package dev.xkmc.l2library.base.effects;
 
 import dev.xkmc.l2library.init.events.listeners.ClientEffectRenderEvents;
-import dev.xkmc.l2library.serial.SerialClass;
-import dev.xkmc.l2library.serial.network.SerialPacketBase;
+import dev.xkmc.l2serial.network.SerialPacketBase;
+import dev.xkmc.l2serial.serialization.SerialClass;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraftforge.network.NetworkEvent;
 

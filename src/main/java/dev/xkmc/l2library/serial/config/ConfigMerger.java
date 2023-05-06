@@ -1,10 +1,9 @@
 package dev.xkmc.l2library.serial.config;
 
-import dev.xkmc.l2library.serial.network.BaseConfig;
-import dev.xkmc.l2library.serial.wrapper.ClassCache;
-import dev.xkmc.l2library.serial.wrapper.FieldCache;
-import dev.xkmc.l2library.serial.wrapper.TypeInfo;
-import dev.xkmc.l2library.util.code.Wrappers;
+import dev.xkmc.l2serial.serialization.type_cache.ClassCache;
+import dev.xkmc.l2serial.serialization.type_cache.FieldCache;
+import dev.xkmc.l2serial.serialization.type_cache.TypeInfo;
+import dev.xkmc.l2serial.util.Wrappers;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,7 +24,7 @@ public class ConfigMerger<T extends BaseConfig> implements Function<Stream<Map.E
 		List<T> list = s.map(e -> (T) e.getValue()).toList();
 		T ans = (T) cache.create();
 		for (FieldCache field : cache.getFields()) {
-			ConfigCollect collect = field.getConfigAnnotation();
+			ConfigCollect collect = field.getAnnotation(ConfigCollect.class);
 			if (collect == null) continue;
 			switch (collect.value()) {
 				case OVERWRITE -> {

@@ -1,8 +1,8 @@
 package dev.xkmc.l2library.capability.player;
 
-import dev.xkmc.l2library.serial.SerialClass;
-import dev.xkmc.l2library.serial.codec.TagCodec;
-import dev.xkmc.l2library.util.code.Wrappers;
+import dev.xkmc.l2serial.serialization.SerialClass;
+import dev.xkmc.l2serial.serialization.codec.TagCodec;
+import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;

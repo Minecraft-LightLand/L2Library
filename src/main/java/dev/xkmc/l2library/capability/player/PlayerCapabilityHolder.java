@@ -1,9 +1,9 @@
 package dev.xkmc.l2library.capability.player;
 
-import dev.xkmc.l2library.serial.SerialClass;
-import dev.xkmc.l2library.serial.codec.TagCodec;
 import dev.xkmc.l2library.util.Proxy;
-import dev.xkmc.l2library.util.code.Wrappers;
+import dev.xkmc.l2serial.serialization.SerialClass;
+import dev.xkmc.l2serial.serialization.codec.TagCodec;
+import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.RemotePlayer;
 import net.minecraft.nbt.CompoundTag;

@@ -1,7 +1,7 @@
 package dev.xkmc.l2library.util.raytrace;
 
-import dev.xkmc.l2library.serial.SerialClass;
-import dev.xkmc.l2library.serial.network.SerialPacketBase;
+import dev.xkmc.l2serial.network.SerialPacketBase;
+import dev.xkmc.l2serial.serialization.SerialClass;
 import net.minecraftforge.network.NetworkEvent;
 
 import javax.annotation.Nullable;

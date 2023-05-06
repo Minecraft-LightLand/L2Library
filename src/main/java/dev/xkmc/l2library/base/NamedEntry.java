@@ -1,6 +1,6 @@
 package dev.xkmc.l2library.base;
 
-import dev.xkmc.l2library.util.code.Wrappers;
+import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;

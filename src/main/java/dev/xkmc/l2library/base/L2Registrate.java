@@ -7,7 +7,7 @@ import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.providers.RegistrateLangProvider;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import com.tterrag.registrate.util.nullness.NonnullType;
-import dev.xkmc.l2library.serial.handler.RLClassHandler;
+import dev.xkmc.l2serial.serialization.custom_handler.RLClassHandler;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.Recipe;

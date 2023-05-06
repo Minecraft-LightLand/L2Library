@@ -1,9 +1,9 @@
 package dev.xkmc.l2library.init.data;
 
-import dev.xkmc.l2library.serial.SerialClass;
+import dev.xkmc.l2library.serial.config.BaseConfig;
 import dev.xkmc.l2library.serial.config.CollectType;
 import dev.xkmc.l2library.serial.config.ConfigCollect;
-import dev.xkmc.l2library.serial.network.BaseConfig;
+import dev.xkmc.l2serial.serialization.SerialClass;
 import net.minecraft.world.effect.MobEffect;
 
 import java.util.HashMap;

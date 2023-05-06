@@ -1,6 +1,6 @@
 package dev.xkmc.l2library.base.menu;
 
-import dev.xkmc.l2library.util.code.Wrappers;
+import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;

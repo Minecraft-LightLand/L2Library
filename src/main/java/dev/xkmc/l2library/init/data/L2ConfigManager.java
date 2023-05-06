@@ -2,7 +2,7 @@ package dev.xkmc.l2library.init.data;
 
 import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2library.serial.config.ConfigMerger;
-import dev.xkmc.l2library.serial.network.BaseConfig;
+import dev.xkmc.l2library.serial.config.BaseConfig;
 
 import java.util.Locale;
 
