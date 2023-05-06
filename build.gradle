@@ -117,8 +117,10 @@ dependencies {
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
     jarJar(group: 'com.tterrag.registrate', name: 'Registrate', version: "[MC1.19.3,MC1.20)")
 
-    implementation fg.deobf("dev.xkmc.l2serial:L2Serial:1.0.0")
-    jarJar(group: 'dev.xkmc.l2serial', name: 'L2Serial', version: "[1.0.0,)")
+    implementation(jarJar("dev.xkmc.l2serial:L2Serial:1.0.0")) {
+        transitive = false
+        jarJar.ranged(it, "[1.0.0,)")
+    }
 
     implementation fg.deobf("mezz.jei:jei-${jei_minecraft_version}:${jei_version}")
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
