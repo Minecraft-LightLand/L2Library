@@ -117,7 +117,7 @@ dependencies {
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
     jarJar(group: 'com.tterrag.registrate', name: 'Registrate', version: "[MC1.19.3,MC1.20)")
 
-    implementation(jarJar("dev.xkmc.l2serial:L2Serial:1.0.0")) {
+    implementation fg.deobf(jarJar("dev.xkmc.l2serial:l2serial:1.0.0")) {
         transitive = false
         jarJar.ranged(it, "[1.0.0,)")
     }
