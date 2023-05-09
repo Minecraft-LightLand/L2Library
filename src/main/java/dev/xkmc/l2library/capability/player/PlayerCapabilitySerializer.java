@@ -28,8 +28,6 @@ public class PlayerCapabilitySerializer<C extends PlayerCapabilityTemplate<C>> i
 		this.player = player;
 		this.level = w;
 		this.holder = holder;
-		if (w == null)
-			LogManager.getLogger().error("level not present in entity");
 		handler = holder.sup.get();
 		handler.world = w;
 		handler.player = player;

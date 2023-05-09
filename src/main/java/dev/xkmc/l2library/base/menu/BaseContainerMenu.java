@@ -156,7 +156,8 @@ public class BaseContainerMenu<T extends BaseContainerMenu<T>> extends AbstractC
 	protected void addSlot(String name, BiPredicate<Integer, ItemStack> pred) {
 		int current = added;
 		sprite.getSlot(name, (x, y) -> {
-			var ans = new PredSlot(container, added, x, y, e -> pred.test(added - current, e));
+			int i = added - current;
+			var ans = new PredSlot(container, added, x, y, e -> pred.test(i, e));
 			added++;
 			return ans;
 		}, this::addSlot);

@@ -3,9 +3,15 @@ package dev.xkmc.l2library.base.overlay;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import dev.xkmc.l2library.init.L2LibraryConfig;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
+import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
@@ -66,15 +72,7 @@ public class OverlayUtils extends GuiComponent {
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 		bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 		Matrix4f matrix4f = stack.last().pose();
-		fillGradient(matrix4f, bufferbuilder, x0 - 3, y1 - 4, x0 + w + 3, y1 - 3, 400, bg, bg);
-		fillGradient(matrix4f, bufferbuilder, x0 - 3, y1 + h + 3, x0 + w + 3, y1 + h + 4, 400, bg, bg);
-		fillGradient(matrix4f, bufferbuilder, x0 - 3, y1 - 3, x0 + w + 3, y1 + h + 3, 400, bg, bg);
-		fillGradient(matrix4f, bufferbuilder, x0 - 4, y1 - 3, x0 - 3, y1 + h + 3, 400, bg, bg);
-		fillGradient(matrix4f, bufferbuilder, x0 + w + 3, y1 - 3, x0 + w + 4, y1 + h + 3, 400, bg, bg);
-		fillGradient(matrix4f, bufferbuilder, x0 - 3, y1 - 3 + 1, x0 - 3 + 1, y1 + h + 3 - 1, 400, bs, be);
-		fillGradient(matrix4f, bufferbuilder, x0 + w + 2, y1 - 3 + 1, x0 + w + 3, y1 + h + 3 - 1, 400, bs, be);
-		fillGradient(matrix4f, bufferbuilder, x0 - 3, y1 - 3, x0 + w + 3, y1 - 3 + 1, 400, bs, bs);
-		fillGradient(matrix4f, bufferbuilder, x0 - 3, y1 + h + 2, x0 + w + 3, y1 + h + 3, 400, be, be);
+		TooltipRenderUtil.renderTooltipBackground(GuiComponent::fillGradient, matrix4f, bufferbuilder, x0, y0, w, h, 400);
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.disableDepthTest();
@@ -86,6 +84,60 @@ public class OverlayUtils extends GuiComponent {
 		RenderSystem.enableDepthTest();
 		RenderSystem.disableBlend();
 	}
+
+	public void renderTooltipInternal(PoseStack pose, List<ClientTooltipComponent> list, int p_263065_, int p_262996_, ClientTooltipPositioner p_262920_) {
+		if (list.isEmpty()) return;
+		int w = 0;
+		int h = list.size() == 1 ? -2 : 0;
+
+		Font font = Minecraft.getInstance().font;
+		ItemRenderer ir = Minecraft.getInstance().getItemRenderer();
+		for (ClientTooltipComponent clienttooltipcomponent : list) {
+			int k = clienttooltipcomponent.getWidth(font);
+			if (k > w) {
+				w = k;
+			}
+
+			h += clienttooltipcomponent.getHeight();
+		}
+
+		int x = getX(w);
+		int y = getY(h);
+		pose.pushPose();
+		int z = 400;
+		Tesselator tesselator = Tesselator.getInstance();
+		BufferBuilder bufferbuilder = tesselator.getBuilder();
+		RenderSystem.setShader(GameRenderer::getPositionColorShader);
+		bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+		Matrix4f matrix4f = pose.last().pose();
+		TooltipRenderUtil.renderTooltipBackground(GuiComponent::fillGradient, matrix4f, bufferbuilder, x, y, w, h, z);
+		RenderSystem.enableDepthTest();
+		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
+		BufferUploader.drawWithShader(bufferbuilder.end());
+		MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
+		pose.translate(0.0F, 0.0F, z);
+		int iy = y;
+
+		for (int i = 0; i < list.size(); ++i) {
+			ClientTooltipComponent comp = list.get(i);
+			comp.renderText(font, x, iy, matrix4f, buffer);
+			iy += comp.getHeight() + (i == 0 ? 2 : 0);
+		}
+
+		buffer.endBatch();
+		iy = y;
+
+		for (int i = 0; i < list.size(); ++i) {
+			ClientTooltipComponent comp = list.get(i);
+			comp.renderImage(font, x, iy, pose, ir);
+			iy += comp.getHeight() + (i == 0 ? 2 : 0);
+		}
+
+		pose.popPose();
+
+	}
+
 
 	public void renderLongText(ForgeGui gui, PoseStack stack, List<Component> list) {
 		renderLongText(gui, stack, -1, -1, -1, list);
