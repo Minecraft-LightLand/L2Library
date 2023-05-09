@@ -1,9 +1,6 @@
 package dev.xkmc.l2library.base.overlay;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -14,15 +11,15 @@ import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 import java.util.List;
 
-public abstract class SelectionSideBar extends SideBar implements IGuiOverlay {
+public abstract class SelectionSideBar<T, S extends SideBar.Signature<S>> extends SideBar<S> implements IGuiOverlay {
 
 	public SelectionSideBar(float duration, float ease) {
 		super(duration, ease);
 	}
 
-	public abstract Pair<List<ItemStack>, Integer> getItems();
+	public abstract Pair<List<T>, Integer> getItems();
 
-	public abstract boolean isAvailable(ItemStack stack);
+	public abstract boolean isAvailable(T t);
 
 	public abstract boolean onCenter();
 
@@ -36,47 +33,32 @@ public abstract class SelectionSideBar extends SideBar implements IGuiOverlay {
 			return;
 		initRender();
 		gui.setupOverlayRenderState(true, false);
-		Pair<List<ItemStack>, Integer> content = getItems();
+		float x0 = this.getXOffset(width);
+		float y0 = this.getYOffset(height);
+		Context ctx = new Context(gui, poseStack, partialTick, width, height, Minecraft.getInstance().font,
+				Minecraft.getInstance().getItemRenderer(), x0, y0);
+		renderContent(ctx);
+	}
+
+	public void renderContent(Context ctx) {
+		Pair<List<T>, Integer> content = getItems();
 		var list = content.getFirst();
-		int selected = content.getSecond();
-		ItemRenderer renderer = gui.getMinecraft().getItemRenderer();
-		Font font = gui.getMinecraft().font;
-		int dx = getXOffset(width);
-		int dy = getYOffset(height);
-		boolean shift = Minecraft.getInstance().options.keyShift.isDown();
 		for (int i = 0; i < list.size(); i++) {
-			ItemStack stack = list.get(i);
-			int y = 18 * i + dy;
-			renderSelection(dx, y, shift ? 127 : 64, isAvailable(stack), selected == i);
-			if (selected == i) {
-				if (!stack.isEmpty() && ease_time == max_ease) {
-					boolean onCenter = onCenter();
-					TextBox box = new TextBox(width, height, onCenter ? 0 : 2, 1, onCenter ? dx + 22 : dx - 6, y + 8, -1);
-					box.renderLongText(gui, poseStack, List.of(stack.getHoverName()));
-				}
-			}
-			if (!stack.isEmpty()) {
-				renderer.renderAndDecorateItem(poseStack, stack, dx, y);
-				renderer.renderGuiItemDecorations(poseStack, font, stack, dx, y);
-			}
+			renderEntry(ctx, list.get(i), i, content.getSecond());
 		}
 	}
 
-	public void renderSelection(int x, int y, int a, boolean available, boolean selected) {
-		RenderSystem.disableDepthTest();
-		RenderSystem.enableBlend();
-		RenderSystem.defaultBlendFunc();
-		Tesselator tex = Tesselator.getInstance();
-		BufferBuilder builder = tex.getBuilder();
-		if (available) {
-			OverlayUtils.fillRect(builder, x, y, 16, 16, 255, 255, 255, a);
-		} else {
-			OverlayUtils.fillRect(builder, x, y, 16, 16, 255, 0, 0, a);
+	protected abstract void renderEntry(Context ctx, T t, int index, int select);
+
+	public record Context(ForgeGui gui, PoseStack pose, float pTick, int width, int height, Font font,
+						  ItemRenderer renderer, float x0, float y0) {
+
+		public void renderItem(ItemStack stack, int x, int y) {
+			if (!stack.isEmpty()) {
+				renderer().renderAndDecorateItem(pose, stack, x, y);
+				renderer().renderGuiItemDecorations(pose, font, stack, x, y);
+			}
 		}
-		if (selected) {
-			OverlayUtils.drawRect(builder, x, y, 16, 16, 255, 170, 0, 255);
-		}
-		RenderSystem.enableDepthTest();
 	}
 
 }

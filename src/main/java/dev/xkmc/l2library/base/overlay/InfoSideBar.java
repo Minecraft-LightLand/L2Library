@@ -8,7 +8,7 @@ import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 import java.util.List;
 
-public abstract class InfoSideBar extends SideBar implements IGuiOverlay {
+public abstract class InfoSideBar<S extends SideBar.Signature<S>> extends SideBar<S> implements IGuiOverlay {
 
 	public InfoSideBar(float duration, float ease) {
 		super(duration, ease);
@@ -23,16 +23,16 @@ public abstract class InfoSideBar extends SideBar implements IGuiOverlay {
 		int anchor = L2LibraryConfig.CLIENT.infoAnchor.get();
 		int y = height * anchor / 2;
 		int w = (int) (width * L2LibraryConfig.CLIENT.infoMaxWidth.get());
-		var box = new TextBox(width, height, 0, anchor, getXOffset(width), y, w);
+		var box = new TextBox(width, height, 0, anchor, (int) getXOffset(width), y, w);
 		box.renderLongText(gui, poseStack, text);
 	}
 
 	protected abstract List<Component> getText();
 
 	@Override
-	protected int getXOffset(int width) {
+	protected float getXOffset(int width) {
 		float progress = (max_ease - ease_time) / max_ease;
-		return -Math.round(progress * width / 2) + 8;
+		return -progress * width / 2 + 8;
 	}
 
 }

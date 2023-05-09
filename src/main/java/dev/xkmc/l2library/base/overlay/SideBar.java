@@ -2,12 +2,30 @@ package dev.xkmc.l2library.base.overlay;
 
 import net.minecraft.client.Minecraft;
 
-public abstract class SideBar {
+import javax.annotation.Nullable;
+
+public abstract class SideBar<S extends SideBar.Signature<S>> {
+
+	public interface Signature<S extends Signature<S>> {
+
+		boolean shouldRefreshIdle(SideBar<?> sideBar, @Nullable S old);
+
+	}
+
+	public record IntSignature(int val) implements Signature<IntSignature> {
+
+		@Override
+		public boolean shouldRefreshIdle(SideBar<?> sideBar, @Nullable SideBar.IntSignature old) {
+			return old == null || val != old.val;
+		}
+
+	}
 
 	protected final float max_time;
 	protected final float max_ease;
 
-	protected int prev = 0;
+	@Nullable
+	protected S prev;
 
 	protected float idle = 0;
 	protected float ease_time = 0;
@@ -18,7 +36,7 @@ public abstract class SideBar {
 		this.max_ease = ease;
 	}
 
-	public abstract int getSignature();
+	public abstract S getSignature();
 
 	public abstract boolean isScreenOn();
 
@@ -28,7 +46,7 @@ public abstract class SideBar {
 
 	protected boolean ease(float current_time) {
 		if (!isScreenOn()) {
-			prev = 0;
+			prev = null;
 			idle = 0;
 			ease_time = 0;
 			prev_time = -1;
@@ -37,13 +55,13 @@ public abstract class SideBar {
 		float time_diff = prev_time < 0 ? 0 : (current_time - prev_time);
 		prev_time = current_time;
 
-		int signature = getSignature();
-		if (signature != prev || isOnHold()) {
-			prev = signature;
+		S signature = getSignature();
+		if (signature.shouldRefreshIdle(this, prev) || isOnHold()) {
 			idle = 0;
 		} else {
 			idle += time_diff;
 		}
+		prev = signature;
 		if (idle < max_time) {
 			if (ease_time < max_ease) {
 				ease_time += time_diff;
@@ -62,11 +80,11 @@ public abstract class SideBar {
 		return ease_time > 0;
 	}
 
-	protected int getXOffset(int width) {
+	protected float getXOffset(int width) {
 		return 0;
 	}
 
-	protected int getYOffset(int height) {
+	protected float getYOffset(int height) {
 		return 0;
 	}
 

@@ -143,14 +143,14 @@ public class OverlayUtils extends GuiComponent {
 		renderLongText(gui, stack, -1, -1, -1, list);
 	}
 
-	public static void drawRect(BufferBuilder builder, int x, int y, int w, int h, int r, int g, int b, int a) {
+	public static void drawRect(BufferBuilder builder, float x, float y, float w, float h, int r, int g, int b, int a) {
 		fillRect(builder, x - 1, y - 1, w + 2, 1, r, g, b, a);
 		fillRect(builder, x - 1, y - 1, 1, h + 2, r, g, b, a);
 		fillRect(builder, x - 1, y + h, w + 2, 1, r, g, b, a);
 		fillRect(builder, x + w, y - 1, 1, h + 2, r, g, b, a);
 	}
 
-	public static void fillRect(BufferBuilder builder, int x, int y, int w, int h, int r, int g, int b, int a) {
+	public static void fillRect(BufferBuilder builder, float x, float y, float w, float h, int r, int g, int b, int a) {
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 		builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 		builder.vertex(x, y, 0.0D).color(r, g, b, a).endVertex();
