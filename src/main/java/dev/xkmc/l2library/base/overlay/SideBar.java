@@ -47,7 +47,7 @@ public abstract class SideBar<S extends SideBar.Signature<S>> {
 	protected boolean ease(float current_time) {
 		if (!isScreenOn()) {
 			prev = null;
-			idle = 0;
+			idle = max_time;
 			ease_time = 0;
 			prev_time = -1;
 			return false;
