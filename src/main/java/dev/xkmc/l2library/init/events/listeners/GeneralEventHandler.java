@@ -20,7 +20,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static dev.xkmc.l2library.base.overlay.select.ItemConvertor.convert;
+import static dev.xkmc.l2library.init.events.select.item.ItemConvertor.convert;
 
 @Mod.EventBusSubscriber(modid = L2Library.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class GeneralEventHandler {

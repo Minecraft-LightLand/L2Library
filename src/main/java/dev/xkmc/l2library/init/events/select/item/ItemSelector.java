@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.base.overlay.select;
+package dev.xkmc.l2library.init.events.select.item;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;

@@ -1,13 +1,13 @@
 package dev.xkmc.l2library.init;
 
 import dev.xkmc.l2library.base.overlay.OverlayManager;
-import dev.xkmc.l2library.base.overlay.select.ItemSelectionOverlay;
 import dev.xkmc.l2library.base.tabs.contents.CuriosScreenCompat;
 import dev.xkmc.l2library.base.tabs.contents.TabAttributes;
 import dev.xkmc.l2library.base.tabs.contents.TabInventory;
 import dev.xkmc.l2library.base.tabs.core.TabRegistry;
 import dev.xkmc.l2library.base.tabs.core.TabToken;
 import dev.xkmc.l2library.init.events.listeners.BaseJsonReloadListener;
+import dev.xkmc.l2library.init.events.select.item.ItemSelectionOverlay;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
@@ -33,7 +33,7 @@ public class L2LibraryClient {
 	}
 
 	@SubscribeEvent
-	public static void registerOverlays(RegisterGuiOverlaysEvent event){
+	public static void registerOverlays(RegisterGuiOverlaysEvent event) {
 		event.registerAbove(VanillaGuiOverlay.CROSSHAIR.id(), "tool_select", ItemSelectionOverlay.INSTANCE);
 	}
 

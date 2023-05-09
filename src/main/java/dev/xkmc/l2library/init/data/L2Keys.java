@@ -7,7 +7,9 @@ public enum L2Keys {
 	UP("key.l2library.up", GLFW.GLFW_KEY_UP),
 	DOWN("key.l2library.down", GLFW.GLFW_KEY_DOWN),
 	LEFT("key.l2library.left", GLFW.GLFW_KEY_LEFT),
-	RIGHT("key.l2library.right", GLFW.GLFW_KEY_RIGHT);
+	RIGHT("key.l2library.right", GLFW.GLFW_KEY_RIGHT),
+	OPEN("key.l2library.open", GLFW.GLFW_KEY_B),
+	SWAP("key.l2library.swap", GLFW.GLFW_KEY_R);
 
 	public final String id;
 	public final int key;

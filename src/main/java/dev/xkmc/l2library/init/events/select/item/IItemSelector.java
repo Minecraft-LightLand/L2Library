@@ -1,7 +1,7 @@
-package dev.xkmc.l2library.base.overlay.select;
+package dev.xkmc.l2library.init.events.select.item;
 
 import dev.xkmc.l2library.init.L2Library;
-import dev.xkmc.l2library.util.Proxy;
+import dev.xkmc.l2library.init.events.select.SetSelectedToServer;
 import dev.xkmc.l2library.util.annotation.ServerOnly;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -55,8 +55,8 @@ public abstract class IItemSelector {
 	public abstract int getIndex(Player player);
 
 	@OnlyIn(Dist.CLIENT)
-	public void move(int i) {
-		int index = getIndex(Proxy.getClientPlayer());
+	public void move(int i, Player player) {
+		int index = getIndex(player);
 		while (i < 0) i += getList().size();
 		index = (index + i) % getList().size();
 		L2Library.PACKET_HANDLER.toServer(new SetSelectedToServer(index));

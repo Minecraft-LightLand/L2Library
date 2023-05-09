@@ -1,11 +1,10 @@
 package dev.xkmc.l2library.init.events.listeners;
 
-import dev.xkmc.l2library.base.overlay.select.IItemSelector;
-import dev.xkmc.l2library.base.overlay.select.ItemSelectionOverlay;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
 import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2library.init.L2LibraryConfig;
 import dev.xkmc.l2library.init.data.L2Keys;
+import dev.xkmc.l2library.init.events.select.SelectionRegistry;
 import dev.xkmc.l2library.util.Proxy;
 import dev.xkmc.l2library.util.raytrace.EntityTarget;
 import dev.xkmc.l2serial.serialization.codec.TagCodec;
@@ -43,13 +42,14 @@ public class ClientGeneralEventHandler {
 	public static void keyEvent(InputEvent.Key event) {
 		LocalPlayer player = Proxy.getClientPlayer();
 		if (player == null) return;
-		if (ItemSelectionOverlay.INSTANCE.isScreenOn()) {
-			IItemSelector sel = IItemSelector.getSelection(player);
-			if (sel == null) return;
-			if (event.getKey() == L2Keys.UP.map.getKey().getValue() && event.getAction() == 1) {
-				sel.move(-1);
-			} else if (event.getKey() == L2Keys.DOWN.map.getKey().getValue() && event.getAction() == 1) {
-				sel.move(1);
+		for (L2Keys k : L2Keys.values()) {
+			if (k.map.getKey().getValue() == event.getKey() && event.getAction() == 1) {
+				for (var e : SelectionRegistry.getListeners()) {
+					if (e.handleClientKey(k, player)) {
+						return;
+					}
+				}
+				return;
 			}
 		}
 	}
@@ -78,13 +78,12 @@ public class ClientGeneralEventHandler {
 	public static void fineScroll(FineScrollEvent event) {
 		LocalPlayer player = Proxy.getClientPlayer();
 		if (player == null) return;
-		if (!ItemSelectionOverlay.INSTANCE.isScreenOn()) return;
-		if (L2LibraryConfig.CLIENT.selectionScrollRequireShift.get() && !player.isShiftKeyDown()) return;
-		IItemSelector sel = IItemSelector.getSelection(Proxy.getClientPlayer());
-		if (sel == null) return;
-		sel.move(event.diff);
-		event.setCanceled(true);
+		for (var e : SelectionRegistry.getListeners()) {
+			if (e.handleClientScroll(event.diff, player)) {
+				event.setCanceled(true);
+				return;
+			}
+		}
 	}
-
 
 }

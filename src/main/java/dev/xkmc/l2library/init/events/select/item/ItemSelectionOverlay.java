@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.base.overlay.select;
+package dev.xkmc.l2library.init.events.select.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
