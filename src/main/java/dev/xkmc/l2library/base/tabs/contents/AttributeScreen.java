@@ -3,7 +3,7 @@ package dev.xkmc.l2library.base.tabs.contents;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.xkmc.l2library.base.tabs.core.TabManager;
 import dev.xkmc.l2library.init.L2LibraryClient;
-import dev.xkmc.l2library.init.LangData;
+import dev.xkmc.l2library.init.data.LangData;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;

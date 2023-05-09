@@ -1,7 +1,7 @@
 package dev.xkmc.l2library.init.materials.generic;
 
 import com.google.common.collect.Multimap;
-import dev.xkmc.l2library.init.LangData;
+import dev.xkmc.l2library.init.data.LangData;
 import dev.xkmc.l2library.init.data.ArmorEffectConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

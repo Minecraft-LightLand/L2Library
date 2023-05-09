@@ -10,6 +10,7 @@ import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
 import dev.xkmc.l2library.init.data.L2ConfigManager;
 import dev.xkmc.l2library.init.data.L2DamageTypes;
+import dev.xkmc.l2library.init.data.LangData;
 import dev.xkmc.l2library.init.events.attack.AttackEventHandler;
 import dev.xkmc.l2library.init.events.click.SlotClickToServer;
 import dev.xkmc.l2library.init.events.damage.DamageTypeRoot;

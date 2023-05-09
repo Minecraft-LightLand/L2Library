@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.init;
+package dev.xkmc.l2library.init.data;
 
 import com.tterrag.registrate.providers.RegistrateLangProvider;
 import net.minecraft.network.chat.Component;

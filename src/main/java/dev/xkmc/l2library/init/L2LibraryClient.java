@@ -6,6 +6,7 @@ import dev.xkmc.l2library.base.tabs.contents.TabAttributes;
 import dev.xkmc.l2library.base.tabs.contents.TabInventory;
 import dev.xkmc.l2library.base.tabs.core.TabRegistry;
 import dev.xkmc.l2library.base.tabs.core.TabToken;
+import dev.xkmc.l2library.init.data.LangData;
 import dev.xkmc.l2library.init.events.listeners.BaseJsonReloadListener;
 import dev.xkmc.l2library.init.events.select.item.ItemSelectionOverlay;
 import net.minecraft.world.item.Items;
