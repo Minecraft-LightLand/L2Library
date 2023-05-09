@@ -5,7 +5,6 @@ import com.mojang.datafixers.util.Pair;
 import dev.xkmc.l2library.base.overlay.SelectionSideBar;
 import dev.xkmc.l2library.base.overlay.TextBox;
 import dev.xkmc.l2library.util.Proxy;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -56,15 +55,9 @@ public class ItemSelectionOverlay extends SelectionSideBar {
 
 	@Override
 	public boolean isScreenOn() {
-		if (Minecraft.getInstance().screen != null) return false;
-		for (var s : SUPPRESS) {
-			if (s.getAsBoolean()) {
-				return false;
-			}
-		}
 		LocalPlayer player = Proxy.getClientPlayer();
 		if (player == null) return false;
-		return IItemSelector.getSelection(player) != null;
+		return ItemSelectionListener.INSTANCE.isClientActive(player);
 	}
 
 	public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int width, int height) {

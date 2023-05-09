@@ -1,7 +1,6 @@
 package dev.xkmc.l2library.init.events.select.item;
 
-import dev.xkmc.l2library.init.L2Library;
-import dev.xkmc.l2library.init.events.select.SetSelectedToServer;
+import dev.xkmc.l2library.init.data.L2TagGen;
 import dev.xkmc.l2library.util.annotation.ServerOnly;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -13,16 +12,21 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class IItemSelector {
+public abstract class IItemSelector {//TODO optimize and make it data driven
 
 	private static final List<IItemSelector> LIST = new ArrayList<>();
 
 	@Nullable
 	public static IItemSelector getSelection(Player player) {
+		ItemStack main = player.getMainHandItem();
+		ItemStack off = player.getOffhandItem();
+		boolean mainMatch = main.is(L2TagGen.SELECTABLE);
+		boolean offMatch = off.is(L2TagGen.SELECTABLE);
+		if (!mainMatch && !offMatch) return null;
 		for (var sel : LIST) {
-			if (sel.test(player.getMainHandItem()))
+			if (mainMatch && sel.test(player.getMainHandItem()))
 				return sel;
-			if (sel.test(player.getOffhandItem()))
+			if (offMatch && sel.test(player.getOffhandItem()))
 				return sel;
 		}
 		return null;
@@ -55,11 +59,10 @@ public abstract class IItemSelector {
 	public abstract int getIndex(Player player);
 
 	@OnlyIn(Dist.CLIENT)
-	public void move(int i, Player player) {
+	public int move(int i, Player player) {
 		int index = getIndex(player);
 		while (i < 0) i += getList().size();
-		index = (index + i) % getList().size();
-		L2Library.PACKET_HANDLER.toServer(new SetSelectedToServer(index));
+		return (index + i) % getList().size();
 	}
 
 	public abstract List<ItemStack> getList();

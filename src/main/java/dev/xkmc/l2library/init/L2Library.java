@@ -15,7 +15,9 @@ import dev.xkmc.l2library.init.events.click.SlotClickToServer;
 import dev.xkmc.l2library.init.events.damage.DamageTypeRoot;
 import dev.xkmc.l2library.init.events.listeners.GeneralAttackListener;
 import dev.xkmc.l2library.init.events.listeners.GeneralEventHandler;
+import dev.xkmc.l2library.init.events.select.SelectionRegistry;
 import dev.xkmc.l2library.init.events.select.SetSelectedToServer;
+import dev.xkmc.l2library.init.events.select.item.ItemSelectionListener;
 import dev.xkmc.l2library.serial.config.PacketHandler;
 import dev.xkmc.l2library.serial.config.PacketHandlerWithConfig;
 import dev.xkmc.l2library.serial.config.SyncPacket;
@@ -82,6 +84,7 @@ public class L2Library {
 		L2ConfigManager.register();
 		ConditionalData.register();
 		L2DamageTypes.register();
+		SelectionRegistry.register(0, ItemSelectionListener.INSTANCE);
 		REGISTRATE.addDataGenerator(ProviderType.LANG, LangData::genLang);
 	}
 
