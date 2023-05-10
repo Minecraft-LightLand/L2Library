@@ -13,7 +13,7 @@ public interface DamageModifier {
 	}
 
 	static DamageModifier addPre(float val) {
-		return new Multiplicative(Order.PRE_ADDITIVE, val);
+		return new Additive(Order.PRE_ADDITIVE, val);
 	}
 
 	static DamageModifier multPost(float val) {
@@ -25,7 +25,7 @@ public interface DamageModifier {
 	}
 
 	static DamageModifier addPost(float val) {
-		return new Multiplicative(Order.POST_ADDITIVE, val);
+		return new Additive(Order.POST_ADDITIVE, val);
 	}
 
 	enum Time {

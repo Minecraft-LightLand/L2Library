@@ -1,5 +1,8 @@
 package dev.xkmc.l2library.init.events.select.item;
 
+import dev.xkmc.l2library.init.L2Library;
+import dev.xkmc.l2library.init.data.L2TagGen;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -16,9 +19,13 @@ public class ItemSelector extends IItemSelector {
 	private final List<ItemStack> list;
 	private final Set<Item> set = new HashSet<>();
 
-	public ItemSelector(ItemStack... stacks) {
+	public ItemSelector(ResourceLocation rl, ItemStack... stacks) {
+		super(rl);
 		list = List.of(stacks);
 		for (ItemStack stack : stacks) {
+			if (!stack.is(L2TagGen.SELECTABLE)) {
+				L2Library.LOGGER.error("item " + stack.getItem() + " is not marked as selectable");
+			}
 			set.add(stack.getItem());
 		}
 		SELECTORS.add(this);

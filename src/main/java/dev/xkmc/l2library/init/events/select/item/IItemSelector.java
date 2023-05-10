@@ -2,6 +2,7 @@ package dev.xkmc.l2library.init.events.select.item;
 
 import dev.xkmc.l2library.init.data.L2TagGen;
 import dev.xkmc.l2library.util.annotation.ServerOnly;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -10,33 +11,44 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public abstract class IItemSelector {//TODO optimize and make it data driven
+public abstract class IItemSelector {
 
-	private static final List<IItemSelector> LIST = new ArrayList<>();
+	private static final HashMap<ResourceLocation, IItemSelector> LIST = new HashMap<>();
+
+	public static synchronized void register(IItemSelector sel){
+		LIST.put(sel.getID(), sel);
+	}
 
 	@Nullable
 	public static IItemSelector getSelection(Player player) {
 		ItemStack main = player.getMainHandItem();
 		ItemStack off = player.getOffhandItem();
-		boolean mainMatch = main.is(L2TagGen.SELECTABLE);
-		boolean offMatch = off.is(L2TagGen.SELECTABLE);
-		if (!mainMatch && !offMatch) return null;
-		for (var sel : LIST) {
-			if (mainMatch && sel.test(player.getMainHandItem()))
-				return sel;
-			if (offMatch && sel.test(player.getOffhandItem()))
-				return sel;
+		if (main.is(L2TagGen.SELECTABLE)) {
+			ItemSelector ans = SimpleItemSelectConfig.get(main);
+			if (ans != null) return ans;
+			for (var sel : LIST.values()) {
+				if (sel.test(main))
+					return sel;
+			}
+		}
+		if (off.is(L2TagGen.SELECTABLE)) {
+			ItemSelector ans = SimpleItemSelectConfig.get(off);
+			if (ans != null) return ans;
+			for (var sel : LIST.values()) {
+				if (sel.test(off))
+					return sel;
+			}
 		}
 		return null;
 	}
 
-	public final int index;
+	private final ResourceLocation id;
 
-	public IItemSelector() {
-		index = LIST.size();
-		LIST.add(this);
+	public IItemSelector(ResourceLocation id) {
+		this.id = id;
 	}
 
 	public abstract boolean test(ItemStack stack);
@@ -69,6 +81,10 @@ public abstract class IItemSelector {//TODO optimize and make it data driven
 
 	public List<ItemStack> getDisplayList() {
 		return getList();
+	}
+
+	public ResourceLocation getID() {
+		return id;
 	}
 
 }

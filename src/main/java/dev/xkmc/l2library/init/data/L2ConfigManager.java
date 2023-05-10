@@ -7,7 +7,7 @@ import dev.xkmc.l2library.serial.config.ConfigMerger;
 import java.util.Locale;
 
 public enum L2ConfigManager {
-	ARMOR;
+	ARMOR, ITEM_SELECTOR;
 
 	public String getID() {
 		return name().toLowerCase(Locale.ROOT);

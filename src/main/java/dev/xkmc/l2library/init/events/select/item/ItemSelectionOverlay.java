@@ -6,13 +6,26 @@ import dev.xkmc.l2library.base.overlay.SideBar;
 import dev.xkmc.l2library.base.overlay.TextBox;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ItemSelectionOverlay extends ItemSelSideBar<SideBar.IntSignature> {
+public class ItemSelectionOverlay extends ItemSelSideBar<ItemSelectionOverlay.ItemSelSignature> {
 
 	public static final ItemSelectionOverlay INSTANCE = new ItemSelectionOverlay();
+
+	private static final ResourceLocation EMPTY = new ResourceLocation("empty");
+
+	public record ItemSelSignature(ResourceLocation id, int val) implements Signature<ItemSelSignature> {
+
+		@Override
+		public boolean shouldRefreshIdle(SideBar<?> sideBar, @Nullable ItemSelectionOverlay.ItemSelSignature old) {
+			return !equals(old);
+		}
+
+	}
 
 	private ItemSelectionOverlay() {
 		super(40, 3);
@@ -38,12 +51,12 @@ public class ItemSelectionOverlay extends ItemSelSideBar<SideBar.IntSignature> {
 	}
 
 	@Override
-	public IntSignature getSignature() {
+	public ItemSelSignature getSignature() {
 		LocalPlayer player = Proxy.getClientPlayer();
-		if (player == null) return new IntSignature(0);
+		if (player == null) return new ItemSelSignature(EMPTY, 0);
 		IItemSelector sel = IItemSelector.getSelection(Proxy.getClientPlayer());
-		if (sel == null) return new IntSignature(0);
-		return new IntSignature(10000 + sel.index * 100 + sel.getIndex(player));
+		if (sel == null) return new ItemSelSignature(EMPTY, 0);
+		return new ItemSelSignature(sel.getID(), sel.getIndex(player));
 	}
 
 	@Override
