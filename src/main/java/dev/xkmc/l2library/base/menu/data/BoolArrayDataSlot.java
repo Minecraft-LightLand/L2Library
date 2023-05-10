@@ -11,7 +11,7 @@ public class BoolArrayDataSlot {
 		int n = size / 16 + (size % 16 == 0 ? 0 : 1);
 		array = new DataSlot[n];
 		for (int i = 0; i < n; i++) {
-			array[i] = DataSlot.standalone();
+			array[i] = menu.addDataSlot(DataSlot.standalone());
 		}
 	}
 

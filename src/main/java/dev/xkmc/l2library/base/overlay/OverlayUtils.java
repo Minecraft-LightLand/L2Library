@@ -7,8 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
-import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -21,11 +19,11 @@ import java.util.List;
 
 public class OverlayUtils extends GuiComponent {
 
+	public final int screenWidth, screenHeight;
+
 	private static int getBGColor() {
 		return (int) (Math.round(L2LibraryConfig.CLIENT.infoAlpha.get() * 255)) << 24 | 0x100010;
 	}
-
-	public final int screenWidth, screenHeight;
 
 	public int bg = getBGColor();
 	public int bs = 0x505000FF;
@@ -49,12 +47,15 @@ public class OverlayUtils extends GuiComponent {
 		return screenWidth / 4;
 	}
 
+	public L2TooltipRenderUtil getTooltipRender(Matrix4f mat, BufferBuilder buffer) {
+		return new L2TooltipRenderUtil(GuiComponent::fillGradient, mat, buffer, bg, bs, be);
+	}
+
 	/**
 	 * x margin: 4 on either side
 	 * y margin: 4 on either side
 	 * row height: 10
 	 * row spacing: 2
-	 * FIXME add client tooltip
 	 */
 	public void renderLongText(ForgeGui gui, PoseStack stack, int x0, int y0, int maxWidth, List<Component> list) {
 		Font font = gui.getFont();
@@ -66,13 +67,12 @@ public class OverlayUtils extends GuiComponent {
 		int w = Math.min(tooltipTextWidth, maxWidth);
 		if (x0 < 0) x0 = getX(w);
 		if (y0 < 0) y0 = getY(h);
-		int y1 = y0;
 		Tesselator tesselator = Tesselator.getInstance();
 		BufferBuilder bufferbuilder = tesselator.getBuilder();
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 		bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 		Matrix4f matrix4f = stack.last().pose();
-		TooltipRenderUtil.renderTooltipBackground(GuiComponent::fillGradient, matrix4f, bufferbuilder, x0, y0, w, h, 400);
+		getTooltipRender(matrix4f, bufferbuilder).renderTooltipBackground(x0, y0, w, h, 400);
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.disableDepthTest();
@@ -85,7 +85,7 @@ public class OverlayUtils extends GuiComponent {
 		RenderSystem.disableBlend();
 	}
 
-	public void renderTooltipInternal(PoseStack pose, List<ClientTooltipComponent> list, int p_263065_, int p_262996_, ClientTooltipPositioner p_262920_) {
+	public void renderTooltipInternal(PoseStack pose, List<ClientTooltipComponent> list, int x, int y) {
 		if (list.isEmpty()) return;
 		int w = 0;
 		int h = list.size() == 1 ? -2 : 0;
@@ -100,9 +100,8 @@ public class OverlayUtils extends GuiComponent {
 
 			h += clienttooltipcomponent.getHeight();
 		}
-
-		int x = getX(w);
-		int y = getY(h);
+		if (x < 0) x = getX(w);
+		if (y < 0) y = getY(h);
 		pose.pushPose();
 		int z = 400;
 		Tesselator tesselator = Tesselator.getInstance();
@@ -110,7 +109,7 @@ public class OverlayUtils extends GuiComponent {
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 		bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 		Matrix4f matrix4f = pose.last().pose();
-		TooltipRenderUtil.renderTooltipBackground(GuiComponent::fillGradient, matrix4f, bufferbuilder, x, y, w, h, z);
+		getTooltipRender(matrix4f, bufferbuilder).renderTooltipBackground(x, y, w, h, z);
 		RenderSystem.enableDepthTest();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
@@ -137,7 +136,6 @@ public class OverlayUtils extends GuiComponent {
 		pose.popPose();
 
 	}
-
 
 	public void renderLongText(ForgeGui gui, PoseStack stack, List<Component> list) {
 		renderLongText(gui, stack, -1, -1, -1, list);
