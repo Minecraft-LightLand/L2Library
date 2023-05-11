@@ -17,6 +17,10 @@ public class BaseConfig {
 		return id;
 	}
 
+	/** called by Config Merger after it's merged*/
+	protected void postMerge() {
+	}
+
 	public static <T, C> HashSet<T> collectSet(List<C> list, Function<C, Set<T>> getter) {
 		return list.stream().reduce(new HashSet<T>(), (a, c) -> {
 			a.addAll(getter.apply(c));

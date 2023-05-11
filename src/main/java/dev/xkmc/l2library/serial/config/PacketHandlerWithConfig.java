@@ -97,6 +97,7 @@ public class PacketHandlerWithConfig extends PacketHandler {
 				return result;
 			}
 			result = function.apply(getConfigs(id));
+			result.id = new ResourceLocation(CHANNEL_NAME.getNamespace(), id);
 			return result;
 		}
 

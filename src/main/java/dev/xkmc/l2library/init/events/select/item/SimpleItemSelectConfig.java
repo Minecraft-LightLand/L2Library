@@ -5,6 +5,7 @@ import dev.xkmc.l2library.init.data.L2TagGen;
 import dev.xkmc.l2library.serial.config.BaseConfig;
 import dev.xkmc.l2library.serial.config.CollectType;
 import dev.xkmc.l2library.serial.config.ConfigCollect;
+import dev.xkmc.l2library.util.annotation.DataGenOnly;
 import dev.xkmc.l2serial.serialization.SerialClass;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -13,7 +14,9 @@ import net.minecraft.world.item.ItemStack;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+@SerialClass
 public class SimpleItemSelectConfig extends BaseConfig {
 
 	@Nullable
@@ -26,11 +29,11 @@ public class SimpleItemSelectConfig extends BaseConfig {
 	@SerialClass.SerialField
 	public final HashMap<ResourceLocation, ArrayList<Item>> map = new HashMap<>();
 
-	private final HashMap<Item, ItemSelector> cache = new HashMap<>();
+	private HashMap<Item, ItemSelector> cache;
 
-	@Deprecated
-	@SerialClass.OnInject
-	public void onInject() {
+	@Override
+	protected void postMerge() {
+		cache = new HashMap<>();
 		for (var ent : map.entrySet()) {
 			ItemSelector sel = new ItemSelector(ent.getKey(), ent.getValue()
 					.stream().map(Item::getDefaultInstance)
@@ -45,6 +48,12 @@ public class SimpleItemSelectConfig extends BaseConfig {
 	private ItemSelector find(ItemStack stack) {
 		if (!stack.is(L2TagGen.SELECTABLE)) return null;
 		return cache.get(stack.getItem());
+	}
+
+	@DataGenOnly
+	public SimpleItemSelectConfig add(ResourceLocation id, Item... items) {
+		map.put(id, new ArrayList<>(List.of(items)));
+		return this;
 	}
 
 }

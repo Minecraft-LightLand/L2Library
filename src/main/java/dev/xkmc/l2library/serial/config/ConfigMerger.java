@@ -4,6 +4,7 @@ import dev.xkmc.l2serial.serialization.type_cache.ClassCache;
 import dev.xkmc.l2serial.serialization.type_cache.FieldCache;
 import dev.xkmc.l2serial.serialization.type_cache.TypeInfo;
 import dev.xkmc.l2serial.util.Wrappers;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Collection;
 import java.util.List;
@@ -90,6 +91,7 @@ public class ConfigMerger<T extends BaseConfig> implements Function<Stream<Map.E
 				}
 			}
 		}
+		ans.postMerge();
 		return ans;
 	}
 
