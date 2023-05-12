@@ -27,8 +27,8 @@ public enum TabType {
 	public void draw(PoseStack stack, GuiComponent screen, int x, int y, boolean selected, int index) {
 		index = index % MAX_TABS;
 		int tx = this.textureX;
-		//if (index > 0)
-		tx += this.width;
+		if (index > 0)
+			tx += this.width;
 
 
 		if (index == MAX_TABS - 1) {
@@ -36,8 +36,7 @@ public enum TabType {
 		}
 
 		int ty = selected ? this.textureY + this.height : this.textureY;
-		int h = selected ? this.height : this.height - 4;//TODO
-		GuiComponent.blit(stack, x, y, tx, ty, this.width, h);
+		GuiComponent.blit(stack, x, y, tx, ty, this.width, this.height);
 	}
 
 	public void drawIcon(PoseStack poseStack, int x, int y, int index, ItemRenderer renderer, ItemStack stack) {

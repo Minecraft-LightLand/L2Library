@@ -27,7 +27,7 @@ public abstract class BaseTextScreen extends Screen {
 
 	@Override
 	public void render(PoseStack stack, int mx, int my, float ptick) {
-		fillGradient(stack, 0, 0, this.width, this.height, -1072689136, -804253680);
+		renderBackground(stack);
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.setShaderTexture(0, this.texture);

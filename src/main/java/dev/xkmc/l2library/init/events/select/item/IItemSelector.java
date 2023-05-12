@@ -10,7 +10,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public abstract class IItemSelector {
 
 	private static final HashMap<ResourceLocation, IItemSelector> LIST = new HashMap<>();
 
-	public static synchronized void register(IItemSelector sel){
+	public static synchronized void register(IItemSelector sel) {
 		LIST.put(sel.getID(), sel);
 	}
 

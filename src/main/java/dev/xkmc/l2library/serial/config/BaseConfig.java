@@ -17,7 +17,9 @@ public class BaseConfig {
 		return id;
 	}
 
-	/** called by Config Merger after it's merged*/
+	/**
+	 * called by Config Merger after it's merged
+	 */
 	protected void postMerge() {
 	}
 

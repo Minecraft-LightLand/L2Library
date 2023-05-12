@@ -35,12 +35,17 @@ public class TabInventory extends BaseTab<TabInventory> {
 			TabManager manager = new TabManager(event.getScreen());
 			manager.init(event::addListener, L2LibraryClient.TAB_INVENTORY);
 		}
-
 	}
 
 	@SubscribeEvent
 	public static void guiPostRenderBG(ScreenEvent.BackgroundRendered event) {
-		//TODO
+		Screen screen = event.getScreen();
+		for (var e : screen.children()) {
+			if (e instanceof BaseTab<?> tab) {
+				if (tab.manager.selected != tab.token)
+					tab.renderBackground(event.getPoseStack());
+			}
+		}
 	}
 
 	public TabInventory(TabToken<TabInventory> token, TabManager manager, ItemStack stack, Component title) {

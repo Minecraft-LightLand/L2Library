@@ -33,7 +33,7 @@ public abstract class BaseTab<T extends BaseTab<T>> extends Button {
 		manager.getScreen().renderTooltip(stack, getMessage(), x, y);
 	}
 
-	public void renderBackground(PoseStack stack){
+	public void renderBackground(PoseStack stack) {
 		if (this.visible) {
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			RenderSystem.enableBlend();
@@ -47,7 +47,9 @@ public abstract class BaseTab<T extends BaseTab<T>> extends Button {
 	}
 
 	public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-		renderBackground(stack);
+		if (manager.selected == token) {
+			renderBackground(stack);
+		}
 		if (this.token.index == TabRegistry.getTabs().size() - 1) { // draw on last
 			manager.onToolTipRender(stack, mouseX, mouseY);
 		}

@@ -1,10 +1,8 @@
 package dev.xkmc.l2library.base.tabs.curios;
 
 import com.tterrag.registrate.util.entry.MenuEntry;
-import dev.xkmc.l2library.base.tabs.contents.TabAttributes;
 import dev.xkmc.l2library.base.tabs.contents.TabInventory;
 import dev.xkmc.l2library.base.tabs.core.TabRegistry;
-import dev.xkmc.l2library.base.tabs.core.TabToken;
 import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2library.init.data.LangData;
 import net.minecraft.client.Minecraft;

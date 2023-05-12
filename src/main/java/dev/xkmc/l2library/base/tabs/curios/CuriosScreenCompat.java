@@ -5,7 +5,7 @@ import net.minecraftforge.fml.ModList;
 
 public class CuriosScreenCompat {
 
-	public static void onStartup(){
+	public static void onStartup() {
 		if (ModList.get().isLoaded("curios")) {
 			CuriosScreenCompatImpl.get().onStartUp();
 		}
