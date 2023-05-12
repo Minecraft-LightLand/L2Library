@@ -2,6 +2,7 @@
   "attribute.name.bow_strength": "Bow Strength",
   "attribute.name.crit_damage": "Crit Damage",
   "attribute.name.crit_rate": "Crit Rate",
+  "key.categories.l2library": "L2Library Keys",
   "l2library.tooltip.tool.immune": "Immune to: ",
   "menu.tabs.attribute": "Attributes",
   "menu.tabs.attribute.add": "Addition: %s",
@@ -10,5 +11,6 @@
   "menu.tabs.attribute.format": "(%s%s)x(1%s)x%s=%s",
   "menu.tabs.attribute.mult_all": "Multiply total: %s",
   "menu.tabs.attribute.mult_base": "Multiply Base: %s",
+  "menu.tabs.curios": "Curios",
   "menu.tabs.inventory": "Inventory"
 }

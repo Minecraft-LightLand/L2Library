@@ -38,6 +38,11 @@ public class TabInventory extends BaseTab<TabInventory> {
 
 	}
 
+	@SubscribeEvent
+	public static void guiPostRenderBG(ScreenEvent.BackgroundRendered event) {
+		//TODO
+	}
+
 	public TabInventory(TabToken<TabInventory> token, TabManager manager, ItemStack stack, Component title) {
 		super(token, manager, stack, title);
 	}

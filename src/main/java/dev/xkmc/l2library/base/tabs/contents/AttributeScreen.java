@@ -53,7 +53,6 @@ public class AttributeScreen extends BaseTextScreen {
 			renderComponentTooltip(stack, getAttributeDetail(focus), mx, my);
 	}
 
-
 	public List<Component> getAttributeDetail(Attribute attr) {
 		Player player = Proxy.getClientPlayer();
 		AttributeInstance ins = player.getAttribute(attr);
@@ -105,13 +104,11 @@ public class AttributeScreen extends BaseTextScreen {
 		return Component.literal(String.format(base, ATTRIBUTE_MODIFIER_FORMAT.format(value))).withStyle(ChatFormatting.GREEN);
 	}
 
-
 	private static MutableComponent numberSigned(String base, double value) {
 		if (value >= 0)
 			return Component.literal(String.format("+" + base, ATTRIBUTE_MODIFIER_FORMAT.format(value))).withStyle(ChatFormatting.GREEN);
 		return Component.literal(String.format("-" + base, ATTRIBUTE_MODIFIER_FORMAT.format(-value))).withStyle(ChatFormatting.RED);
 	}
-
 
 	private static MutableComponent name(AttributeModifier e) {
 		return Component.literal("  (" + e.getName() + ")").withStyle(ChatFormatting.DARK_GRAY);

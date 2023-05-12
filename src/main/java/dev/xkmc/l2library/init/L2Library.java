@@ -5,9 +5,11 @@ import com.tterrag.registrate.util.entry.RegistryEntry;
 import dev.xkmc.l2library.base.L2Registrate;
 import dev.xkmc.l2library.base.effects.EffectToClient;
 import dev.xkmc.l2library.base.tabs.contents.AttributeEntry;
+import dev.xkmc.l2library.base.tabs.curios.CuriosScreenCompat;
 import dev.xkmc.l2library.capability.conditionals.ConditionalData;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
+import dev.xkmc.l2library.init.data.GeneralPurposeEventPacket;
 import dev.xkmc.l2library.init.data.L2ConfigManager;
 import dev.xkmc.l2library.init.data.L2DamageTypes;
 import dev.xkmc.l2library.init.data.LangData;
@@ -67,7 +69,8 @@ public class L2Library {
 			e -> e.create(PlayerCapToClient.class, PLAY_TO_CLIENT),
 			e -> e.create(TargetSetPacket.class, PLAY_TO_SERVER),
 			e -> e.create(SlotClickToServer.class, PLAY_TO_SERVER),
-			e -> e.create(SetSelectedToServer.class, PLAY_TO_SERVER));
+			e -> e.create(SetSelectedToServer.class, PLAY_TO_SERVER),
+			e -> e.create(GeneralPurposeEventPacket.class, PLAY_TO_SERVER));
 
 	public static final L2Registrate REGISTRATE = new L2Registrate(MODID);
 	public static final RegistryEntry<Attribute> CRIT_RATE = REGISTRATE.simple("crit_rate", ForgeRegistries.ATTRIBUTES.getRegistryKey(), () -> new RangedAttribute("attribute.name.crit_rate", 0, 0, 1).setSyncable(true));
@@ -85,6 +88,7 @@ public class L2Library {
 		L2ConfigManager.register();
 		ConditionalData.register();
 		L2DamageTypes.register();
+		CuriosScreenCompat.onStartup();
 		SelectionRegistry.register(0, ItemSelectionListener.INSTANCE);
 		REGISTRATE.addDataGenerator(ProviderType.LANG, LangData::genLang);
 	}

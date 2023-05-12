@@ -7,6 +7,7 @@ import net.minecraft.network.chat.MutableComponent;
 public enum LangData {
 	INVENTORY("menu.tabs.inventory", "Inventory", 0),
 	ATTRIBUTE("menu.tabs.attribute", "Attributes", 0),
+	CURIOS("menu.tabs.curios", "Curios", 0),
 	DETAIL("menu.tabs.attribute.detail", "Press Shift to show details", 0),
 	BASE("menu.tabs.attribute.base", "Base value: %s", 1),
 	ADD("menu.tabs.attribute.add", "Addition: %s", 1),

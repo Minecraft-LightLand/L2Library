@@ -64,7 +64,7 @@ public class ClientEffectRenderEvents {
 		Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
 		PoseStack stack = event.getPoseStack();
 
-		// cache the previous stack
+		// cache the previous handler
 		PoseStack posestack = RenderSystem.getModelViewStack();
 		var last = posestack.last();
 		posestack.popPose();
@@ -76,7 +76,7 @@ public class ClientEffectRenderEvents {
 		}
 		buffers.endBatch();
 
-		// restore the previous stack
+		// restore the previous handler
 		posestack.pushPose();
 		posestack.setIdentity();
 		posestack.last().pose().mul(last.pose());

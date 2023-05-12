@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 
 public abstract class BaseTab<T extends BaseTab<T>> extends Button {
 
-	private final static ResourceLocation TEXTURE = new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
+	protected final static ResourceLocation TEXTURE = new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
 
 	public final ItemStack stack;
 	public final TabToken<T> token;
@@ -33,7 +33,7 @@ public abstract class BaseTab<T extends BaseTab<T>> extends Button {
 		manager.getScreen().renderTooltip(stack, getMessage(), x, y);
 	}
 
-	public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+	public void renderBackground(PoseStack stack){
 		if (this.visible) {
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			RenderSystem.enableBlend();
@@ -41,9 +41,13 @@ public abstract class BaseTab<T extends BaseTab<T>> extends Button {
 			RenderSystem.setShaderTexture(0, TEXTURE);
 			token.type.draw(stack, manager.getScreen(), getX(), getY(), manager.selected == token, token.index);
 			RenderSystem.defaultBlendFunc();
-			token.type.drawIcon(stack, getX(), getY()
-					, token.index, Minecraft.getInstance().getItemRenderer(), this.stack);
+			if (!this.stack.isEmpty())
+				token.type.drawIcon(stack, getX(), getY(), token.index, Minecraft.getInstance().getItemRenderer(), this.stack);
 		}
+	}
+
+	public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+		renderBackground(stack);
 		if (this.token.index == TabRegistry.getTabs().size() - 1) { // draw on last
 			manager.onToolTipRender(stack, mouseX, mouseY);
 		}

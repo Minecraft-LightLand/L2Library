@@ -16,7 +16,7 @@ public class TabRegistry {
 	public TabRegistry() {
 	}
 
-	public static <T extends BaseTab<T>> TabToken<T> registerTab(TabToken.TabFactory<T> sup, Supplier<Item> item, Component title) {
+	public static synchronized <T extends BaseTab<T>> TabToken<T> registerTab(TabToken.TabFactory<T> sup, Supplier<Item> item, Component title) {
 		TabToken<T> ans = new TabToken<>(TABS.size(), sup, item, title);
 		TABS.add(ans);
 		return ans;

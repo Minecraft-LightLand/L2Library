@@ -1,6 +1,7 @@
 {
     "menu.tabs.inventory": "背包",
     "menu.tabs.attribute": "数值",
+    "menu.tabs.curios": "饰品",
     "menu.tabs.attribute.detail": "按Shift显示细节",
     "menu.tabs.attribute.base": "基础数值: %s",
     "menu.tabs.attribute.add": "加法乘区: %s",
@@ -13,5 +14,6 @@
     "generic.attack_range": "攻击距离",
     "generic.reachDistance": "触及距离",
     "forge.swimSpeed": "游泳速度",
-    "l2library.tooltip.tool.immune": "免疫: "
+    "l2library.tooltip.tool.immune": "免疫: ",
+    "key.categories.l2library": "莱特兰通用按键"
 }

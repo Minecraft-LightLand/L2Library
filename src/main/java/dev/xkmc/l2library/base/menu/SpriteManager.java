@@ -18,10 +18,12 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 
+import javax.annotation.Nullable;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.TreeMap;
 
+@SuppressWarnings("unused")
 @SerialClass
 public class SpriteManager {
 
@@ -101,8 +103,12 @@ public class SpriteManager {
 		check();
 		Rect c = getComp(key);
 		for (int j = 0; j < c.ry; j++)
-			for (int i = 0; i < c.rx; i++)
-				con.addSlot(key, i, j, fac.getSlot(c.x + i * c.w, c.y + j * c.h));
+			for (int i = 0; i < c.rx; i++) {
+				var slot = fac.getSlot(c.x + i * c.w, c.y + j * c.h);
+				if (slot != null) {
+					con.addSlot(key, i, j, slot);
+				}
+			}
 	}
 
 	public int getWidth() {
@@ -140,6 +146,7 @@ public class SpriteManager {
 
 	public interface SlotFactory<T extends Slot> {
 
+		@Nullable
 		T getSlot(int x, int y);
 
 	}

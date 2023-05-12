@@ -8,7 +8,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-enum TabType {
+public enum TabType {
 	ABOVE(0, 0, 26, 32);
 
 	public static final int MAX_TABS = 8;
@@ -36,12 +36,12 @@ enum TabType {
 		}
 
 		int ty = selected ? this.textureY + this.height : this.textureY;
-		int h = selected ? this.height : this.height - 4;
+		int h = selected ? this.height : this.height - 4;//TODO
 		GuiComponent.blit(stack, x, y, tx, ty, this.width, h);
 	}
 
 	public void drawIcon(PoseStack poseStack, int x, int y, int index, ItemRenderer renderer, ItemStack stack) {
-		renderer.renderAndDecorateFakeItem(poseStack, stack, x + 6, y + 9);
+		renderer.renderAndDecorateFakeItem(poseStack, stack, x + 5, y + 9);
 	}
 
 	public int getX(int index) {
