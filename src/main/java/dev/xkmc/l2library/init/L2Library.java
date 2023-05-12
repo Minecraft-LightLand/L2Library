@@ -9,12 +9,10 @@ import dev.xkmc.l2library.base.tabs.curios.CuriosScreenCompat;
 import dev.xkmc.l2library.capability.conditionals.ConditionalData;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
-import dev.xkmc.l2library.init.data.GeneralPurposeEventPacket;
-import dev.xkmc.l2library.init.data.L2ConfigManager;
-import dev.xkmc.l2library.init.data.L2DamageTypes;
-import dev.xkmc.l2library.init.data.LangData;
+import dev.xkmc.l2library.init.data.*;
 import dev.xkmc.l2library.init.events.attack.AttackEventHandler;
 import dev.xkmc.l2library.init.events.click.SlotClickToServer;
+import dev.xkmc.l2library.init.events.click.quickaccess.QuickAccessClickHandler;
 import dev.xkmc.l2library.init.events.damage.DamageTypeRoot;
 import dev.xkmc.l2library.init.events.listeners.GeneralAttackListener;
 import dev.xkmc.l2library.init.events.listeners.GeneralEventHandler;
@@ -73,9 +71,12 @@ public class L2Library {
 			e -> e.create(GeneralPurposeEventPacket.class, PLAY_TO_SERVER));
 
 	public static final L2Registrate REGISTRATE = new L2Registrate(MODID);
+
 	public static final RegistryEntry<Attribute> CRIT_RATE = REGISTRATE.simple("crit_rate", ForgeRegistries.ATTRIBUTES.getRegistryKey(), () -> new RangedAttribute("attribute.name.crit_rate", 0, 0, 1).setSyncable(true));
 	public static final RegistryEntry<Attribute> CRIT_DMG = REGISTRATE.simple("crit_damage", ForgeRegistries.ATTRIBUTES.getRegistryKey(), () -> new RangedAttribute("attribute.name.crit_damage", 0.5, 0, 1000).setSyncable(true));
 	public static final RegistryEntry<Attribute> BOW_STRENGTH = REGISTRATE.simple("bow_strength", ForgeRegistries.ATTRIBUTES.getRegistryKey(), () -> new RangedAttribute("attribute.name.bow_strength", 1, 0, 1000).setSyncable(true));
+
+	public static final QuickAccessClickHandler CLICK = new QuickAccessClickHandler(new ResourceLocation(MODID, "quick_access"));
 
 	public L2Library() {
 		Handlers.register();
@@ -91,6 +92,7 @@ public class L2Library {
 		CuriosScreenCompat.onStartup();
 		SelectionRegistry.register(0, ItemSelectionListener.INSTANCE);
 		REGISTRATE.addDataGenerator(ProviderType.LANG, LangData::genLang);
+		REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, L2TagGen::genItemTags);
 	}
 
 	@SubscribeEvent

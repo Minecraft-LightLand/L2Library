@@ -1,10 +1,12 @@
 package dev.xkmc.l2library.init.events.click;
 
 import dev.xkmc.l2library.init.L2Library;
+import dev.xkmc.l2library.init.data.L2TagGen;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,7 +21,12 @@ public class SlotClickEventHandler {
 		Screen screen = event.getScreen();
 		if (screen instanceof AbstractContainerScreen cont) {
 			Slot slot = cont.getSlotUnderMouse();
-			if (slot == null || slot.getItem().isStackable()) return;
+			if (slot == null) return;
+			if (slot.getItem().isStackable()) {
+				ItemStack stack = slot.getItem();
+				if (stack.getCount() > 1) return;
+				if (!stack.is(L2TagGen.QUICK_ACCESS)) return;
+			}
 			if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
 				boolean b1 = slot.container == Proxy.getClientPlayer().getInventory();
 				boolean b2 = cont.getMenu().containerId > 0;

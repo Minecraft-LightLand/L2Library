@@ -15,7 +15,7 @@ public enum LangData {
 	MULT_TOTAL("menu.tabs.attribute.mult_all", "Multiply total: %s", 1),
 	FORMAT("menu.tabs.attribute.format", "(%s%s)x(1%s)x%s=%s", 5),
 	ARMOR_IMMUNE("l2library.tooltip.tool.immune", "Immune to: ", 0),
-	;
+	QUICK_ACCESS("l2library.tooltip.quick_access", "Right click in GUI to open", 0);
 
 	private final String key, def;
 	private final int arg;

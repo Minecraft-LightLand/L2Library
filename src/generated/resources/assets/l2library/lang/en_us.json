@@ -3,6 +3,7 @@
   "attribute.name.crit_damage": "Crit Damage",
   "attribute.name.crit_rate": "Crit Rate",
   "key.categories.l2library": "L2Library Keys",
+  "l2library.tooltip.quick_access": "Right click in GUI to open",
   "l2library.tooltip.tool.immune": "Immune to: ",
   "menu.tabs.attribute": "Attributes",
   "menu.tabs.attribute.add": "Addition: %s",

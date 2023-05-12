@@ -1,0 +1,10 @@
+{
+  "values": [
+    "minecraft:crafting_table",
+    "minecraft:smithing_table",
+    "minecraft:stonecutter",
+    "minecraft:grindstone",
+    "minecraft:cartography_table",
+    "minecraft:loom"
+  ]
+}
