@@ -53,7 +53,7 @@ public class TabManager {
 		guiLeft -= 52;
 		for (TabToken<?> token : TabRegistry.getTabs()) {
 			BaseTab<?> tab = token.create(this);
-			tab.setX(guiLeft + (token.index + 2) * 26);
+			tab.setX(guiLeft + (token.getIndex() + 2) * 26);
 			tab.setY(guiTop - 28);
 			adder.accept(tab);
 			list.add(tab);
@@ -78,7 +78,7 @@ public class TabManager {
 
 	private void updateVisibility() {
 		for (BaseTab<?> tab : list) {
-			tab.visible = tab.token.index >= tabPage * TabType.MAX_TABS && tab.token.index < (tabPage + 1) * TabType.MAX_TABS;
+			tab.visible = tab.token.getIndex() >= tabPage * TabType.MAX_TABS && tab.token.getIndex() < (tabPage + 1) * TabType.MAX_TABS;
 			tab.active = tab.visible;
 		}
 	}

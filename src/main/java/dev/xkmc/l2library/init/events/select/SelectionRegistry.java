@@ -15,7 +15,8 @@ public class SelectionRegistry {
 	private static final Map<Integer, ISelectionListener> PRIORITY_MAP = new TreeMap<>();
 
 	/**
-	 * -5000: Numeric Display
+	 * -5000: Artifact Selection
+	 * -3000: Numeric Display
 	 * -1000: Backpack Selection
 	 * 0: ItemSelection
 	 */

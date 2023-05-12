@@ -42,7 +42,7 @@ class CuriosScreenCompatImpl {
 		TabInventory.inventoryTest = screen -> old.test(screen) || screen instanceof CuriosScreen;
 		TabInventory.openInventory = this::openInventory;
 
-		TabCurios.tab = TabRegistry.registerTab(TabCurios::new, () -> Items.AIR, LangData.CURIOS.get());
+		TabCurios.tab = TabRegistry.registerTab(2000, TabCurios::new, () -> Items.AIR, LangData.CURIOS.get());
 	}
 
 	void openScreen(ServerPlayer player) {

@@ -38,7 +38,7 @@ public class TabCurios extends BaseTab<TabCurios> {
 			RenderSystem.enableBlend();
 			RenderSystem.setShader(GameRenderer::getPositionTexShader);
 			RenderSystem.setShaderTexture(0, TEXTURE);
-			token.type.draw(stack, manager.getScreen(), getX(), getY(), manager.selected == token, token.index);
+			token.type.draw(stack, manager.getScreen(), getX(), getY(), manager.selected == token, token.getIndex());
 			RenderSystem.setShaderTexture(0, new ResourceLocation(Curios.MODID, "textures/gui/inventory.png"));
 			blit(stack, getX() + 6, getY() + 10, 50, 14, 14, 14);
 		}

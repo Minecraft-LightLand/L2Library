@@ -39,10 +39,10 @@ public abstract class BaseTab<T extends BaseTab<T>> extends Button {
 			RenderSystem.enableBlend();
 			RenderSystem.setShader(GameRenderer::getPositionTexShader);
 			RenderSystem.setShaderTexture(0, TEXTURE);
-			token.type.draw(stack, manager.getScreen(), getX(), getY(), manager.selected == token, token.index);
+			token.type.draw(stack, manager.getScreen(), getX(), getY(), manager.selected == token, token.getIndex());
 			RenderSystem.defaultBlendFunc();
 			if (!this.stack.isEmpty())
-				token.type.drawIcon(stack, getX(), getY(), token.index, Minecraft.getInstance().getItemRenderer(), this.stack);
+				token.type.drawIcon(stack, getX(), getY(), token.getIndex(), Minecraft.getInstance().getItemRenderer(), this.stack);
 		}
 	}
 
@@ -50,7 +50,7 @@ public abstract class BaseTab<T extends BaseTab<T>> extends Button {
 		if (manager.selected == token) {
 			renderBackground(stack);
 		}
-		if (this.token.index == TabRegistry.getTabs().size() - 1) { // draw on last
+		if (this.token.getIndex() == TabRegistry.getTabs().size() - 1) { // draw on last
 			manager.onToolTipRender(stack, mouseX, mouseY);
 		}
 	}

@@ -86,7 +86,9 @@ public class ClientGeneralEventHandler {
 		if (player == null) return;
 		var sel = SelectionRegistry.getClientActiveListener(player);
 		if (sel.isEmpty()) return;
-		if (L2LibraryConfig.CLIENT.selectionScrollRequireShift.get() && !player.isShiftKeyDown()) return;
+		if (!sel.get().scrollBypassShift() &&
+				L2LibraryConfig.CLIENT.selectionScrollRequireShift.get() &&
+				!player.isShiftKeyDown()) return;
 		if (sel.get().handleClientScroll(event.diff, player)) {
 			event.setCanceled(true);
 		}

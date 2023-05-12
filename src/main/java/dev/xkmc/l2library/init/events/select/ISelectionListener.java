@@ -21,6 +21,10 @@ public interface ISelectionListener {
 
 	boolean handleClientNumericKey(int i, BooleanSupplier consumeClick);
 
+	default boolean scrollBypassShift(){
+		return false;
+	}
+
 	default void toServer(int slot) {
 		L2Library.PACKET_HANDLER.toServer(new SetSelectedToServer(this, slot));
 	}

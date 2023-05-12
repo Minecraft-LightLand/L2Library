@@ -27,8 +27,8 @@ public class L2LibraryClient {
 	@SubscribeEvent
 	public static void client(FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
-			TAB_INVENTORY = TabRegistry.registerTab(TabInventory::new, () -> Items.CRAFTING_TABLE, LangData.INVENTORY.get());
-			TAB_ATTRIBUTE = TabRegistry.registerTab(TabAttributes::new, () -> Items.IRON_SWORD, LangData.ATTRIBUTE.get());
+			TAB_INVENTORY = TabRegistry.registerTab(0, TabInventory::new, () -> Items.CRAFTING_TABLE, LangData.INVENTORY.get());
+			TAB_ATTRIBUTE = TabRegistry.registerTab(1000, TabAttributes::new, () -> Items.IRON_SWORD, LangData.ATTRIBUTE.get());
 			CuriosScreenCompat.onClientInit();
 		});
 	}
