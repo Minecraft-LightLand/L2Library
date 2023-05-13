@@ -12,6 +12,7 @@ import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
 import dev.xkmc.l2library.init.data.*;
 import dev.xkmc.l2library.init.events.attack.AttackEventHandler;
 import dev.xkmc.l2library.init.events.click.SlotClickToServer;
+import dev.xkmc.l2library.init.events.click.quickaccess.DefaultQuickAccessActions;
 import dev.xkmc.l2library.init.events.click.quickaccess.QuickAccessClickHandler;
 import dev.xkmc.l2library.init.events.damage.DamageTypeRoot;
 import dev.xkmc.l2library.init.events.listeners.GeneralAttackListener;
@@ -76,8 +77,6 @@ public class L2Library {
 	public static final RegistryEntry<Attribute> CRIT_DMG = REGISTRATE.simple("crit_damage", ForgeRegistries.ATTRIBUTES.getRegistryKey(), () -> new RangedAttribute("attribute.name.crit_damage", 0.5, 0, 1000).setSyncable(true));
 	public static final RegistryEntry<Attribute> BOW_STRENGTH = REGISTRATE.simple("bow_strength", ForgeRegistries.ATTRIBUTES.getRegistryKey(), () -> new RangedAttribute("attribute.name.bow_strength", 1, 0, 1000).setSyncable(true));
 
-	public static final QuickAccessClickHandler CLICK = new QuickAccessClickHandler(new ResourceLocation(MODID, "quick_access"));
-
 	public L2Library() {
 		Handlers.register();
 		FMLJavaModLoadingContext ctx = FMLJavaModLoadingContext.get();
@@ -90,7 +89,11 @@ public class L2Library {
 		ConditionalData.register();
 		L2DamageTypes.register();
 		CuriosScreenCompat.onStartup();
+
+		new QuickAccessClickHandler(new ResourceLocation(MODID, "quick_access"));
+		AttackEventHandler.register(0, new GeneralAttackListener());
 		SelectionRegistry.register(0, ItemSelectionListener.INSTANCE);
+
 		REGISTRATE.addDataGenerator(ProviderType.LANG, LangData::genLang);
 		REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, L2TagGen::genItemTags);
 	}
@@ -122,7 +125,7 @@ public class L2Library {
 	public static void setup(FMLCommonSetupEvent event) {
 		DamageTypeRoot.generateAll();
 		event.enqueueWork(() -> {
-			AttackEventHandler.register(0, new GeneralAttackListener());
+			DefaultQuickAccessActions.register();
 			AttributeEntry.add(() -> Attributes.MAX_HEALTH, false, 1000);
 			AttributeEntry.add(() -> Attributes.ARMOR, false, 2000);
 			AttributeEntry.add(() -> Attributes.ARMOR_TOUGHNESS, false, 3000);
