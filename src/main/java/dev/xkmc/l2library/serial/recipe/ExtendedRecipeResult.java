@@ -15,11 +15,6 @@ public record ExtendedRecipeResult(FinishedRecipe impl, IExtendedRecipe parent) 
 	}
 
 	@Override
-	public JsonObject serializeRecipe() {
-		return impl().serializeRecipe();
-	}
-
-	@Override
 	public ResourceLocation getId() {
 		return impl().getId();
 	}
