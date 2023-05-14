@@ -24,27 +24,47 @@ public abstract class AbstractSmithingRecipe<T extends AbstractSmithingRecipe<T>
 		super(rl, TEMPLATE_PLACEHOLDER, left, right, result);
 	}
 
+	public AbstractSmithingRecipe(ResourceLocation rl, Ingredient template, Ingredient left, Ingredient right, ItemStack result) {
+		super(rl, template, left, right, result);
+	}
+
 	@Override
 	public abstract Serializer<T> getSerializer();
+
 
 	@FunctionalInterface
 	public interface RecipeFactory<T extends AbstractSmithingRecipe<T>> {
 
 		T create(ResourceLocation rl, Ingredient left, Ingredient right, ItemStack result);
 
+		default T create(ResourceLocation rl, Ingredient template, Ingredient left, Ingredient right, ItemStack result) {
+			return create(rl, left, right, result);
+		}
+
+	}
+
+	@FunctionalInterface
+	public interface RecipeFactoryWithTemplate<T extends AbstractSmithingRecipe<T>> {
+
+		T create(ResourceLocation rl, Ingredient template, Ingredient left, Ingredient right, ItemStack result);
+
 	}
 
 	public static class Serializer<T extends AbstractSmithingRecipe<T>> extends SmithingTransformRecipe.Serializer {
 
-		private final RecipeFactory<T> factory;
+		private final RecipeFactoryWithTemplate<T> factory;
 
 		public Serializer(RecipeFactory<T> factory) {
+			this.factory = factory::create;
+		}
+
+		public Serializer(RecipeFactoryWithTemplate<T> factory) {
 			this.factory = factory;
 		}
 
 		public T fromJson(ResourceLocation id, JsonObject obj) {
 			SmithingTransformRecipe r = super.fromJson(id, obj);
-			return factory.create(r.getId(), r.base, r.addition, r.result);
+			return factory.create(r.getId(), r.template, r.base, r.addition, r.result);
 		}
 
 
@@ -53,7 +73,7 @@ public abstract class AbstractSmithingRecipe<T extends AbstractSmithingRecipe<T>
 			if (r == null) {
 				return null;
 			}
-			return factory.create(r.getId(), r.base, r.addition, r.result);
+			return factory.create(r.getId(), r.template, r.base, r.addition, r.result);
 		}
 
 
@@ -67,6 +87,11 @@ public abstract class AbstractSmithingRecipe<T extends AbstractSmithingRecipe<T>
 		private final Class<T> cls;
 
 		public SerialSerializer(Class<T> cls, RecipeFactory<T> factory) {
+			super(factory);
+			this.cls = cls;
+		}
+
+		public SerialSerializer(Class<T> cls, RecipeFactoryWithTemplate<T> factory) {
 			super(factory);
 			this.cls = cls;
 		}

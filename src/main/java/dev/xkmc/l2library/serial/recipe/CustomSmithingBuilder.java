@@ -29,13 +29,18 @@ public class CustomSmithingBuilder<T extends AbstractSmithingRecipe<T>> extends 
 		this.serializer = serializer;
 	}
 
+	public CustomSmithingBuilder(RegistryEntry<AbstractSmithingRecipe.Serializer<T>> serializer, Ingredient template, Ingredient left, Ingredient right, Item result) {
+		super(serializer.get(), template, left, right, RecipeCategory.MISC, result);
+		this.serializer = serializer;
+	}
+
 	public void save(Consumer<FinishedRecipe> pvd, ResourceLocation id) {
 		this.ensureValid(id);
 		this.advancement.parent(new ResourceLocation("recipes/root"))
 				.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
 				.rewards(AdvancementRewards.Builder.recipe(id)).requirements(RequirementsStrategy.OR);
 		pvd.accept(new ExtendedRecipeResult(new SmithingTransformRecipeBuilder.Result(id,
-				getType(), TEMPLATE_PLACEHOLDER, base, addition, result, advancement,
+				getType(), template, base, addition, result, advancement,
 				new ResourceLocation(id.getNamespace(), "recipes/" + id.getPath())),
 				this));
 	}
