@@ -21,7 +21,7 @@ public interface ISelectionListener {
 
 	boolean handleClientNumericKey(int i, BooleanSupplier consumeClick);
 
-	default boolean scrollBypassShift(){
+	default boolean scrollBypassShift() {
 		return false;
 	}
 

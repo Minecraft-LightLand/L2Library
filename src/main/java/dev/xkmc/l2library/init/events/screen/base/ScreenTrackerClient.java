@@ -6,9 +6,6 @@ import dev.xkmc.l2library.init.events.screen.packets.ScreenType;
 import dev.xkmc.l2library.init.events.screen.track.TrackedEntry;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-
-import javax.annotation.Nullable;
 
 public class ScreenTrackerClient {
 
