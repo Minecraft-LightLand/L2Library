@@ -5,7 +5,7 @@ import dev.xkmc.l2library.base.tabs.contents.TabAttributes;
 import dev.xkmc.l2library.base.tabs.contents.TabInventory;
 import dev.xkmc.l2library.base.tabs.core.TabRegistry;
 import dev.xkmc.l2library.base.tabs.core.TabToken;
-import dev.xkmc.l2library.base.tabs.curios.CuriosScreenCompat;
+import dev.xkmc.l2library.init.compat.L2CuriosCompat;
 import dev.xkmc.l2library.init.data.LangData;
 import dev.xkmc.l2library.init.events.listeners.BaseJsonReloadListener;
 import dev.xkmc.l2library.init.events.select.item.ItemSelectionOverlay;
@@ -29,7 +29,7 @@ public class L2LibraryClient {
 		event.enqueueWork(() -> {
 			TAB_INVENTORY = TabRegistry.registerTab(0, TabInventory::new, () -> Items.CRAFTING_TABLE, LangData.INVENTORY.get());
 			TAB_ATTRIBUTE = TabRegistry.registerTab(1000, TabAttributes::new, () -> Items.IRON_SWORD, LangData.ATTRIBUTE.get());
-			CuriosScreenCompat.onClientInit();
+			L2CuriosCompat.onClientInit();
 		});
 	}
 

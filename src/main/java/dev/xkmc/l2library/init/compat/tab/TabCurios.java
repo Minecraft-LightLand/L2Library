@@ -3,7 +3,7 @@
 // (powered by FernFlower decompiler)
 //
 
-package dev.xkmc.l2library.base.tabs.curios;
+package dev.xkmc.l2library.init.compat.tab;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -21,7 +21,7 @@ import top.theillusivec4.curios.Curios;
 
 public class TabCurios extends BaseTab<TabCurios> {
 
-	static TabToken<TabCurios> tab;
+	public static TabToken<TabCurios> tab;
 
 	public TabCurios(TabToken<TabCurios> token, TabManager manager, ItemStack stack, Component title) {
 		super(token, manager, stack, title);

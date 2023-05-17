@@ -1,9 +1,13 @@
-package dev.xkmc.l2library.base.tabs.curios;
+package dev.xkmc.l2library.init.compat;
 
 import com.tterrag.registrate.util.entry.MenuEntry;
 import dev.xkmc.l2library.base.tabs.contents.TabInventory;
 import dev.xkmc.l2library.base.tabs.core.TabRegistry;
 import dev.xkmc.l2library.init.L2Library;
+import dev.xkmc.l2library.init.compat.tab.CuriosListMenu;
+import dev.xkmc.l2library.init.compat.tab.CuriosListScreen;
+import dev.xkmc.l2library.init.compat.tab.CuriosMenuPvd;
+import dev.xkmc.l2library.init.compat.tab.TabCurios;
 import dev.xkmc.l2library.init.data.LangData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -15,6 +19,7 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PacketDistributor;
 import top.theillusivec4.curios.client.gui.CuriosScreen;
+import top.theillusivec4.curios.common.inventory.container.CuriosContainerProvider;
 import top.theillusivec4.curios.common.network.NetworkHandler;
 import top.theillusivec4.curios.common.network.client.CPacketOpenCurios;
 
@@ -65,4 +70,9 @@ class CuriosScreenCompatImpl {
 					new CPacketOpenCurios(stack));
 		}
 	}
+
+	void openCurioImpl(ServerPlayer player) {
+		NetworkHooks.openScreen(player, new CuriosContainerProvider());
+	}
+
 }

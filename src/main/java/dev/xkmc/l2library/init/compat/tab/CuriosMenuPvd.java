@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.base.tabs.curios;
+package dev.xkmc.l2library.init.compat.tab;
 
 import dev.xkmc.l2library.init.data.LangData;
 import net.minecraft.network.chat.Component;

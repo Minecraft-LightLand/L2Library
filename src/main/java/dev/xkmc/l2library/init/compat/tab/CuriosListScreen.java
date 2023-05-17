@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.base.tabs.curios;
+package dev.xkmc.l2library.init.compat.tab;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.xkmc.l2library.base.menu.BaseContainerScreen;

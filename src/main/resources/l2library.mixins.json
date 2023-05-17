@@ -7,7 +7,8 @@
   "mixins": [
 	"AbstractArrowMixin",
 	"DamageSourcesMixin",
-	"EntityMixin"
+	"EntityMixin",
+	"ServerPlayerMixin"
   ],
   "client": [
 	"ClientLocalPlayerMixin"

@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.base.tabs.curios;
+package dev.xkmc.l2library.init.compat.tab;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
