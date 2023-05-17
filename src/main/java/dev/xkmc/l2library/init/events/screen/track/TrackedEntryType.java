@@ -17,6 +17,6 @@ public abstract class TrackedEntryType<T extends TrackedEntryData<T>> extends Na
 
 	public abstract LayerPopType restoreMenuNotifyClient(ServerPlayer player, T data, @Nullable Component comp);
 
-	public abstract boolean match(AbstractContainerMenu current, T data);
+	public abstract boolean match(T self, T other);
 
 }

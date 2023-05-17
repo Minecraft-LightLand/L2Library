@@ -21,7 +21,8 @@ public class EnderTrace extends TrackedEntryType<NoData> {
 	}
 
 	@Override
-	public boolean match(AbstractContainerMenu current, NoData data) {
+	public boolean match(NoData self, NoData other) {
 		return true;
 	}
+
 }

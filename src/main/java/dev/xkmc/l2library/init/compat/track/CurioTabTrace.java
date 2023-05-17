@@ -6,7 +6,6 @@ import dev.xkmc.l2library.init.events.screen.track.NoData;
 import dev.xkmc.l2library.init.events.screen.track.TrackedEntryType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.jetbrains.annotations.Nullable;
 
 public class CurioTabTrace extends TrackedEntryType<NoData> {
@@ -18,7 +17,8 @@ public class CurioTabTrace extends TrackedEntryType<NoData> {
 	}
 
 	@Override
-	public boolean match(AbstractContainerMenu current, NoData data) {
-		return false;
+	public boolean match(NoData self, NoData other) {
+		return true;
 	}
+
 }

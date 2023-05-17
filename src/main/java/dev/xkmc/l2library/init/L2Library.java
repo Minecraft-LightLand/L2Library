@@ -107,8 +107,7 @@ public class L2Library {
 		ScreenTracker.register();
 		ScreenTrackerRegistry.register();
 		L2CuriosCompat.onStartup();
-
-		new QuickAccessClickHandler(new ResourceLocation(MODID, "quick_access"));
+		QuickAccessClickHandler.INS = new QuickAccessClickHandler(new ResourceLocation(MODID, "quick_access"));
 		AttackEventHandler.register(0, new GeneralAttackListener());
 		SelectionRegistry.register(0, ItemSelectionListener.INSTANCE);
 

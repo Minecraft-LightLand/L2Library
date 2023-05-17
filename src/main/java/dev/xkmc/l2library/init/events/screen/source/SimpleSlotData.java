@@ -6,7 +6,12 @@ import dev.xkmc.l2serial.serialization.SerialClass;
 public final class SimpleSlotData extends ItemSourceData<SimpleSlotData> {
 
 	@SerialClass.SerialField
-	private final int slot;
+	private int slot;
+
+	@Deprecated
+	public SimpleSlotData() {
+
+	}
 
 	public SimpleSlotData(int slot) {
 		this.slot = slot;

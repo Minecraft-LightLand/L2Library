@@ -1,5 +1,6 @@
 package dev.xkmc.l2library.init.events.click.quickaccess;
 
+import dev.xkmc.l2library.init.events.screen.base.ScreenTracker;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
@@ -13,6 +14,7 @@ public record SimpleMenuAction(MenuFactory factory, String id) implements QuickA
 
 	@Override
 	public void perform(ServerPlayer player, ItemStack stack) {
+		ScreenTracker.onServerOpen(player);
 		NetworkHooks.openScreen(player, new SimpleMenuProvider((wid, inv, pl) ->
 				factory.create(wid, inv, new DummyHandler(pl)),
 				Component.translatable(id)));

@@ -14,13 +14,14 @@ public class InventoryTrace extends TrackedEntryType<NoData> {
 
 	@Override
 	public LayerPopType restoreMenuNotifyClient(ServerPlayer player, NoData data, @Nullable Component comp) {
+		player.doCloseContainer();
 		L2Library.PACKET_HANDLER.toClientPlayer(new SetScreenToClient(ScreenType.PLAYER), player);
 		return LayerPopType.CLEAR;
 	}
 
 	@Override
-	public boolean match(AbstractContainerMenu current, NoData data) {
-		return false;
+	public boolean match(NoData self, NoData other) {
+		return true;
 	}
 
 }

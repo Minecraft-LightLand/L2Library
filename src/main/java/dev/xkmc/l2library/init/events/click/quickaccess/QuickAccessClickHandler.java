@@ -12,6 +12,8 @@ import java.util.Map;
 
 public class QuickAccessClickHandler extends SlotClickHandler {
 
+	public static QuickAccessClickHandler INS;
+
 	private static final Map<Item, QuickAccessAction> MAP = new HashMap<>();
 
 	public static synchronized void register(Item item, QuickAccessAction action) {
@@ -28,7 +30,7 @@ public class QuickAccessClickHandler extends SlotClickHandler {
 	}
 
 	@Override
-	protected void handle(ServerPlayer player, ItemStack stack) {
+	public void handle(ServerPlayer player, ItemStack stack) {
 		QuickAccessAction accessAction = MAP.get(stack.getItem());
 		if (accessAction != null) {
 			accessAction.perform(player, stack);

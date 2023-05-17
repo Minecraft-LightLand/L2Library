@@ -18,7 +18,8 @@ public class CurioInvTrace extends TrackedEntryType<NoData> {
 	}
 
 	@Override
-	public boolean match(AbstractContainerMenu current, NoData data) {
-		return false;
+	public boolean match(NoData self, NoData other) {
+		return true;
 	}
+
 }
