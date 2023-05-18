@@ -4,6 +4,7 @@ import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityNetworkHandler;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityTemplate;
 import dev.xkmc.l2library.init.L2Library;
+import dev.xkmc.l2library.init.L2LibraryConfig;
 import dev.xkmc.l2serial.serialization.SerialClass;
 import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.resources.ResourceLocation;
@@ -49,7 +50,8 @@ public class ConditionalData extends PlayerCapabilityTemplate<ConditionalData> {
 	@Override
 	public void tick() {
 		tickSinceDeath++;
-		if (tickSinceDeath < 60 && player.getHealth() < player.getMaxHealth()) {
+		if (L2LibraryConfig.COMMON.restoreFullHealthOnRespawn.get() &&
+				tickSinceDeath < 60 && player.getHealth() < player.getMaxHealth()) {
 			player.setHealth(player.getMaxHealth());
 		}
 		data.entrySet().removeIf(e -> e.getValue().tick(player));

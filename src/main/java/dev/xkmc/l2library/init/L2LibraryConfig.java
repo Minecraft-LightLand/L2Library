@@ -14,11 +14,11 @@ public class L2LibraryConfig {
 		public final ForgeConfigSpec.DoubleValue infoMaxWidth;
 
 		public final ForgeConfigSpec.BooleanValue showTabs;
-		public final ForgeConfigSpec.BooleanValue restoreFullHealthOnRespawn;
 
 		public final ForgeConfigSpec.BooleanValue selectionDisplayRequireShift;
 		public final ForgeConfigSpec.BooleanValue selectionScrollRequireShift;
 		public final ForgeConfigSpec.DoubleValue scrollTick;
+
 
 		Client(ForgeConfigSpec.Builder builder) {
 			infoAlpha = builder.comment("Info background transparency. 1 means opaque.")
@@ -30,8 +30,6 @@ public class L2LibraryConfig {
 
 			showTabs = builder.comment("Show inventory tabs")
 					.define("showTabs", true);
-			restoreFullHealthOnRespawn = builder.comment("Restore full health on respawn")
-					.define("restoreFullHealthOnRespawn", true);
 
 			scrollTick = builder.comment("Scroll sensitivity")
 					.defineInRange("scrollTick", 1, 0.01, 10000);
@@ -40,13 +38,21 @@ public class L2LibraryConfig {
 			selectionScrollRequireShift = builder.comment("Scroll for selection only when pressing shift")
 					.define("selectionScrollRequireShift", true);
 
+
 		}
 
 	}
 
 	public static class Common {
 
+		public final ForgeConfigSpec.BooleanValue restoreFullHealthOnRespawn;
+		public final ForgeConfigSpec.BooleanValue tabSafeMode;
+
 		Common(ForgeConfigSpec.Builder builder) {
+			restoreFullHealthOnRespawn = builder.comment("Restore full health on respawn")
+					.define("restoreFullHealthOnRespawn", true);
+			tabSafeMode = builder.comment("Safe Mode for menu stacking")
+					.define("tabSafeMode", false);
 		}
 
 	}

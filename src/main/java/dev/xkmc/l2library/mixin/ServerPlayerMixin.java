@@ -1,5 +1,7 @@
 package dev.xkmc.l2library.mixin;
 
+import dev.xkmc.l2library.init.events.screen.base.MenuCache;
+import dev.xkmc.l2library.init.events.screen.base.MenuTriggerType;
 import dev.xkmc.l2library.init.events.screen.base.ScreenTracker;
 import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,7 +19,7 @@ public class ServerPlayerMixin {
 	@Inject(at = @At("RETURN"), method = "openMenu")
 	public void l2library_openMenu_recordTitle(MenuProvider menu, CallbackInfoReturnable<OptionalInt> cir) {
 		if (menu != null) {
-			ScreenTracker.onServerOpenMenu(Wrappers.cast(this), menu.getDisplayName());
+			ScreenTracker.onServerOpenMenu(Wrappers.cast(this), menu, MenuTriggerType.OPEN_MENU, null);
 		}
 	}
 

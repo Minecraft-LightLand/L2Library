@@ -21,6 +21,7 @@ public class ScreenTrackerRegistry {
 	public static final RegistryEntry<InventoryTrace> TE_INVENTORY = L2Library.REGISTRATE.simple("inventory", TRACKED_ENTRY_TYPE.key(), InventoryTrace::new);
 	public static final RegistryEntry<EnderTrace> TE_ENDER = L2Library.REGISTRATE.simple("ender", TRACKED_ENTRY_TYPE.key(), EnderTrace::new);
 	public static final RegistryEntry<QuickAccessTrace> TE_QUICK_ACCESS = L2Library.REGISTRATE.simple("quick_access", TRACKED_ENTRY_TYPE.key(), QuickAccessTrace::new);
+	public static final RegistryEntry<MenuProviderTrace> TE_MENU_PROVIDER = L2Library.REGISTRATE.simple("menu_provider", TRACKED_ENTRY_TYPE.key(), MenuProviderTrace::new);
 
 	public static void register() {
 	}

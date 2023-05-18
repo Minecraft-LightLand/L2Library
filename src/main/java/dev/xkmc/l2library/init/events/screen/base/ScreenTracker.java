@@ -11,9 +11,10 @@ import dev.xkmc.l2library.init.events.screen.track.NoData;
 import dev.xkmc.l2library.init.events.screen.track.TrackedEntry;
 import dev.xkmc.l2serial.serialization.SerialClass;
 import dev.xkmc.l2serial.util.Wrappers;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.common.capabilities.Capability;
@@ -22,6 +23,7 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 
 import javax.annotation.Nullable;
 import java.util.Stack;
+import java.util.function.Consumer;
 
 /**
  * 1. Server open BaseOpenableContainer: add previous and current menu to stack, tell client
@@ -49,8 +51,8 @@ public class ScreenTracker extends PlayerCapabilityTemplate<ScreenTracker> {
 		get(player).serverOpen(player);
 	}
 
-	public static void onServerOpenMenu(ServerPlayer player, Component title) {
-		get(player).serverOpenMenu(player, player.containerMenu, title);
+	public static void onServerOpenMenu(ServerPlayer player, MenuProvider next, MenuTriggerType type, @Nullable Consumer<FriendlyByteBuf> buf) {
+		get(player).serverOpenMenu(player, MenuCache.of(player.containerMenu, next, type, buf));
 	}
 
 	public static void removeAll(ServerPlayer player) {
@@ -66,15 +68,15 @@ public class ScreenTracker extends PlayerCapabilityTemplate<ScreenTracker> {
 	// --- server only values
 	private TrackedEntry<?> temp;
 	private boolean restoring = false;
-	private Component title;
+	private MenuCache current;
 
-	private void serverOpenMenu(ServerPlayer player, AbstractContainerMenu menu, Component title) {
+	private void serverOpenMenu(ServerPlayer player, MenuCache next) {
 		if (temp != null) {
-			if (this.title != null)
-				temp.setTitle(this.title);
-			serverOpenMenu(player, temp, menu);
+			if (current != null)
+				temp.setTitle(current.title());
+			serverOpenMenu(player, temp, next.menu());
 		}
-		this.title = title;
+		this.current = next;
 		temp = null;
 	}
 
@@ -82,13 +84,19 @@ public class ScreenTracker extends PlayerCapabilityTemplate<ScreenTracker> {
 	private TrackedEntry<?> getEntry(AbstractContainerMenu prev) {
 		if (prev.containerId == 0) {
 			return TrackedEntry.of(ScreenTrackerRegistry.TE_INVENTORY.get(), NoData.DATA);
-		} else {
-			var getter = MenuTraceRegistry.get(prev.getType());
-			if (getter == null) return null;
-			var entry = getter.track(Wrappers.cast(prev));
-			if (entry.isEmpty()) return null;
-			return entry.get();
 		}
+		var getter = MenuTraceRegistry.get(prev.getType());
+		if (getter != null) {
+			var entry = getter.track(Wrappers.cast(prev));
+			if (entry.isPresent()) {
+				return entry.get();
+
+			}
+		}
+		if (current != null && current.menu() == prev) {
+			return current.constructEntry();
+		}
+		return null;
 	}
 
 	private void serverOpen(ServerPlayer player) {
