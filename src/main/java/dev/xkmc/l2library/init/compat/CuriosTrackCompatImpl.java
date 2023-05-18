@@ -66,11 +66,11 @@ public class CuriosTrackCompatImpl {
 		MenuSourceRegistry.register(CuriosScreenCompatImpl.get().menuType.get(), (menu, slot, index, wid) ->
 				getPlayerSlotImpl(slot, index, wid, menu));
 
-		MenuTraceRegistry.register(CuriosRegistry.CURIO_MENU.get(), (menu, comp) ->
-				Optional.of(TrackedEntry.of(TE_CURIO_INV.get(), NoData.DATA, comp)));
+		MenuTraceRegistry.register(CuriosRegistry.CURIO_MENU.get(), menu ->
+				Optional.of(TrackedEntry.of(TE_CURIO_INV.get(), NoData.DATA)));
 
-		MenuTraceRegistry.register(CuriosScreenCompatImpl.get().menuType.get(), (menu, comp) ->
-				Optional.of(TrackedEntry.of(TE_CURIO_TAB.get(), NoData.DATA, comp)));
+		MenuTraceRegistry.register(CuriosScreenCompatImpl.get().menuType.get(), menu ->
+				Optional.of(TrackedEntry.of(TE_CURIO_TAB.get(), NoData.DATA)));
 	}
 
 	private Optional<PlayerSlot<?>> getPlayerSlotImpl(int slot, int index, int wid, AbstractContainerMenu menu) {

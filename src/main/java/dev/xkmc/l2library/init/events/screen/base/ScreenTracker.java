@@ -11,6 +11,7 @@ import dev.xkmc.l2library.init.events.screen.track.NoData;
 import dev.xkmc.l2library.init.events.screen.track.TrackedEntry;
 import dev.xkmc.l2serial.serialization.SerialClass;
 import dev.xkmc.l2serial.util.Wrappers;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -48,8 +49,8 @@ public class ScreenTracker extends PlayerCapabilityTemplate<ScreenTracker> {
 		get(player).serverOpen(player);
 	}
 
-	public static void onServerOpenMenu(ServerPlayer player, AbstractContainerMenu menu) {
-		get(player).serverOpenMenu(player, menu);
+	public static void onServerOpenMenu(ServerPlayer player, Component title) {
+		get(player).serverOpenMenu(player, player.containerMenu, title);
 	}
 
 	public static void removeAll(ServerPlayer player) {
@@ -65,22 +66,26 @@ public class ScreenTracker extends PlayerCapabilityTemplate<ScreenTracker> {
 	// --- server only values
 	private TrackedEntry<?> temp;
 	private boolean restoring = false;
+	private Component title;
 
-	private void serverOpenMenu(ServerPlayer player, AbstractContainerMenu menu) {
+	private void serverOpenMenu(ServerPlayer player, AbstractContainerMenu menu, Component title) {
 		if (temp != null) {
+			if (this.title != null)
+				temp.setTitle(this.title);
 			serverOpenMenu(player, temp, menu);
 		}
+		this.title = title;
 		temp = null;
 	}
 
 	@Nullable
 	private TrackedEntry<?> getEntry(AbstractContainerMenu prev) {
 		if (prev.containerId == 0) {
-			return TrackedEntry.of(ScreenTrackerRegistry.TE_INVENTORY.get(), NoData.DATA, null);
+			return TrackedEntry.of(ScreenTrackerRegistry.TE_INVENTORY.get(), NoData.DATA);
 		} else {
 			var getter = MenuTraceRegistry.get(prev.getType());
 			if (getter == null) return null;
-			var entry = getter.track(Wrappers.cast(prev), null);
+			var entry = getter.track(Wrappers.cast(prev));
 			if (entry.isEmpty()) return null;
 			return entry.get();
 		}

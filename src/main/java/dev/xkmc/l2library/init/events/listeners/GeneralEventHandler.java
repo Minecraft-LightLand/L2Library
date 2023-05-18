@@ -98,9 +98,4 @@ public class GeneralEventHandler {
 			event.getToolTip().add(LangData.QUICK_ACCESS.get().withStyle(ChatFormatting.GRAY));
 	}
 
-	@SubscribeEvent
-	public static void onMenuOpen(PlayerContainerEvent.Open event) {
-		ScreenTracker.onServerOpenMenu((ServerPlayer) event.getEntity(), event.getContainer());
-	}
-
 }

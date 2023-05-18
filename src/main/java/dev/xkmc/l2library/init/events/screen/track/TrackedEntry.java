@@ -23,15 +23,13 @@ public final class TrackedEntry<T extends Record & TrackedEntryData<T>> {
 
 	}
 
-	public TrackedEntry(TrackedEntryType<T> type, T data, String title) {
+	public TrackedEntry(TrackedEntryType<T> type, T data) {
 		this.type = type;
 		this.data = data;
-		this.title = title;
 	}
 
-	public static <T extends Record & TrackedEntryData<T>> TrackedEntry<T> of(TrackedEntryType<T> type, T data, @Nullable Component title) {
-		String str = title == null ? "" : Component.Serializer.toJson(title);
-		return new TrackedEntry<>(type, data, str);
+	public static <T extends Record & TrackedEntryData<T>> TrackedEntry<T> of(TrackedEntryType<T> type, T data) {
+		return new TrackedEntry<>(type, data);
 	}
 
 	public LayerPopType restoreServerMenu(ServerPlayer player) {
@@ -58,4 +56,7 @@ public final class TrackedEntry<T extends Record & TrackedEntryData<T>> {
 		return title;
 	}
 
+	public void setTitle(@Nullable Component title) {
+		this.title = title == null ? "" : Component.Serializer.toJson(title);
+	}
 }

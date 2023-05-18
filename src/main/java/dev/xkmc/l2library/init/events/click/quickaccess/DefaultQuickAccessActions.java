@@ -35,9 +35,9 @@ public class DefaultQuickAccessActions {
 	}
 
 	public static <T extends AbstractContainerMenu> void quickAccess(MenuType<T> type, Item item) {
-		MenuTraceRegistry.register(type, (menu, comp) ->
+		MenuTraceRegistry.register(type, menu ->
 				Optional.of(TrackedEntry.of(ScreenTrackerRegistry.TE_QUICK_ACCESS.get(),
-						new QuickAccessTraceData(item.getDefaultInstance()), comp)));
+						new QuickAccessTraceData(item.getDefaultInstance()))));
 	}
 
 }

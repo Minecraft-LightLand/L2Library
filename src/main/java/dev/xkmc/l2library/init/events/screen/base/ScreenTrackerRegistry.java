@@ -32,9 +32,9 @@ public class ScreenTrackerRegistry {
 						Optional.of(new PlayerSlot<>(IS_ENDER.get(), new SimpleSlotData(index))) :
 						Optional.empty());
 
-		MenuTraceRegistry.register(MenuType.GENERIC_9x3, (menu, comp) ->
+		MenuTraceRegistry.register(MenuType.GENERIC_9x3, menu ->
 				menu.getContainer() instanceof PlayerEnderChestContainer ?
-						Optional.of(TrackedEntry.of(TE_ENDER.get(), NoData.DATA, comp)) :
+						Optional.of(TrackedEntry.of(TE_ENDER.get(), NoData.DATA)) :
 						Optional.empty());
 
 	}
