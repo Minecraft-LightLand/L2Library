@@ -11,17 +11,13 @@ public abstract class ItemBasedTrace extends TrackedEntryType<ItemBasedTraceData
 
 	@Override
 	public LayerPopType restoreMenuNotifyClient(ServerPlayer player, ItemBasedTraceData data, @Nullable Component comp) {
-		ItemStack stack = data.parent.getItem(player);
-		if (stack.getItem() != data.verifier) {
+		ItemStack stack = data.parent().getItem(player);
+		if (stack.getItem() != data.verifier()) {
 			return LayerPopType.FAIL;
 		}
-		return restore(player, data.parent, stack, comp);
+		return restore(player, data.parent(), stack, comp);
 	}
 
 	public abstract LayerPopType restore(ServerPlayer player, PlayerSlot<?> slot, ItemStack stack, @Nullable Component comp);
 
-	@Override
-	public boolean match(ItemBasedTraceData self, ItemBasedTraceData other) {
-		return self.verifier == other.verifier && self.parent.canReplace(other.parent);
-	}
 }

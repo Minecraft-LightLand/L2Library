@@ -117,7 +117,7 @@ dependencies {
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
     jarJar(group: 'com.tterrag.registrate', name: 'Registrate', version: "[MC1.19.3,MC1.20)")
 
-    implementation fg.deobf(jarJar("dev.xkmc.l2serial:l2serial:1.0.0")) {
+    implementation fg.deobf(jarJar("dev.xkmc.l2serial:l2serial:1.1.0")) {
         transitive = false
         jarJar.ranged(it, "[1.0.0,)")
     }
@@ -126,7 +126,7 @@ dependencies {
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
 
     runtimeOnly fg.deobf("dev.xkmc.l2modularblock:l2modularblock:1.0.0")
-    runtimeOnly fg.deobf("dev.xkmc.l2backpack:l2backpack:2.3.0.pre5-slim")
+    runtimeOnly fg.deobf("dev.xkmc.l2backpack:l2backpack:2.3.0.pre6-slim")
     runtimeOnly fg.deobf("dev.xkmc.l2artifacts:l2artifacts:2.2.0.pre4")
     runtimeOnly fg.deobf("dev.xkmc.l2complements:l2complements:2.2.0.pre1")
     runtimeOnly fg.deobf('dev.xkmc.modulargolems:modulargolems:2.2.0.pre3')

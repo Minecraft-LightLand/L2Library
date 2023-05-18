@@ -102,15 +102,10 @@ public class ScreenTracker extends PlayerCapabilityTemplate<ScreenTracker> {
 		if (!stack.isEmpty()) {
 			TrackedEntry<?> next = getEntry(menu);
 			if (next != null) {
-				for (int i = 0; i < stack.size(); i++) {
-					TrackedEntry<?> itr = stack.get(i);
-					if (itr.shouldReturn(next)) {
-						toRemove = stack.size() - i;
-						for (int j = 0; j < toRemove; j++) {
-							stack.pop();
-						}
-						break;
-					}
+				TrackedEntry<?> itr = stack.peek();
+				if (itr.shouldReturn(next)) {
+					toRemove = 1;
+					stack.pop();
 				}
 			}
 		}

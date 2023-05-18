@@ -16,9 +16,4 @@ public class CurioInvTrace extends TrackedEntryType<NoData> {
 		return LayerPopType.CLEAR;
 	}
 
-	@Override
-	public boolean match(NoData self, NoData other) {
-		return true;
-	}
-
 }

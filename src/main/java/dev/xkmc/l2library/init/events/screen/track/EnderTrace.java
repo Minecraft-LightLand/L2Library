@@ -19,9 +19,4 @@ public class EnderTrace extends TrackedEntryType<NoData> {
 		return LayerPopType.REMAIN;
 	}
 
-	@Override
-	public boolean match(NoData self, NoData other) {
-		return true;
-	}
-
 }

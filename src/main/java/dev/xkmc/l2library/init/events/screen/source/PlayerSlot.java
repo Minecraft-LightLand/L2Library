@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 
-public record PlayerSlot<T extends ItemSourceData<T>>(ItemSource<T> type, T data) {
+public record PlayerSlot<T extends Record & ItemSourceData<T>>(ItemSource<T> type, T data) {
 
 	public static PlayerSlot<SimpleSlotData> ofInventory(int slot) {
 		return new PlayerSlot<>(ScreenTrackerRegistry.IS_INVENTORY.get(), new SimpleSlotData(slot));
@@ -35,11 +35,6 @@ public record PlayerSlot<T extends ItemSourceData<T>>(ItemSource<T> type, T data
 
 	public ItemStack getItem(Player player) {
 		return type.getItem(player, data);
-	}
-
-
-	public boolean canReplace(PlayerSlot<?> other) {
-		return type == other.type && data.canReplace(Wrappers.cast(other.data()));
 	}
 
 }

@@ -10,13 +10,8 @@ public class QuickAccessTrace extends TrackedEntryType<QuickAccessTraceData> {
 
 	@Override
 	public LayerPopType restoreMenuNotifyClient(ServerPlayer player, QuickAccessTraceData data, @Nullable Component comp) {
-		QuickAccessClickHandler.INS.handle(player, data.stack);
+		QuickAccessClickHandler.INS.handle(player, data.stack());
 		return LayerPopType.REMAIN;
-	}
-
-	@Override
-	public boolean match(QuickAccessTraceData self, QuickAccessTraceData other) {
-		return self.stack.getItem() == other.stack.getItem();
 	}
 
 }
