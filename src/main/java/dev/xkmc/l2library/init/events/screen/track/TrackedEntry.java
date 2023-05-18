@@ -19,7 +19,7 @@ public final class TrackedEntry<T extends Record & TrackedEntryData<T>> {
 	private String title;
 
 	@Deprecated
-	private TrackedEntry() {
+	public TrackedEntry() {
 
 	}
 

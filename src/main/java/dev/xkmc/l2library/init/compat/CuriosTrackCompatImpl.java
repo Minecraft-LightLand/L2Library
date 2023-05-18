@@ -10,6 +10,9 @@ import dev.xkmc.l2library.init.events.screen.base.ScreenTrackerRegistry;
 import dev.xkmc.l2library.init.events.screen.source.MenuSourceRegistry;
 import dev.xkmc.l2library.init.events.screen.source.PlayerSlot;
 import dev.xkmc.l2library.init.events.screen.source.SimpleSlotData;
+import dev.xkmc.l2library.init.events.screen.track.MenuTraceRegistry;
+import dev.xkmc.l2library.init.events.screen.track.NoData;
+import dev.xkmc.l2library.init.events.screen.track.TrackedEntry;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
@@ -59,6 +62,15 @@ public class CuriosTrackCompatImpl {
 	void onCommonSetup() {
 		MenuSourceRegistry.register(CuriosRegistry.CURIO_MENU.get(), (menu, slot, index, wid) ->
 				getPlayerSlotImpl(slot, index, wid, menu));
+
+		MenuSourceRegistry.register(CuriosScreenCompatImpl.get().menuType.get(), (menu, slot, index, wid) ->
+				getPlayerSlotImpl(slot, index, wid, menu));
+
+		MenuTraceRegistry.register(CuriosRegistry.CURIO_MENU.get(), (menu, comp) ->
+				Optional.of(TrackedEntry.of(TE_CURIO_INV.get(), NoData.DATA, comp)));
+
+		MenuTraceRegistry.register(CuriosScreenCompatImpl.get().menuType.get(), (menu, comp) ->
+				Optional.of(TrackedEntry.of(TE_CURIO_TAB.get(), NoData.DATA, comp)));
 	}
 
 	private Optional<PlayerSlot<?>> getPlayerSlotImpl(int slot, int index, int wid, AbstractContainerMenu menu) {

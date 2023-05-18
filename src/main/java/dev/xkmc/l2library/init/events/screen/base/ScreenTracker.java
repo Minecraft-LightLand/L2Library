@@ -11,10 +11,8 @@ import dev.xkmc.l2library.init.events.screen.track.NoData;
 import dev.xkmc.l2library.init.events.screen.track.TrackedEntry;
 import dev.xkmc.l2serial.serialization.SerialClass;
 import dev.xkmc.l2serial.util.Wrappers;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.common.capabilities.Capability;
@@ -65,9 +63,6 @@ public class ScreenTracker extends PlayerCapabilityTemplate<ScreenTracker> {
 	int wid;
 
 	// --- server only values
-
-	public MenuProvider provider;
-
 	private TrackedEntry<?> temp;
 	private boolean restoring = false;
 
@@ -83,10 +78,9 @@ public class ScreenTracker extends PlayerCapabilityTemplate<ScreenTracker> {
 		if (prev.containerId == 0) {
 			return TrackedEntry.of(ScreenTrackerRegistry.TE_INVENTORY.get(), NoData.DATA, null);
 		} else {
-			Component comp = provider == null ? null : provider.getDisplayName();
 			var getter = MenuTraceRegistry.get(prev.getType());
 			if (getter == null) return null;
-			var entry = getter.track(Wrappers.cast(prev), comp);
+			var entry = getter.track(Wrappers.cast(prev), null);
 			if (entry.isEmpty()) return null;
 			return entry.get();
 		}
