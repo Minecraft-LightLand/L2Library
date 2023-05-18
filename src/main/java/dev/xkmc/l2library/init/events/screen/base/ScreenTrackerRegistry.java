@@ -20,7 +20,7 @@ public class ScreenTrackerRegistry {
 
 	public static final RegistryEntry<InventoryTrace> TE_INVENTORY = L2Library.REGISTRATE.simple("inventory", TRACKED_ENTRY_TYPE.key(), InventoryTrace::new);
 	public static final RegistryEntry<EnderTrace> TE_ENDER = L2Library.REGISTRATE.simple("ender", TRACKED_ENTRY_TYPE.key(), EnderTrace::new);
-	public static final RegistryEntry<QuickAccessTrace> TE_TRACE = L2Library.REGISTRATE.simple("quick_access", TRACKED_ENTRY_TYPE.key(), QuickAccessTrace::new);
+	public static final RegistryEntry<QuickAccessTrace> TE_QUICK_ACCESS = L2Library.REGISTRATE.simple("quick_access", TRACKED_ENTRY_TYPE.key(), QuickAccessTrace::new);
 
 	public static void register() {
 	}
@@ -36,8 +36,6 @@ public class ScreenTrackerRegistry {
 				menu.getContainer() instanceof PlayerEnderChestContainer ?
 						Optional.of(TrackedEntry.of(TE_ENDER.get(), NoData.DATA, comp)) :
 						Optional.empty());
-
-
 
 	}
 

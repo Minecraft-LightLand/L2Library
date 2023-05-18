@@ -38,4 +38,8 @@ public record PlayerSlot<T extends ItemSourceData<T>>(ItemSource<T> type, T data
 	}
 
 
+	public boolean canReplace(PlayerSlot<?> other) {
+		return type == other.type && data.canReplace(Wrappers.cast(other.data()));
+	}
+
 }

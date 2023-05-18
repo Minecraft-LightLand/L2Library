@@ -104,7 +104,7 @@ public class ScreenTracker extends PlayerCapabilityTemplate<ScreenTracker> {
 			if (next != null) {
 				for (int i = 0; i < stack.size(); i++) {
 					TrackedEntry<?> itr = stack.get(i);
-					if (itr.shouldReturn(next)){
+					if (itr.shouldReturn(next)) {
 						toRemove = stack.size() - i;
 						for (int j = 0; j < toRemove; j++) {
 							stack.pop();

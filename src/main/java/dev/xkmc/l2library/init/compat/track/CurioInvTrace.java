@@ -6,7 +6,6 @@ import dev.xkmc.l2library.init.events.screen.track.NoData;
 import dev.xkmc.l2library.init.events.screen.track.TrackedEntryType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.jetbrains.annotations.Nullable;
 
 public class CurioInvTrace extends TrackedEntryType<NoData> {

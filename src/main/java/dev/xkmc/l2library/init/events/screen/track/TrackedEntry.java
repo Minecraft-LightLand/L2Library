@@ -1,11 +1,9 @@
 package dev.xkmc.l2library.init.events.screen.track;
 
 import dev.xkmc.l2library.init.events.screen.base.LayerPopType;
-import dev.xkmc.l2library.util.annotation.ServerOnly;
 import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import javax.annotation.Nullable;
 

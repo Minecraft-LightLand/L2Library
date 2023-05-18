@@ -4,7 +4,6 @@ import dev.xkmc.l2library.init.events.screen.base.LayerPopType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraftforge.network.NetworkHooks;
 

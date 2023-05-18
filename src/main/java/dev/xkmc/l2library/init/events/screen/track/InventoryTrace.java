@@ -6,7 +6,6 @@ import dev.xkmc.l2library.init.events.screen.packets.ScreenType;
 import dev.xkmc.l2library.init.events.screen.packets.SetScreenToClient;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import javax.annotation.Nullable;
 
