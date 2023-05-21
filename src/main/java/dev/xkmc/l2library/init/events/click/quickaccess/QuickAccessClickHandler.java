@@ -1,7 +1,7 @@
 package dev.xkmc.l2library.init.events.click.quickaccess;
 
 import dev.xkmc.l2library.init.data.L2TagGen;
-import dev.xkmc.l2library.init.events.click.SlotClickHandler;
+import dev.xkmc.l2library.init.events.click.ReadOnlyStackClickHandler;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-public class QuickAccessClickHandler extends SlotClickHandler {
+public class QuickAccessClickHandler extends ReadOnlyStackClickHandler {
 
 	public static QuickAccessClickHandler INS;
 

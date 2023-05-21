@@ -5,6 +5,7 @@ import dev.xkmc.l2library.base.L2Registrate;
 import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2library.init.events.screen.source.*;
 import dev.xkmc.l2library.init.events.screen.track.*;
+import dev.xkmc.l2library.init.events.screen.triggers.ExitMenuTrigger;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.PlayerEnderChestContainer;
 
@@ -24,6 +25,7 @@ public class ScreenTrackerRegistry {
 	public static final RegistryEntry<MenuProviderTrace> TE_MENU_PROVIDER = L2Library.REGISTRATE.simple("menu_provider", TRACKED_ENTRY_TYPE.key(), MenuProviderTrace::new);
 
 	public static void register() {
+		ExitMenuTrigger.register();
 	}
 
 	public static void commonSetup() {

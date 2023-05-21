@@ -12,6 +12,10 @@ public class ExitMenuTrigger extends BaseCriterion<ExitMenuTrigger.Ins, ExitMenu
 
 	public static final ExitMenuTrigger EXIT_MENU = new ExitMenuTrigger(new ResourceLocation(L2Library.MODID, "exit_menu"));
 
+	public static void register() {
+
+	}
+
 	public static Ins exitOne() {
 		return new Ins(EXIT_MENU.getId(), EntityPredicate.Composite.ANY);
 	}
