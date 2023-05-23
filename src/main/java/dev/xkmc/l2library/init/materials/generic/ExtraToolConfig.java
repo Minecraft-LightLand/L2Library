@@ -2,6 +2,7 @@ package dev.xkmc.l2library.init.materials.generic;
 
 import com.google.common.collect.Multimap;
 import dev.xkmc.l2library.base.effects.EffectUtil;
+import dev.xkmc.l2library.init.events.attack.AttackCache;
 import dev.xkmc.l2library.init.materials.api.IMatVanillaType;
 import dev.xkmc.l2library.init.materials.vanilla.GenItemVanillaType;
 import net.minecraft.network.chat.Component;
@@ -111,4 +112,9 @@ public class ExtraToolConfig {
 	public boolean hideWithEffect() {
 		return false;
 	}
+
+	public void onDamage(AttackCache cache, ItemStack stack) {
+
+	}
+
 }
