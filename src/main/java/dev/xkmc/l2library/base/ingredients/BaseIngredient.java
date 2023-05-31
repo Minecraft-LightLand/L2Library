@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.crafting.AbstractIngredient;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 
+import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
 @SerialClass
@@ -27,7 +28,7 @@ public abstract class BaseIngredient<T extends BaseIngredient<T>> extends Abstra
 
 	protected abstract T validate();
 
-	public abstract boolean test(ItemStack stack);
+	public abstract boolean test(@Nullable ItemStack stack);
 
 	public boolean isSimple() {
 		return false;

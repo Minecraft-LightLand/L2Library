@@ -9,6 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionUtils;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 @SerialClass
@@ -42,7 +43,8 @@ public class MobEffectIngredient extends BaseIngredient<MobEffectIngredient> {
 		this.min_time = minTime;
 	}
 
-	public boolean test(ItemStack stack) {
+	public boolean test(@Nullable ItemStack stack) {
+		if (stack == null) return false;
 		return PotionUtils.getMobEffects(stack).stream().anyMatch(e ->
 				e.getEffect() == effect &&
 						e.getAmplifier() >= min_level &&

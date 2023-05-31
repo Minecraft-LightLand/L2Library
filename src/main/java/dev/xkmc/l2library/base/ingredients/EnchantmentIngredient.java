@@ -9,6 +9,8 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 
+import javax.annotation.Nullable;
+
 @SerialClass
 public class EnchantmentIngredient extends BaseIngredient<EnchantmentIngredient> {
 
@@ -35,7 +37,8 @@ public class EnchantmentIngredient extends BaseIngredient<EnchantmentIngredient>
 		return new EnchantmentIngredient(enchantment, min_level);
 	}
 
-	public boolean test(ItemStack stack) {
+	public boolean test(@Nullable ItemStack stack) {
+		if (stack == null) return false;
 		return EnchantmentHelper.getEnchantments(stack).getOrDefault(this.enchantment, 0) >= this.min_level;
 	}
 

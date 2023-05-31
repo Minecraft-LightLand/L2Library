@@ -8,6 +8,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 
+import javax.annotation.Nullable;
+
 @SerialClass
 public class PotionIngredient extends BaseIngredient<PotionIngredient> {
 
@@ -31,7 +33,8 @@ public class PotionIngredient extends BaseIngredient<PotionIngredient> {
 		this.potion = potion;
 	}
 
-	public boolean test(ItemStack stack) {
+	public boolean test(@Nullable ItemStack stack) {
+		if (stack == null) return false;
 		return PotionUtils.getPotion(stack) == potion;
 	}
 
