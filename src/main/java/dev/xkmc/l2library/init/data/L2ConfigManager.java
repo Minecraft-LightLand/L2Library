@@ -8,7 +8,7 @@ import dev.xkmc.l2library.serial.config.ConfigMerger;
 import java.util.Locale;
 
 public enum L2ConfigManager {
-	ARMOR, ITEM_SELECTOR;
+	ITEM_SELECTOR;
 
 	public String getID() {
 		return name().toLowerCase(Locale.ROOT);
@@ -19,7 +19,6 @@ public enum L2ConfigManager {
 	}
 
 	public static void register() {
-		L2Library.PACKET_HANDLER.addCachedConfig(ARMOR.getID(), new ConfigMerger<>(ArmorEffectConfig.class));
 		L2Library.PACKET_HANDLER.addCachedConfig(ITEM_SELECTOR.getID(), new ConfigMerger<>(SimpleItemSelectConfig.class));
 	}
 

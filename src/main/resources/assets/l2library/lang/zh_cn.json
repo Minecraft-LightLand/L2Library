@@ -1,11 +1,6 @@
 {
-    "attribute.name.crit_rate": "暴击率",
-    "attribute.name.crit_damage": "暴击伤害",
-    "attribute.name.bow_strength": "弓箭伤害",
     "generic.attack_range": "攻击距离",
     "generic.reachDistance": "触及距离",
     "forge.swimSpeed": "游泳速度",
-    "l2library.tooltip.tool.immune": "免疫: ",
-    "key.categories.l2library": "莱特兰通用按键",
-    "l2library.tooltip.quick_access": "在GUI中右键打开"
+    "key.categories.l2library": "莱特兰通用按键"
 }

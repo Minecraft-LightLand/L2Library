@@ -14,8 +14,6 @@ public class L2LibraryConfig {
 		public final ForgeConfigSpec.IntValue infoAnchor;
 		public final ForgeConfigSpec.DoubleValue infoMaxWidth;
 
-		public final ForgeConfigSpec.BooleanValue showTabs;
-
 		public final ForgeConfigSpec.BooleanValue selectionDisplayRequireShift;
 		public final ForgeConfigSpec.BooleanValue selectionScrollRequireShift;
 		public final ForgeConfigSpec.DoubleValue scrollTick;
@@ -28,9 +26,6 @@ public class L2LibraryConfig {
 					.defineInRange("infoAnchor", 1, 0, 2);
 			infoMaxWidth = builder.comment("Info max with. 0.5 means half screen. default: 0.3")
 					.defineInRange("infoMaxWidth", 0.3, 0, 0.5);
-
-			showTabs = builder.comment("Show inventory tabs")
-					.define("showTabs", true);
 
 			scrollTick = builder.comment("Scroll sensitivity")
 					.defineInRange("scrollTick", 1, 0.01, 10000);
@@ -47,13 +42,10 @@ public class L2LibraryConfig {
 	public static class Common {
 
 		public final ForgeConfigSpec.BooleanValue restoreFullHealthOnRespawn;
-		public final ForgeConfigSpec.BooleanValue tabSafeMode;
 
 		Common(ForgeConfigSpec.Builder builder) {
 			restoreFullHealthOnRespawn = builder.comment("Restore full health on respawn")
 					.define("restoreFullHealthOnRespawn", true);
-			tabSafeMode = builder.comment("Safe Mode for menu stacking")
-					.define("tabSafeMode", false);
 		}
 
 	}
