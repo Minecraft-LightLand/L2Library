@@ -78,8 +78,8 @@ public class L2LibraryConfig {
 	 * Registers any relevant listeners for config
 	 */
 	public static void init() {
-		register(ModConfig.Type.CLIENT, L2LibraryConfig.CLIENT_SPEC);
-		register(ModConfig.Type.COMMON, L2LibraryConfig.COMMON_SPEC);
+		register(ModConfig.Type.CLIENT, CLIENT_SPEC);
+		register(ModConfig.Type.COMMON, COMMON_SPEC);
 	}
 
 	private static void register(ModConfig.Type type, IConfigSpec<?> spec) {
