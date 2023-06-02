@@ -4,12 +4,10 @@ import dev.xkmc.l2library.base.menu.SpriteManager;
 import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2library.init.data.L2TagGen;
 import dev.xkmc.l2library.init.data.LangData;
-import dev.xkmc.l2library.init.events.screen.base.ScreenTracker;
 import dev.xkmc.l2library.init.materials.generic.GenericArmorItem;
 import dev.xkmc.l2library.serial.config.PacketHandlerWithConfig;
 import dev.xkmc.l2library.util.raytrace.RayTraceUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -21,7 +19,6 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -90,12 +87,6 @@ public class GeneralEventHandler {
 			event.getItem().setItem(next);
 			event.setCanceled(true);
 		}
-	}
-
-	@SubscribeEvent
-	public static void tooltipEvent(ItemTooltipEvent event) {
-		if (event.getItemStack().is(L2TagGen.QUICK_ACCESS_VANILLA))
-			event.getToolTip().add(LangData.QUICK_ACCESS.get().withStyle(ChatFormatting.GRAY));
 	}
 
 }

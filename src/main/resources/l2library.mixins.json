@@ -7,12 +7,9 @@
   "mixins": [
 	"AbstractArrowMixin",
 	"DamageSourcesMixin",
-	"EntityMixin",
-	"NetworkHooksMixin",
-	"ServerPlayerMixin"
+	"EntityMixin"
   ],
   "client": [
-	"AbstractContainerScreenMixin",
 	"ClientLocalPlayerMixin"
   ],
   "injectors": {

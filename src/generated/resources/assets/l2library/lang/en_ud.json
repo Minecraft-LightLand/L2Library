@@ -4,14 +4,5 @@
   "attribute.name.crit_rate": "ǝʇɐᴚ ʇıɹƆ",
   "key.categories.l2library": "sʎǝʞ ʎɹɐɹqıꞀᄅꞀ",
   "l2library.tooltip.quick_access": "uǝdo oʇ I∩⅁ uı ʞɔıןɔ ʇɥbıᴚ",
-  "l2library.tooltip.tool.immune": " :oʇ ǝunɯɯI",
-  "menu.tabs.attribute": "sǝʇnqıɹʇʇⱯ",
-  "menu.tabs.attribute.add": "%s :uoıʇıppⱯ",
-  "menu.tabs.attribute.base": "%s :ǝnןɐʌ ǝsɐᗺ",
-  "menu.tabs.attribute.detail": "sןıɐʇǝp ʍoɥs oʇ ʇɟıɥS ssǝɹԀ",
-  "menu.tabs.attribute.format": "%s=%sx)%sƖ(x)%s%s(",
-  "menu.tabs.attribute.mult_all": "%s :ןɐʇoʇ ʎןdıʇןnW",
-  "menu.tabs.attribute.mult_base": "%s :ǝsɐᗺ ʎןdıʇןnW",
-  "menu.tabs.curios": "soıɹnƆ",
-  "menu.tabs.inventory": "ʎɹoʇuǝʌuI"
+  "l2library.tooltip.tool.immune": " :oʇ ǝunɯɯI"
 }

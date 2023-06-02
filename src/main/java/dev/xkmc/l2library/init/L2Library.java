@@ -4,25 +4,17 @@ import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import dev.xkmc.l2library.base.L2Registrate;
 import dev.xkmc.l2library.base.effects.EffectToClient;
-import dev.xkmc.l2library.base.tabs.contents.AttributeEntry;
 import dev.xkmc.l2library.capability.conditionals.ConditionalData;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
-import dev.xkmc.l2library.init.compat.L2CuriosCompat;
-import dev.xkmc.l2library.init.data.*;
+import dev.xkmc.l2library.init.data.L2ConfigManager;
+import dev.xkmc.l2library.init.data.L2DamageTypes;
+import dev.xkmc.l2library.init.data.L2TagGen;
+import dev.xkmc.l2library.init.data.LangData;
 import dev.xkmc.l2library.init.events.attack.AttackEventHandler;
-import dev.xkmc.l2library.init.events.click.SlotClickToServer;
-import dev.xkmc.l2library.init.events.click.quickaccess.DefaultQuickAccessActions;
-import dev.xkmc.l2library.init.events.click.quickaccess.QuickAccessClickHandler;
 import dev.xkmc.l2library.init.events.damage.DamageTypeRoot;
 import dev.xkmc.l2library.init.events.listeners.GeneralAttackListener;
 import dev.xkmc.l2library.init.events.listeners.GeneralEventHandler;
-import dev.xkmc.l2library.init.events.screen.base.ScreenTracker;
-import dev.xkmc.l2library.init.events.screen.base.ScreenTrackerRegistry;
-import dev.xkmc.l2library.init.events.screen.packets.AddTrackedToClient;
-import dev.xkmc.l2library.init.events.screen.packets.PopLayerToClient;
-import dev.xkmc.l2library.init.events.screen.packets.RestoreMenuToServer;
-import dev.xkmc.l2library.init.events.screen.packets.SetScreenToClient;
 import dev.xkmc.l2library.init.events.select.SelectionRegistry;
 import dev.xkmc.l2library.init.events.select.SetSelectedToServer;
 import dev.xkmc.l2library.init.events.select.item.ItemSelectionListener;
@@ -38,9 +30,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
-import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -76,16 +66,9 @@ public class L2Library {
 			e -> e.create(PlayerCapToClient.class, PLAY_TO_CLIENT),
 			e -> e.create(TargetSetPacket.class, PLAY_TO_SERVER),
 			// slot click
-			e -> e.create(SlotClickToServer.class, PLAY_TO_SERVER),
 			// selection
-			e -> e.create(SetSelectedToServer.class, PLAY_TO_SERVER),
-			// compat events
-			e -> e.create(GeneralPurposeEventPacket.class, PLAY_TO_SERVER),
-			// multi-layer screen
-			e -> e.create(RestoreMenuToServer.class, PLAY_TO_SERVER),
-			e -> e.create(AddTrackedToClient.class, PLAY_TO_CLIENT),
-			e -> e.create(SetScreenToClient.class, PLAY_TO_CLIENT),
-			e -> e.create(PopLayerToClient.class, PLAY_TO_CLIENT));
+			e -> e.create(SetSelectedToServer.class, PLAY_TO_SERVER)
+	);
 
 	public static final L2Registrate REGISTRATE = new L2Registrate(MODID);
 
@@ -104,10 +87,6 @@ public class L2Library {
 		L2ConfigManager.register();
 		ConditionalData.register();
 		L2DamageTypes.register();
-		ScreenTracker.register();
-		ScreenTrackerRegistry.register();
-		L2CuriosCompat.onStartup();
-		QuickAccessClickHandler.INS = new QuickAccessClickHandler(new ResourceLocation(MODID, "quick_access"));
 		AttackEventHandler.register(0, new GeneralAttackListener());
 		SelectionRegistry.register(0, ItemSelectionListener.INSTANCE);
 
@@ -142,22 +121,10 @@ public class L2Library {
 	public static void setup(FMLCommonSetupEvent event) {
 		DamageTypeRoot.generateAll();
 		event.enqueueWork(() -> {
-			DefaultQuickAccessActions.register();
-			ScreenTrackerRegistry.commonSetup();
-			L2CuriosCompat.commonSetup();
-			AttributeEntry.add(() -> Attributes.MAX_HEALTH, false, 1000);
-			AttributeEntry.add(() -> Attributes.ARMOR, false, 2000);
-			AttributeEntry.add(() -> Attributes.ARMOR_TOUGHNESS, false, 3000);
-			AttributeEntry.add(() -> Attributes.KNOCKBACK_RESISTANCE, false, 4000);
-			AttributeEntry.add(() -> Attributes.MOVEMENT_SPEED, false, 5000);
-			AttributeEntry.add(() -> Attributes.ATTACK_DAMAGE, false, 6000);
-			AttributeEntry.add(() -> Attributes.ATTACK_SPEED, false, 7000);
-			AttributeEntry.add(ForgeMod.BLOCK_REACH, false, 8000);
-			AttributeEntry.add(ForgeMod.ENTITY_REACH, false, 9000);
-			AttributeEntry.add(() -> Attributes.LUCK, false, 10000);
-			AttributeEntry.add(CRIT_RATE, true, 11000);
-			AttributeEntry.add(CRIT_DMG, true, 12000);
-			AttributeEntry.add(BOW_STRENGTH, true, 12000);
+			//TODO
+			//AttributeEntry.add(CRIT_RATE, true, 11000);
+			//AttributeEntry.add(CRIT_DMG, true, 12000);
+			//AttributeEntry.add(BOW_STRENGTH, true, 12000);
 		});
 	}
 

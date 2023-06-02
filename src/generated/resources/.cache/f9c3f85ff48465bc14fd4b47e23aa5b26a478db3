@@ -1,5 +1,3 @@
-// 1.19.4	2023-05-12T14:31:27.009812	Registrate Provider for l2library [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
-23698e816e310e234c60cf6e1f65eb0839fac098 assets/l2library/lang/en_ud.json
-8b2475e4cb50b28b6cc4670aff0dac908db61cec assets/l2library/lang/en_us.json
-750618e9b1ab6bdbdc6b292484f9682c88f5868d data/l2library/tags/items/quick_access.json
-042d6b3c62ca82ee52acdf3609d2ea34a98fe76d data/l2library/tags/items/quick_access_vanilla.json
+// 1.19.4	2023-06-01T23:30:50.423133	Registrate Provider for l2library [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+95ca5e9e0a6d8c34548e097b038d2ed58d608aec assets/l2library/lang/en_ud.json
+7fcd9f8676d4eb95f0d5bddc62e025591c2fad32 assets/l2library/lang/en_us.json
