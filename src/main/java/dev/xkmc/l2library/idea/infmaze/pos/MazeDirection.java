@@ -21,7 +21,6 @@ public enum MazeDirection {
 	}
 
 	public static MazeDirection getDirection(MazeAxis axis, int factor) {
-		Asserts.check(factor == 1 || factor == -1, "factor can only be 1 or -1");
 		return values()[(axis.ordinal() << 1) | ((1 - factor) >> 1)];
 	}
 
