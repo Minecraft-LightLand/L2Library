@@ -1,8 +1,3 @@
 {
-  "attribute.name.bow_strength": "Bow Strength",
-  "attribute.name.crit_damage": "Crit Damage",
-  "attribute.name.crit_rate": "Crit Rate",
-  "key.categories.l2library": "L2Library Keys",
-  "l2library.tooltip.quick_access": "Right click in GUI to open",
-  "l2library.tooltip.tool.immune": "Immune to: "
+  "key.categories.l2library": "L2Library Keys"
 }

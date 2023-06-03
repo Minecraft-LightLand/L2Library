@@ -5,7 +5,9 @@ import dev.xkmc.l2serial.serialization.codec.JsonCodec;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.resources.ResourceLocation;
 
+import javax.annotation.Nullable;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,27 +18,28 @@ import java.util.concurrent.CompletableFuture;
 public abstract class ConfigDataProvider implements DataProvider {
 
 	private final DataGenerator generator;
-	private final String folder_path, name;
+	private final String name;
 
-	private final Map<String, BaseConfig> map = new HashMap<>();
+	private final Map<String, ConfigEntry<?>> map = new HashMap<>();
 
-	public ConfigDataProvider(DataGenerator generator, String folder_path, String name) {
+	public ConfigDataProvider(DataGenerator generator, String name) {
 		this.generator = generator;
-		this.folder_path = folder_path;
 		this.name = name;
 	}
 
-	public abstract void add(Map<String, BaseConfig> map);
+	public abstract void add(Collector map);
 
 	@Override
 	public CompletableFuture<?> run(CachedOutput cache) {
 		Path folder = generator.getPackOutput().getOutputFolder();
-		add(map);
+		add(new Collector(map));
 		List<CompletableFuture<?>> list = new ArrayList<>();
 		map.forEach((k, v) -> {
-			JsonElement elem = JsonCodec.toJson(v, BaseConfig.class);
-			Path path = folder.resolve(folder_path + k + ".json");
-			list.add(DataProvider.saveStable(cache, elem, path));
+			JsonElement elem = v.serialize();
+			if (elem != null) {
+				Path path = folder.resolve(k + ".json");
+				list.add(DataProvider.saveStable(cache, elem, path));
+			}
 		});
 		return CompletableFuture.allOf(list.toArray(CompletableFuture[]::new));
 	}
@@ -45,4 +48,22 @@ public abstract class ConfigDataProvider implements DataProvider {
 	public String getName() {
 		return name;
 	}
+
+	public record Collector(Map<String, ConfigEntry<?>> map) {
+
+		public <T extends BaseConfig> void add(ConfigTypeEntry<T> type, ResourceLocation id, T config) {
+			map.put(type.asPath(id), new ConfigEntry<>(type, id, config));
+		}
+
+	}
+
+	public record ConfigEntry<T extends BaseConfig>(ConfigTypeEntry<T> type, ResourceLocation id, T config) {
+
+		@Nullable
+		public JsonElement serialize() {
+			return JsonCodec.toJson(config, type.cls());
+		}
+
+	}
+
 }

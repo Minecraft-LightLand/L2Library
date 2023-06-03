@@ -1,6 +1,6 @@
 package dev.xkmc.l2library.init.events.select.item;
 
-import dev.xkmc.l2library.init.data.L2ConfigManager;
+import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2library.init.data.L2TagGen;
 import dev.xkmc.l2library.serial.config.BaseConfig;
 import dev.xkmc.l2library.serial.config.CollectType;
@@ -21,7 +21,7 @@ public class SimpleItemSelectConfig extends BaseConfig {
 
 	@Nullable
 	public static ItemSelector get(ItemStack stack) {
-		SimpleItemSelectConfig config = L2ConfigManager.ITEM_SELECTOR.getMerged();
+		SimpleItemSelectConfig config = L2Library.ITEM_SELECTOR.getMerged();
 		return config.find(stack);
 	}
 

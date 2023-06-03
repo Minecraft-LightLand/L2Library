@@ -1,5 +1,6 @@
 package dev.xkmc.l2library.serial.config;
 
+import com.google.gson.JsonElement;
 import dev.xkmc.l2serial.network.SerialPacketBase;
 import dev.xkmc.l2serial.serialization.SerialClass;
 import net.minecraft.resources.ResourceLocation;
@@ -14,14 +15,14 @@ public class SyncPacket extends SerialPacketBase {
 	public ResourceLocation id;
 
 	@SerialClass.SerialField
-	public HashMap<String, BaseConfig> map = null;
+	public HashMap<ResourceLocation, JsonElement> map = null;
 
 	@Deprecated
 	public SyncPacket() {
 
 	}
 
-	SyncPacket(PacketHandlerWithConfig handler, HashMap<String, BaseConfig> map) {
+	SyncPacket(PacketHandlerWithConfig handler, HashMap<ResourceLocation, JsonElement> map) {
 		this.id = handler.CHANNEL_NAME;
 		this.map = map;
 	}
@@ -31,8 +32,8 @@ public class SyncPacket extends SerialPacketBase {
 		if (map != null) {
 			var handler = PacketHandlerWithConfig.INTERNAL.get(id);
 			handler.listener_before.forEach(Runnable::run);
+			handler.listener.apply(map);
 			handler.configs = map;
-			map.forEach((k, v) -> v.id = new ResourceLocation(k));
 			handler.listener_after.forEach(Runnable::run);
 		}
 	}

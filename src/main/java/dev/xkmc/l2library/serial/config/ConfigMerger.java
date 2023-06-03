@@ -8,11 +8,9 @@ import dev.xkmc.l2serial.util.Wrappers;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class ConfigMerger<T extends BaseConfig> implements Function<Stream<Map.Entry<String, BaseConfig>>, T> {
+public class ConfigMerger<T extends BaseConfig> {
 
 	private final ClassCache cache;
 
@@ -20,8 +18,7 @@ public class ConfigMerger<T extends BaseConfig> implements Function<Stream<Map.E
 		this.cache = ClassCache.get(cls);
 	}
 
-	public T merge(Stream<Map.Entry<String, BaseConfig>> s) throws Exception {
-		List<T> list = s.map(e -> (T) e.getValue()).toList();
+	public T merge(List<T> list) throws Exception {
 		T ans = (T) cache.create();
 		for (FieldCache field : cache.getFields()) {
 			ConfigCollect collect = field.getAnnotation(ConfigCollect.class);
@@ -94,8 +91,7 @@ public class ConfigMerger<T extends BaseConfig> implements Function<Stream<Map.E
 		return ans;
 	}
 
-	@Override
-	public T apply(Stream<Map.Entry<String, BaseConfig>> s) {
+	public T apply(List<T> s) {
 		return Wrappers.get(() -> this.merge(s));
 	}
 }

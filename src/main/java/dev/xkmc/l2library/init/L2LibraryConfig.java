@@ -24,7 +24,7 @@ public class L2LibraryConfig {
 					.defineInRange("infoAlpha", 0.5, 0, 1);
 			infoAnchor = builder.comment("Info alignment. 0 means top. 1 means middle. 2 means bottom.")
 					.defineInRange("infoAnchor", 1, 0, 2);
-			infoMaxWidth = builder.comment("Info max with. 0.5 means half screen. default: 0.3")
+			infoMaxWidth = builder.comment("Info max width. 0.5 means half screen. default: 0.3")
 					.defineInRange("infoMaxWidth", 0.3, 0, 0.5);
 
 			scrollTick = builder.comment("Scroll sensitivity")

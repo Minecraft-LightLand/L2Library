@@ -6,13 +6,14 @@ import dev.xkmc.l2library.base.effects.EffectToClient;
 import dev.xkmc.l2library.capability.conditionals.ConditionalData;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
-import dev.xkmc.l2library.init.data.L2ConfigManager;
+import dev.xkmc.l2library.init.data.L2LLangData;
 import dev.xkmc.l2library.init.data.L2TagGen;
-import dev.xkmc.l2library.init.data.LangData;
 import dev.xkmc.l2library.init.events.listeners.GeneralEventHandler;
 import dev.xkmc.l2library.init.events.select.SelectionRegistry;
 import dev.xkmc.l2library.init.events.select.SetSelectedToServer;
 import dev.xkmc.l2library.init.events.select.item.ItemSelectionListener;
+import dev.xkmc.l2library.init.events.select.item.SimpleItemSelectConfig;
+import dev.xkmc.l2library.serial.config.ConfigTypeEntry;
 import dev.xkmc.l2library.serial.config.PacketHandler;
 import dev.xkmc.l2library.serial.config.PacketHandlerWithConfig;
 import dev.xkmc.l2library.serial.config.SyncPacket;
@@ -59,6 +60,9 @@ public class L2Library {
 
 	public static final L2Registrate REGISTRATE = new L2Registrate(MODID);
 
+	public static final ConfigTypeEntry<SimpleItemSelectConfig> ITEM_SELECTOR =
+			new ConfigTypeEntry<>(PACKET_HANDLER, "item_selector", SimpleItemSelectConfig.class);
+
 	public L2Library() {
 		Handlers.register();
 		FMLJavaModLoadingContext ctx = FMLJavaModLoadingContext.get();
@@ -66,12 +70,10 @@ public class L2Library {
 		MinecraftForge.EVENT_BUS.register(GeneralEventHandler.class);
 		bus.register(L2Library.class);
 		bus.addListener(PacketHandler::setup);
-		L2LibraryConfig.init();
-		L2ConfigManager.register();
 		ConditionalData.register();
 		SelectionRegistry.register(0, ItemSelectionListener.INSTANCE);
 
-		REGISTRATE.addDataGenerator(ProviderType.LANG, LangData::genLang);
+		REGISTRATE.addDataGenerator(ProviderType.LANG, L2LLangData::genLang);
 		REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, L2TagGen::genItemTags);
 	}
 

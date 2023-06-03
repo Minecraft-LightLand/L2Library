@@ -1,7 +1,0 @@
-// 1.19.4	2023-04-03T08:44:57.780992	Registries
-25d924fdac4392adb88fe3b6aa2c23420f6fb4f9 data/l2library/damage_type/mob_attack-bypass_armor-bypass_magic.json
-25d924fdac4392adb88fe3b6aa2c23420f6fb4f9 data/l2library/damage_type/mob_attack-bypass_armor.json
-25d924fdac4392adb88fe3b6aa2c23420f6fb4f9 data/l2library/damage_type/mob_attack-bypass_magic.json
-4b4b2ff422d23e4cb6282f664d89dad7ac8ff8e6 data/l2library/damage_type/player_attack-bypass_armor-bypass_magic.json
-4b4b2ff422d23e4cb6282f664d89dad7ac8ff8e6 data/l2library/damage_type/player_attack-bypass_armor.json
-4b4b2ff422d23e4cb6282f664d89dad7ac8ff8e6 data/l2library/damage_type/player_attack-bypass_magic.json

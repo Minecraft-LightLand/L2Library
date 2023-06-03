@@ -7,7 +7,6 @@ import dev.xkmc.l2serial.network.BasePacketHandler;
 import dev.xkmc.l2serial.serialization.codec.JsonCodec;
 import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
 public class PacketHandlerWithConfig extends PacketHandler {
@@ -43,18 +41,22 @@ public class PacketHandlerWithConfig extends PacketHandler {
 		}
 	}
 
-	public HashMap<String, BaseConfig> configs = new HashMap<>();
+	public HashMap<ResourceLocation, JsonElement> configs = new HashMap<>();
 
-	private final PreparableReloadListener listener;
-	private final Map<String, CachedConfig<?>> cache = new HashMap<>();
+	public final String config_path;
+
+	final ConfigReloadListener listener;
 	final List<Runnable> listener_before = new ArrayList<>();
 	final List<Runnable> listener_after = new ArrayList<>();
+
+	private final Map<String, CachedConfig<?>> cache = new HashMap<>();
 
 	@SafeVarargs
 	public PacketHandlerWithConfig(ResourceLocation id, int version, String config_path, Function<BasePacketHandler, LoadedPacket<?>>... values) {
 		super(id, version, values);
 		INTERNAL.put(id, this);
 		listener = new ConfigReloadListener(config_path);
+		this.config_path = config_path;
 	}
 
 	public void addBeforeReloadListener(Runnable runnable) {
@@ -65,9 +67,10 @@ public class PacketHandlerWithConfig extends PacketHandler {
 		listener_after.add(runnable);
 	}
 
-	public <T extends BaseConfig> void addCachedConfig(String id, Function<Stream<Map.Entry<String, BaseConfig>>, T> loader) {
+	public <T extends BaseConfig> void addCachedConfig(String id, Class<T> loader) {
 		CachedConfig<T> c = new CachedConfig<>(id, loader);
 		cache.put(id, c);
+		addBeforeReloadListener(c.list::clear);
 		addAfterReloadListener(() -> c.result = null);
 	}
 
@@ -75,35 +78,32 @@ public class PacketHandlerWithConfig extends PacketHandler {
 		return Wrappers.cast(cache.get(id).load());
 	}
 
-	public Stream<Map.Entry<String, BaseConfig>> getConfigs(String id) {
-		return configs.entrySet().stream()
-				.filter(e -> new ResourceLocation(e.getKey()).getPath().split("/")[0].equals(id));
-	}
-
 	private class CachedConfig<T extends BaseConfig> {
 
-		private final Function<Stream<Map.Entry<String, BaseConfig>>, T> function;
+		private final Class<T> cls;
 		private final String id;
+
+		private final List<T> list = new ArrayList<>();
 
 		private T result;
 
-		CachedConfig(String id, Function<Stream<Map.Entry<String, BaseConfig>>, T> function) {
+		CachedConfig(String id, Class<T> cls) {
 			this.id = id;
-			this.function = function;
+			this.cls = cls;
 		}
 
 		T load() {
 			if (result != null) {
 				return result;
 			}
-			result = function.apply(getConfigs(id));
+			result = new ConfigMerger<>(cls).apply(list);
 			result.id = new ResourceLocation(CHANNEL_NAME.getNamespace(), id);
 			return result;
 		}
 
 	}
 
-	private class ConfigReloadListener extends SimpleJsonResourceReloadListener {
+	class ConfigReloadListener extends SimpleJsonResourceReloadListener {
 
 		public ConfigReloadListener(String path) {
 			super(new Gson(), path);
@@ -111,6 +111,10 @@ public class PacketHandlerWithConfig extends PacketHandler {
 
 		@Override
 		protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager manager, ProfilerFiller filler) {
+			apply(map);
+		}
+
+		protected void apply(Map<ResourceLocation, JsonElement> map) {
 			listener_before.forEach(Runnable::run);
 			map.forEach((k, v) -> {
 				if (!k.getNamespace().startsWith("_")) {
@@ -118,13 +122,21 @@ public class PacketHandlerWithConfig extends PacketHandler {
 						return;
 					}
 				}
-				BaseConfig config = JsonCodec.from(v, BaseConfig.class, null);
-				if (config != null) {
-					config.id = k;
-					configs.put(k.toString(), config);
+				String id = k.getPath().split("/")[0];
+				if (cache.containsKey(id)) {
+					add(cache.get(id), k, v);
 				}
 			});
 			listener_after.forEach(Runnable::run);
+		}
+
+		private <T extends BaseConfig> void add(CachedConfig<T> type, ResourceLocation k, JsonElement v) {
+			T config = JsonCodec.from(v, type.cls, null);
+			if (config != null) {
+				config.id = k;
+				type.list.add(config);
+				configs.put(k, v);
+			}
 		}
 	}
 

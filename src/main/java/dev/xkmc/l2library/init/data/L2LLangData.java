@@ -1,10 +1,8 @@
 package dev.xkmc.l2library.init.data;
 
 import com.tterrag.registrate.providers.RegistrateLangProvider;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 
-public enum LangData {
+public enum L2LLangData {
 	;
 
 	public static void genLang(RegistrateLangProvider pvd) {
