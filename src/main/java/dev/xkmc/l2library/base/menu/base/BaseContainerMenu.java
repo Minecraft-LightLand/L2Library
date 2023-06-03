@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.base.menu;
+package dev.xkmc.l2library.base.menu.base;
 
 import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.server.level.ServerPlayer;
@@ -87,7 +87,7 @@ public class BaseContainerMenu<T extends BaseContainerMenu<T>> extends AbstractC
 	}
 
 	public final Inventory inventory;
-	public final SimpleContainer container;
+	public final Container container;
 	public final SpriteManager sprite;
 	protected int added = 0;
 	protected final boolean isVirtual;
@@ -111,8 +111,8 @@ public class BaseContainerMenu<T extends BaseContainerMenu<T>> extends AbstractC
 		this.inventory = plInv;
 		container = factory.apply(Wrappers.cast(this));
 		sprite = manager;
-		int x = manager.getPlInvX();
-		int y = manager.getPlInvY();
+		int x = manager.get().getPlInvX();
+		int y = manager.get().getPlInvY();
 		this.bindPlayerInventory(plInv, x, y);
 		this.isVirtual = isVirtual;
 	}
@@ -146,7 +146,7 @@ public class BaseContainerMenu<T extends BaseContainerMenu<T>> extends AbstractC
 	 * Add new slots, with item input predicate
 	 */
 	protected void addSlot(String name, Predicate<ItemStack> pred) {
-		sprite.getSlot(name, (x, y) -> new PredSlot(container, added++, x, y, pred), this::addSlot);
+		sprite.get().getSlot(name, (x, y) -> new PredSlot(container, added++, x, y, pred), this::addSlot);
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class BaseContainerMenu<T extends BaseContainerMenu<T>> extends AbstractC
 	 */
 	protected void addSlot(String name, BiPredicate<Integer, ItemStack> pred) {
 		int current = added;
-		sprite.getSlot(name, (x, y) -> {
+		sprite.get().getSlot(name, (x, y) -> {
 			int i = added - current;
 			var ans = new PredSlot(container, added, x, y, e -> pred.test(i, e));
 			added++;
@@ -167,7 +167,7 @@ public class BaseContainerMenu<T extends BaseContainerMenu<T>> extends AbstractC
 	 * Add new slots, with other modifications to the slot.
 	 */
 	protected void addSlot(String name, Predicate<ItemStack> pred, Consumer<PredSlot> modifier) {
-		sprite.getSlot(name, (x, y) -> {
+		sprite.get().getSlot(name, (x, y) -> {
 			PredSlot s = new PredSlot(container, added++, x, y, pred);
 			modifier.accept(s);
 			return s;
@@ -180,7 +180,7 @@ public class BaseContainerMenu<T extends BaseContainerMenu<T>> extends AbstractC
 	 */
 	protected void addSlot(String name, BiPredicate<Integer, ItemStack> pred, BiConsumer<Integer, PredSlot> modifier) {
 		int current = added;
-		sprite.getSlot(name, (x, y) -> {
+		sprite.get().getSlot(name, (x, y) -> {
 			int i = added - current;
 			var ans = new PredSlot(container, added, x, y, e -> pred.test(i, e));
 			modifier.accept(i, ans);

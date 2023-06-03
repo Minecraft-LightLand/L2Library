@@ -1,7 +1,7 @@
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 
-package dev.xkmc.l2library.base.menu;
+package dev.xkmc.l2library.base.menu.base;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

@@ -3,6 +3,7 @@ package dev.xkmc.l2library.init;
 import com.tterrag.registrate.providers.ProviderType;
 import dev.xkmc.l2library.base.L2Registrate;
 import dev.xkmc.l2library.base.effects.EffectToClient;
+import dev.xkmc.l2library.base.menu.base.MenuLayoutConfig;
 import dev.xkmc.l2library.capability.conditionals.ConditionalData;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
@@ -47,7 +48,6 @@ public class L2Library {
 	public static final Logger LOGGER = LogManager.getLogger();
 
 	public static final PacketHandlerWithConfig PACKET_HANDLER = new PacketHandlerWithConfig(new ResourceLocation(MODID, "main"), 1,
-			"l2library_config",
 			// generic data sync
 			e -> e.create(SyncPacket.class, PLAY_TO_CLIENT),
 			e -> e.create(EffectToClient.class, PLAY_TO_CLIENT),
@@ -62,6 +62,8 @@ public class L2Library {
 
 	public static final ConfigTypeEntry<SimpleItemSelectConfig> ITEM_SELECTOR =
 			new ConfigTypeEntry<>(PACKET_HANDLER, "item_selector", SimpleItemSelectConfig.class);
+	public static final ConfigTypeEntry<MenuLayoutConfig> MENU_LAYOUT =
+			new ConfigTypeEntry<>(PACKET_HANDLER, "menu_layout", MenuLayoutConfig.class);
 
 	public L2Library() {
 		Handlers.register();

@@ -1,54 +1,42 @@
-package dev.xkmc.l2library.base.menu;
+package dev.xkmc.l2library.base.menu.base;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import dev.xkmc.l2library.serial.config.BaseConfig;
 import dev.xkmc.l2serial.serialization.SerialClass;
-import dev.xkmc.l2serial.serialization.codec.JsonCodec;
-import dev.xkmc.l2serial.util.Wrappers;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.DistExecutor;
 
 import javax.annotation.Nullable;
-import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.util.TreeMap;
 
 @SuppressWarnings("unused")
 @SerialClass
-public class SpriteManager {
+public class MenuLayoutConfig extends BaseConfig {
 
-	public static final TreeMap<ResourceLocation, JsonElement> CACHE = new TreeMap<>();
-
-	private final String name;
-	private final ResourceLocation coords, texture;
 	@SerialClass.SerialField
 	public int height;
 	@SerialClass.SerialField
 	public HashMap<String, Rect> side, comp;
-	private boolean loaded = false;
 
-	public SpriteManager(String mod, String str) {
-		name = mod + ":" + str;
-		coords = new ResourceLocation(mod, str);
-		texture = new ResourceLocation(mod, "textures/gui/container/" + str + ".png");
-		check();
+	@Deprecated
+	public MenuLayoutConfig() {
+
+	}
+
+	public ResourceLocation getTexture() {
+		return new ResourceLocation(getID().getNamespace(), "textures/gui/container/" + getID().getPath() + ".png");
 	}
 
 	/**
 	 * get the location of the component on the GUI
 	 */
 	public Rect getComp(String key) {
-		check();
 		return comp.getOrDefault(key, Rect.ZERO);
 	}
 
@@ -56,7 +44,6 @@ public class SpriteManager {
 	 * Height of this GUI
 	 */
 	public int getHeight() {
-		check();
 		return height;
 	}
 
@@ -64,7 +51,6 @@ public class SpriteManager {
 	 * The X position of the player inventory
 	 */
 	public int getPlInvX() {
-		check();
 		return 8;
 	}
 
@@ -72,19 +58,16 @@ public class SpriteManager {
 	 * The Y position of the player inventory
 	 */
 	public int getPlInvY() {
-		check();
 		return height - 82;
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	public ScreenRenderer getRenderer(AbstractContainerScreen<?> gui) {
-		check();
 		return new ScreenRenderer(gui);
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	public ScreenRenderer getRenderer(Screen gui, int x, int y, int w, int h) {
-		check();
 		return new ScreenRenderer(gui, x, y, w, h);
 	}
 
@@ -92,7 +75,6 @@ public class SpriteManager {
 	 * get the rectangle representing the sprite element on the sprite
 	 */
 	public Rect getSide(String key) {
-		check();
 		return side.getOrDefault(key, Rect.ZERO);
 	}
 
@@ -100,7 +82,6 @@ public class SpriteManager {
 	 * configure the coordinate of the slot
 	 */
 	public <T extends Slot> void getSlot(String key, SlotFactory<T> fac, SlotAcceptor con) {
-		check();
 		Rect c = getComp(key);
 		for (int j = 0; j < c.ry; j++)
 			for (int i = 0; i < c.rx; i++) {
@@ -112,36 +93,15 @@ public class SpriteManager {
 	}
 
 	public int getWidth() {
-		check();
 		return 176;
-	}
-
-	@Override
-	public String toString() {
-		return name;
 	}
 
 	/**
 	 * return if the coordinate is within the rectangle represented by the key
 	 */
 	public boolean within(String key, double x, double y) {
-		check();
 		Rect c = getComp(key);
 		return x > c.x && x < c.x + c.w && y > c.y && y < c.y + c.h;
-	}
-
-	private void check() {
-		if (!loaded)
-			load();
-	}
-
-	private void load() {
-		JsonObject jo = DistExecutor.unsafeRunForDist(() -> () ->
-				Wrappers.get(() -> GsonHelper.parse(new InputStreamReader(Minecraft.getInstance().getResourceManager().getResource(
-						new ResourceLocation(coords.getNamespace(), "textures/gui/coords/" + coords.getPath() + ".json")
-				).get().open())).getAsJsonObject()), () -> () -> CACHE.get(coords).getAsJsonObject());
-		JsonCodec.from(jo, SpriteManager.class, this);
-		loaded = true;
 	}
 
 	public interface SlotFactory<T extends Slot> {
@@ -253,7 +213,7 @@ public class SpriteManager {
 		public void start(PoseStack mat) {
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			scr.renderBackground(mat);
-			RenderSystem.setShaderTexture(0, texture);
+			RenderSystem.setShaderTexture(0, getTexture());
 			GuiComponent.blit(mat, x, y, 0, 0, w, h);
 		}
 

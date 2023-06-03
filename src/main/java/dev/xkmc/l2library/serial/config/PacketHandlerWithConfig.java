@@ -48,15 +48,14 @@ public class PacketHandlerWithConfig extends PacketHandler {
 	final ConfigReloadListener listener;
 	final List<Runnable> listener_before = new ArrayList<>();
 	final List<Runnable> listener_after = new ArrayList<>();
-
-	private final Map<String, CachedConfig<?>> cache = new HashMap<>();
+	final Map<String, BaseConfigType<?>> types = new HashMap<>();
 
 	@SafeVarargs
-	public PacketHandlerWithConfig(ResourceLocation id, int version, String config_path, Function<BasePacketHandler, LoadedPacket<?>>... values) {
+	public PacketHandlerWithConfig(ResourceLocation id, int version, Function<BasePacketHandler, LoadedPacket<?>>... values) {
 		super(id, version, values);
 		INTERNAL.put(id, this);
+		config_path = id.getNamespace() + "_config";
 		listener = new ConfigReloadListener(config_path);
-		this.config_path = config_path;
 	}
 
 	public void addBeforeReloadListener(Runnable runnable) {
@@ -67,40 +66,23 @@ public class PacketHandlerWithConfig extends PacketHandler {
 		listener_after.add(runnable);
 	}
 
+	public <T extends BaseConfig> void addConfig(String id, Class<T> loader) {
+		BaseConfigType<T> c = new BaseConfigType<>(this, id, loader);
+		types.put(id, c);
+		addBeforeReloadListener(c::beforeReload);
+		addAfterReloadListener(c::afterReload);
+	}
+
 	public <T extends BaseConfig> void addCachedConfig(String id, Class<T> loader) {
-		CachedConfig<T> c = new CachedConfig<>(id, loader);
-		cache.put(id, c);
-		addBeforeReloadListener(c.list::clear);
-		addAfterReloadListener(() -> c.result = null);
+		MergedConfigType<T> c = new MergedConfigType<>(this, id, loader);
+		types.put(id, c);
+		addBeforeReloadListener(c::beforeReload);
+		addAfterReloadListener(c::afterReload);
 	}
 
-	public <T extends BaseConfig> T getCachedConfig(String id) {
-		return Wrappers.cast(cache.get(id).load());
-	}
-
-	private class CachedConfig<T extends BaseConfig> {
-
-		private final Class<T> cls;
-		private final String id;
-
-		private final List<T> list = new ArrayList<>();
-
-		private T result;
-
-		CachedConfig(String id, Class<T> cls) {
-			this.id = id;
-			this.cls = cls;
-		}
-
-		T load() {
-			if (result != null) {
-				return result;
-			}
-			result = new ConfigMerger<>(cls).apply(list);
-			result.id = new ResourceLocation(CHANNEL_NAME.getNamespace(), id);
-			return result;
-		}
-
+	<T extends BaseConfig> T getCachedConfig(String id) {
+		MergedConfigType<T> type = Wrappers.cast(types.get(id));
+		return type.load();
 	}
 
 	class ConfigReloadListener extends SimpleJsonResourceReloadListener {
@@ -119,23 +101,25 @@ public class PacketHandlerWithConfig extends PacketHandler {
 					}
 				}
 				String id = k.getPath().split("/")[0];
-				if (cache.containsKey(id)) {
-					addJson(cache.get(id), k, v);
+				if (types.containsKey(id)) {
+					String name = k.getPath().substring(id.length() + 1);
+					ResourceLocation nk = new ResourceLocation(k.getNamespace(), name);
+					addJson(types.get(id), nk, v);
 				}
 			});
 			listener_after.forEach(Runnable::run);
 		}
 
-		private <T extends BaseConfig> void addJson(CachedConfig<T> type, ResourceLocation k, JsonElement v) {
+		private <T extends BaseConfig> void addJson(BaseConfigType<T> type, ResourceLocation k, JsonElement v) {
 			T config = JsonCodec.from(v, type.cls, null);
 			if (config != null) {
 				addConfig(type, k, config);
 			}
 		}
 
-		private <T extends BaseConfig> void addConfig(CachedConfig<T> type, ResourceLocation k, T config) {
+		private <T extends BaseConfig> void addConfig(BaseConfigType<T> type, ResourceLocation k, T config) {
 			config.id = k;
-			type.list.add(config);
+			type.configs.put(k, config);
 			configs.put(k, new ConfigInstance(type.id, k, config));
 		}
 
@@ -145,7 +129,7 @@ public class PacketHandlerWithConfig extends PacketHandler {
 		public void apply(ArrayList<ConfigInstance> list) {
 			listener_before.forEach(Runnable::run);
 			for (var e : list) {
-				addConfig(cache.get(e.name), e.id(), Wrappers.cast(e.config));
+				addConfig(types.get(e.name), e.id(), Wrappers.cast(e.config));
 			}
 			listener_after.forEach(Runnable::run);
 		}

@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.base.menu;
+package dev.xkmc.l2library.base.menu.base;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;

@@ -1,7 +1,7 @@
 package dev.xkmc.l2library.base.menu.stacked;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.xkmc.l2library.base.menu.SpriteManager;
+import dev.xkmc.l2library.base.menu.base.MenuLayoutConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -20,7 +20,7 @@ public class StackedRenderHandle {
 
 	final Screen scr;
 	final PoseStack stack;
-	final SpriteManager sm;
+	final MenuLayoutConfig sm;
 	final Font font;
 	final int text_color;
 	private final int TEXT_Y_OFFSET;
@@ -32,19 +32,19 @@ public class StackedRenderHandle {
 
 	final List<TextEntry> textList = new ArrayList<>();
 
-	public StackedRenderHandle(Screen scr, PoseStack stack, SpriteManager sm) {
+	public StackedRenderHandle(Screen scr, PoseStack stack, MenuLayoutConfig sm) {
 		this(scr, stack, sm, 3);
 	}
 
-	public StackedRenderHandle(Screen scr, PoseStack stack, SpriteManager sm, int ty) {
+	public StackedRenderHandle(Screen scr, PoseStack stack, MenuLayoutConfig sm, int ty) {
 		this(scr, stack, 8, 4210752, sm, ty);
 	}
 
-	public StackedRenderHandle(Screen scr, PoseStack stack, int x_offset, int color, SpriteManager sm) {
+	public StackedRenderHandle(Screen scr, PoseStack stack, int x_offset, int color, MenuLayoutConfig sm) {
 		this(scr, stack, x_offset, color, sm, 3);
 	}
 
-	public StackedRenderHandle(Screen scr, PoseStack stack, int x_offset, int color, SpriteManager sm, int ty) {
+	public StackedRenderHandle(Screen scr, PoseStack stack, int x_offset, int color, MenuLayoutConfig sm, int ty) {
 		this.font = Minecraft.getInstance().font;
 		this.stack = stack;
 		this.scr = scr;

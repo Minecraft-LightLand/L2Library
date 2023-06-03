@@ -1,5 +1,6 @@
 package dev.xkmc.l2library.serial.config;
 
+import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.resources.ResourceLocation;
 
 public record ConfigTypeEntry<T extends BaseConfig>(PacketHandlerWithConfig channel, String name, Class<T> cls) {
@@ -16,7 +17,13 @@ public record ConfigTypeEntry<T extends BaseConfig>(PacketHandlerWithConfig chan
 	}
 
 	public T getMerged() {
-		return channel.getCachedConfig(name);
+		MergedConfigType<T> type = Wrappers.cast(channel.types.get(name));
+		return type.load();
+	}
+
+	public T getEntry(ResourceLocation id) {
+		MergedConfigType<T> type = Wrappers.cast(channel.types.get(name));
+		return type.configs.get(id);
 	}
 
 }

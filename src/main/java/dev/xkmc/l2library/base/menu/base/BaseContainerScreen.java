@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.base.menu;
+package dev.xkmc.l2library.base.menu.base;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.xkmc.l2library.util.Proxy;
@@ -11,8 +11,8 @@ public abstract class BaseContainerScreen<T extends BaseContainerMenu<T>> extend
 
 	public BaseContainerScreen(T cont, Inventory plInv, Component title) {
 		super(cont, plInv, title);
-		this.imageHeight = menu.sprite.getHeight();
-		this.inventoryLabelY = menu.sprite.getPlInvY() - 11;
+		this.imageHeight = menu.sprite.get().getHeight();
+		this.inventoryLabelY = menu.sprite.get().getPlInvY() - 11;
 	}
 
 	@Override

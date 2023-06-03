@@ -5,6 +5,7 @@ import dev.xkmc.l2serial.serialization.type_cache.FieldCache;
 import dev.xkmc.l2serial.serialization.type_cache.TypeInfo;
 import dev.xkmc.l2serial.util.Wrappers;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +92,7 @@ public class ConfigMerger<T extends BaseConfig> {
 		return ans;
 	}
 
-	public T apply(List<T> s) {
-		return Wrappers.get(() -> this.merge(s));
+	public T apply(Collection<T> s) {
+		return Wrappers.get(() -> this.merge(new ArrayList<>(s)));
 	}
 }

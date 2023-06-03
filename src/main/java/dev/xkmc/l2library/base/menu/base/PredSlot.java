@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.base.menu;
+package dev.xkmc.l2library.base.menu.base;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;

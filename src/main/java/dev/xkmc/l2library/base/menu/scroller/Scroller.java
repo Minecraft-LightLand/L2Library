@@ -1,20 +1,20 @@
 package dev.xkmc.l2library.base.menu.scroller;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.xkmc.l2library.base.menu.SpriteManager;
+import dev.xkmc.l2library.base.menu.base.MenuLayoutConfig;
 import net.minecraft.util.Mth;
 
 public class Scroller {
 
 	private final ScrollerScreen screen;
-	private final SpriteManager sprite;
+	private final MenuLayoutConfig sprite;
 	private final String box, light, dark;
 	private final int bx, by, bw, bh, sh;
 
 	private boolean scrolling;
 	private double percentage;
 
-	public Scroller(ScrollerScreen screen, SpriteManager sprite, String slider_middle, String slider_light, String slider_dark) {
+	public Scroller(ScrollerScreen screen, MenuLayoutConfig sprite, String slider_middle, String slider_light, String slider_dark) {
 		this.screen = screen;
 		this.sprite = sprite;
 		this.box = slider_middle;
@@ -66,7 +66,7 @@ public class Scroller {
 		screen.scrollTo((int) ((percentage * screen.getMenu().getMaxScroll()) + 0.5D));
 	}
 
-	public void render(PoseStack stack, SpriteManager.ScreenRenderer sr) {
+	public void render(PoseStack stack, MenuLayoutConfig.ScreenRenderer sr) {
 		if (screen.getMenu().getMaxScroll() == 0) {
 			sr.draw(stack, box, dark);
 		} else {

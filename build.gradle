@@ -125,7 +125,7 @@ dependencies {
     implementation fg.deobf("mezz.jei:jei-${jei_minecraft_version}:${jei_version}")
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
 
-    implementation fg.deobf("dev.xkmc.l2tabs:l2tabs:0.0.2")
+    implementation fg.deobf("dev.xkmc.l2tabs:l2tabs:0.0.4")
     runtimeOnly fg.deobf("dev.xkmc.l2modularblock:l2modularblock:1.0.0")
     //runtimeOnly fg.deobf("dev.xkmc.l2backpack:l2backpack:2.3.2-slim")
     //runtimeOnly fg.deobf("dev.xkmc.l2artifacts:l2artifacts:2.3.0")

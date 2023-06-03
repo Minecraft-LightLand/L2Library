@@ -1,6 +1,5 @@
 package dev.xkmc.l2library.init.events.listeners;
 
-import dev.xkmc.l2library.base.menu.SpriteManager;
 import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2library.serial.config.PacketHandlerWithConfig;
 import dev.xkmc.l2library.util.raytrace.RayTraceUtil;
@@ -19,10 +18,6 @@ public class GeneralEventHandler {
 
 	@SubscribeEvent
 	public static void addReloadListeners(AddReloadListenerEvent event) {
-		event.addListener(new BaseJsonReloadListener("gui/coords", map -> {
-			SpriteManager.CACHE.clear();
-			SpriteManager.CACHE.putAll(map);
-		}));
 		PacketHandlerWithConfig.addReloadListeners(event);
 	}
 
