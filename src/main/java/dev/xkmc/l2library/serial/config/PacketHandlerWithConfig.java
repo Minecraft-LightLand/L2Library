@@ -41,7 +41,7 @@ public class PacketHandlerWithConfig extends PacketHandler {
 		}
 	}
 
-	public HashMap<ResourceLocation, JsonElement> configs = new HashMap<>();
+	public HashMap<ResourceLocation, ConfigInstance> configs = new HashMap<>();
 
 	public final String config_path;
 
@@ -111,10 +111,6 @@ public class PacketHandlerWithConfig extends PacketHandler {
 
 		@Override
 		protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager manager, ProfilerFiller filler) {
-			apply(map);
-		}
-
-		protected void apply(Map<ResourceLocation, JsonElement> map) {
 			listener_before.forEach(Runnable::run);
 			map.forEach((k, v) -> {
 				if (!k.getNamespace().startsWith("_")) {
@@ -124,20 +120,39 @@ public class PacketHandlerWithConfig extends PacketHandler {
 				}
 				String id = k.getPath().split("/")[0];
 				if (cache.containsKey(id)) {
-					add(cache.get(id), k, v);
+					addJson(cache.get(id), k, v);
 				}
 			});
 			listener_after.forEach(Runnable::run);
 		}
 
-		private <T extends BaseConfig> void add(CachedConfig<T> type, ResourceLocation k, JsonElement v) {
+		private <T extends BaseConfig> void addJson(CachedConfig<T> type, ResourceLocation k, JsonElement v) {
 			T config = JsonCodec.from(v, type.cls, null);
 			if (config != null) {
-				config.id = k;
-				type.list.add(config);
-				configs.put(k, v);
+				addConfig(type, k, config);
 			}
 		}
+
+		private <T extends BaseConfig> void addConfig(CachedConfig<T> type, ResourceLocation k, T config) {
+			config.id = k;
+			type.list.add(config);
+			configs.put(k, new ConfigInstance(type.id, k, config));
+		}
+
+		/**
+		 * Called on client side only
+		 */
+		public void apply(ArrayList<ConfigInstance> list) {
+			listener_before.forEach(Runnable::run);
+			for (var e : list) {
+				addConfig(cache.get(e.name), e.id(), Wrappers.cast(e.config));
+			}
+			listener_after.forEach(Runnable::run);
+		}
+	}
+
+	public record ConfigInstance(String name, ResourceLocation id, BaseConfig config) {
+
 	}
 
 }

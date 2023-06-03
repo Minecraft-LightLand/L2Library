@@ -70,6 +70,7 @@ public class L2Library {
 		MinecraftForge.EVENT_BUS.register(GeneralEventHandler.class);
 		bus.register(L2Library.class);
 		bus.addListener(PacketHandler::setup);
+		L2LibraryConfig.init();
 		ConditionalData.register();
 		SelectionRegistry.register(0, ItemSelectionListener.INSTANCE);
 
