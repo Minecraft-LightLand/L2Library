@@ -122,11 +122,22 @@ dependencies {
         jarJar.ranged(it, "[1.1.2,)")
     }
 
+    implementation fg.deobf(jarJar("dev.xkmc.l2tabs:l2tabs:0.0.4")) {
+        transitive = false
+        jarJar.ranged(it, "[0.0.4,)")
+    }
+
+    implementation fg.deobf(jarJar("dev.xkmc.l2screentracker:l2screentracker:0.0.1")) {
+        transitive = false
+        jarJar.ranged(it, "[0.0.1,)")
+    }
+
     implementation fg.deobf("mezz.jei:jei-${jei_minecraft_version}:${jei_version}")
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
 
-    implementation fg.deobf("dev.xkmc.l2tabs:l2tabs:0.0.4")
     runtimeOnly fg.deobf("dev.xkmc.l2modularblock:l2modularblock:1.0.0")
+    runtimeOnly fg.deobf("dev.xkmc.l2damagetracker:l2damagetracker:0.0.4")
+    runtimeOnly fg.deobf("dev.xkmc.l2damagetracker:l2itemselector:0.0.1")
     //runtimeOnly fg.deobf("dev.xkmc.l2backpack:l2backpack:2.3.2-slim")
     //runtimeOnly fg.deobf("dev.xkmc.l2artifacts:l2artifacts:2.3.0")
     //runtimeOnly fg.deobf("dev.xkmc.l2complements:l2complements:2.3.1")
