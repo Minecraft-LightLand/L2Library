@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.init.events.listeners;
+package dev.xkmc.l2library.init.events;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;

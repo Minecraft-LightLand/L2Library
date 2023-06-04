@@ -1,7 +1,7 @@
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 
-package dev.xkmc.l2library.init.events.listeners;
+package dev.xkmc.l2library.init.events;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

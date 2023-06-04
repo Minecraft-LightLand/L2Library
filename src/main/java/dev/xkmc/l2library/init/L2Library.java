@@ -1,19 +1,11 @@
 package dev.xkmc.l2library.init;
 
-import com.tterrag.registrate.providers.ProviderType;
-import dev.xkmc.l2library.base.L2Registrate;
 import dev.xkmc.l2library.base.effects.EffectToClient;
 import dev.xkmc.l2library.base.menu.base.MenuLayoutConfig;
 import dev.xkmc.l2library.capability.conditionals.ConditionalData;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
-import dev.xkmc.l2library.init.data.L2LLangData;
-import dev.xkmc.l2library.init.data.L2TagGen;
-import dev.xkmc.l2library.init.events.listeners.GeneralEventHandler;
-import dev.xkmc.l2library.init.events.select.SelectionRegistry;
-import dev.xkmc.l2library.init.events.select.SetSelectedToServer;
-import dev.xkmc.l2library.init.events.select.item.ItemSelectionListener;
-import dev.xkmc.l2library.init.events.select.item.SimpleItemSelectConfig;
+import dev.xkmc.l2library.init.events.GeneralEventHandler;
 import dev.xkmc.l2library.serial.config.ConfigTypeEntry;
 import dev.xkmc.l2library.serial.config.PacketHandler;
 import dev.xkmc.l2library.serial.config.PacketHandlerWithConfig;
@@ -48,20 +40,12 @@ public class L2Library {
 	public static final Logger LOGGER = LogManager.getLogger();
 
 	public static final PacketHandlerWithConfig PACKET_HANDLER = new PacketHandlerWithConfig(new ResourceLocation(MODID, "main"), 1,
-			// generic data sync
 			e -> e.create(SyncPacket.class, PLAY_TO_CLIENT),
 			e -> e.create(EffectToClient.class, PLAY_TO_CLIENT),
 			e -> e.create(PlayerCapToClient.class, PLAY_TO_CLIENT),
-			e -> e.create(TargetSetPacket.class, PLAY_TO_SERVER),
-			// slot click
-			// selection
-			e -> e.create(SetSelectedToServer.class, PLAY_TO_SERVER)
+			e -> e.create(TargetSetPacket.class, PLAY_TO_SERVER)
 	);
 
-	public static final L2Registrate REGISTRATE = new L2Registrate(MODID);
-
-	public static final ConfigTypeEntry<SimpleItemSelectConfig> ITEM_SELECTOR =
-			new ConfigTypeEntry<>(PACKET_HANDLER, "item_selector", SimpleItemSelectConfig.class);
 	public static final ConfigTypeEntry<MenuLayoutConfig> MENU_LAYOUT =
 			new ConfigTypeEntry<>(PACKET_HANDLER, "menu_layout", MenuLayoutConfig.class);
 
@@ -74,10 +58,6 @@ public class L2Library {
 		bus.addListener(PacketHandler::setup);
 		L2LibraryConfig.init();
 		ConditionalData.register();
-		SelectionRegistry.register(0, ItemSelectionListener.INSTANCE);
-
-		REGISTRATE.addDataGenerator(ProviderType.LANG, L2LLangData::genLang);
-		REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, L2TagGen::genItemTags);
 	}
 
 	@SubscribeEvent

@@ -1,17 +1,11 @@
-package dev.xkmc.l2library.init.events.listeners;
+package dev.xkmc.l2library.init.events;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
 import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2library.init.L2LibraryConfig;
-import dev.xkmc.l2library.init.data.L2Keys;
-import dev.xkmc.l2library.init.events.select.SelectionRegistry;
-import dev.xkmc.l2library.util.Proxy;
 import dev.xkmc.l2library.util.raytrace.EntityTarget;
 import dev.xkmc.l2serial.serialization.codec.TagCodec;
 import dev.xkmc.l2serial.util.Wrappers;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
@@ -40,26 +34,6 @@ public class ClientGeneralEventHandler {
 		}
 	}
 
-	@SubscribeEvent
-	public static void keyEvent(InputEvent.Key event) {
-		LocalPlayer player = Proxy.getClientPlayer();
-		if (player == null) return;
-		var sel = SelectionRegistry.getClientActiveListener(player);
-		if (sel.isEmpty()) return;
-		for (L2Keys k : L2Keys.values()) {
-			if (k.map.getKey().getValue() == event.getKey() && event.getAction() == InputConstants.PRESS) {
-				sel.get().handleClientKey(k, player);
-				return;
-			}
-		}
-		for (int i = 0; i < 9; i++) {
-			if (sel.get().handleClientNumericKey(i, Minecraft.getInstance().options.keyHotbarSlots[i]::consumeClick)) {
-				return;
-			}
-		}
-
-	}
-
 	private static double scroll;
 
 	@SubscribeEvent
@@ -76,20 +50,6 @@ public class ClientGeneralEventHandler {
 			scroll -= diff * scroll_tick;
 		}
 		if (MinecraftForge.EVENT_BUS.post(new FineScrollEvent(diff))) {
-			event.setCanceled(true);
-		}
-	}
-
-	@SubscribeEvent
-	public static void fineScroll(FineScrollEvent event) {
-		LocalPlayer player = Proxy.getClientPlayer();
-		if (player == null) return;
-		var sel = SelectionRegistry.getClientActiveListener(player);
-		if (sel.isEmpty()) return;
-		if (!sel.get().scrollBypassShift() &&
-				L2LibraryConfig.CLIENT.selectionScrollRequireShift.get() &&
-				!player.isShiftKeyDown()) return;
-		if (sel.get().handleClientScroll(event.diff, player)) {
 			event.setCanceled(true);
 		}
 	}

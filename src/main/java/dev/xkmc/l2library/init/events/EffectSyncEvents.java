@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.init.events.listeners;
+package dev.xkmc.l2library.init.events;
 
 import dev.xkmc.l2library.base.effects.EffectToClient;
 import dev.xkmc.l2library.init.L2Library;
