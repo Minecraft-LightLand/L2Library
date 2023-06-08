@@ -21,7 +21,7 @@ public class PlayerCapabilityEvents {
 	public static void onAttachEntityCapabilities(AttachCapabilitiesEvent<Entity> event) {
 		if (event.getObject() instanceof Player player) {
 			for (PlayerCapabilityHolder<?> holder : PlayerCapabilityHolder.INTERNAL_MAP.values()) {
-				event.addCapability(holder.id, holder.generateSerializer(player, player.level));
+				event.addCapability(holder.id, holder.generateSerializer(player, player.level()));
 			}
 		}
 	}

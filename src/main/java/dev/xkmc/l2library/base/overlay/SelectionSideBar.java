@@ -1,10 +1,9 @@
 package dev.xkmc.l2library.base.overlay;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
@@ -28,15 +27,14 @@ public abstract class SelectionSideBar<T, S extends SideBar.Signature<S>> extend
 	}
 
 	@Override
-	public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int width, int height) {
+	public void render(ForgeGui gui, GuiGraphics g, float partialTick, int width, int height) {
 		if (!ease(gui.getGuiTicks() + partialTick))
 			return;
 		initRender();
 		gui.setupOverlayRenderState(true, false);
-		float x0 = this.getXOffset(width);
-		float y0 = this.getYOffset(height);
-		Context ctx = new Context(gui, poseStack, partialTick, width, height, Minecraft.getInstance().font,
-				Minecraft.getInstance().getItemRenderer(), x0, y0);
+		int x0 = this.getXOffset(width);
+		int y0 = this.getYOffset(height);
+		Context ctx = new Context(gui, g, partialTick, Minecraft.getInstance().font, x0, y0);
 		renderContent(ctx);
 	}
 
@@ -50,13 +48,12 @@ public abstract class SelectionSideBar<T, S extends SideBar.Signature<S>> extend
 
 	protected abstract void renderEntry(Context ctx, T t, int index, int select);
 
-	public record Context(ForgeGui gui, PoseStack pose, float pTick, int width, int height, Font font,
-						  ItemRenderer renderer, float x0, float y0) {
+	public record Context(ForgeGui gui, GuiGraphics g, float pTick, Font font, int x0, int y0) {
 
 		public void renderItem(ItemStack stack, int x, int y) {
 			if (!stack.isEmpty()) {
-				renderer().renderAndDecorateItem(pose, stack, x, y);
-				renderer().renderGuiItemDecorations(pose, font, stack, x, y);
+				g.renderItem(stack, x, y);
+				g.renderItemDecorations(font, stack, x, y);
 			}
 		}
 	}

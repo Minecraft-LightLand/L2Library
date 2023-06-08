@@ -1,8 +1,8 @@
 package dev.xkmc.l2library.base.menu.base;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,9 +16,9 @@ public abstract class BaseContainerScreen<T extends BaseContainerMenu<T>> extend
 	}
 
 	@Override
-	public void render(PoseStack stack, int mx, int my, float partial) {
-		super.render(stack, mx, my, partial);
-		renderTooltip(stack, mx, my);
+	public void render(GuiGraphics g, int mx, int my, float partial) {
+		super.render(g, mx, my, partial);
+		renderTooltip(g, mx, my);
 	}
 
 	protected boolean click(int btn) {

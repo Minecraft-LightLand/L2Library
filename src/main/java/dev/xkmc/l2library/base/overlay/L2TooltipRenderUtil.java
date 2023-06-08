@@ -1,10 +1,8 @@
 package dev.xkmc.l2library.base.overlay;
 
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import org.joml.Matrix4f;
+import net.minecraft.client.gui.GuiGraphics;
 
-public record L2TooltipRenderUtil(L2TooltipRenderUtil.BlitPainter fill, Matrix4f mat, BufferBuilder buffer,
-								  int bg, int bs, int be) {
+public record L2TooltipRenderUtil(GuiGraphics fill, int bg, int bs, int be) {
 
 	public void renderTooltipBackground(int x, int y, int w, int h, int z) {
 		int x1 = x - 3;
@@ -27,25 +25,19 @@ public record L2TooltipRenderUtil(L2TooltipRenderUtil.BlitPainter fill, Matrix4f
 	}
 
 	private void renderVerticalLine(int x, int y, int h, int z, int c) {
-		fill.blit(mat, buffer, x, y, x + 1, y + h, z, c, c);
+		fill.fillGradient(x, y, x + 1, y + h, z, c, c);
 	}
 
 	private void renderVerticalLineGradient(int x, int y, int h, int z, int c0, int c1) {
-		fill.blit(mat, buffer, x, y, x + 1, y + h, z, c0, c1);
+		fill.fillGradient(x, y, x + 1, y + h, z, c0, c1);
 	}
 
 	private void renderHorizontalLine(int x, int y, int w, int z, int c) {
-		fill.blit(mat, buffer, x, y, x + w, y + 1, z, c, c);
+		fill.fillGradient(x, y, x + w, y + 1, z, c, c);
 	}
 
 	private void renderRectangle(int x, int y, int w, int h, int z, int c) {
-		fill.blit(mat, buffer, x, y, x + w, y + h, z, c, c);
-	}
-
-
-	@FunctionalInterface
-	public interface BlitPainter {
-		void blit(Matrix4f matrix4f, BufferBuilder builder, int x0, int y0, int x1, int y1, int z, int c0, int c1);
+		fill.fillGradient(x, y, x + w, y + h, z, c, c);
 	}
 
 }

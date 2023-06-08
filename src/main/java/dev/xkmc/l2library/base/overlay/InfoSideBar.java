@@ -1,7 +1,8 @@
 package dev.xkmc.l2library.base.overlay;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.xkmc.l2library.init.L2LibraryConfig;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
@@ -15,7 +16,7 @@ public abstract class InfoSideBar<S extends SideBar.Signature<S>> extends SideBa
 	}
 
 	@Override
-	public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int width, int height) {
+	public void render(ForgeGui gui, GuiGraphics g, float partialTick, int width, int height) {
 		if (!ease(gui.getGuiTicks() + partialTick))
 			return;
 		var text = getText();
@@ -23,16 +24,16 @@ public abstract class InfoSideBar<S extends SideBar.Signature<S>> extends SideBa
 		int anchor = L2LibraryConfig.CLIENT.infoAnchor.get();
 		int y = height * anchor / 2;
 		int w = (int) (width * L2LibraryConfig.CLIENT.infoMaxWidth.get());
-		var box = new TextBox(width, height, 0, anchor, (int) getXOffset(width), y, w);
-		box.renderLongText(gui, poseStack, text);
+		new TextBox(g, 0, anchor, (int) getXOffset(width), y, w)
+				.renderLongText(Minecraft.getInstance().font, text);
 	}
 
 	protected abstract List<Component> getText();
 
 	@Override
-	protected float getXOffset(int width) {
+	protected int getXOffset(int width) {
 		float progress = (max_ease - ease_time) / max_ease;
-		return -progress * width / 2 + 8;
+		return Math.round(-progress * width / 2 + 8);
 	}
 
 }

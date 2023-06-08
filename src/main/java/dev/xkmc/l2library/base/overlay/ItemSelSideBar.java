@@ -1,9 +1,7 @@
 package dev.xkmc.l2library.base.overlay;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -17,33 +15,32 @@ public abstract class ItemSelSideBar<S extends SideBar.Signature<S>> extends Sel
 	@Override
 	protected void renderEntry(Context ctx, ItemStack stack, int i, int selected) {
 		boolean shift = Minecraft.getInstance().options.keyShift.isDown();
-		float y = 18 * i + ctx.y0();
-		renderSelection(ctx.x0(), y, shift ? 127 : 64, isAvailable(stack), selected == i);
+		int y = 18 * i + ctx.y0();
+		renderSelection(ctx.g(), ctx.x0(), y, shift ? 127 : 64, isAvailable(stack), selected == i);
 		if (selected == i) {
 			if (!stack.isEmpty() && ease_time == max_ease) {
 				boolean onCenter = onCenter();
-				TextBox box = new TextBox(ctx.width(), ctx.height(), onCenter ? 0 : 2, 1, (int) (ctx.x0() + (onCenter ? 22 : -6)), (int) (y + 8), -1);
-				box.renderLongText(ctx.gui(), ctx.pose(), List.of(stack.getHoverName()));
+				ctx.g().renderTooltip(ctx.font(), stack.getHoverName(), 0, 0);
+				TextBox box = new TextBox(ctx.g(), onCenter ? 0 : 2, 1, ctx.x0() + (onCenter ? 22 : -6), y + 8, -1);
+				box.renderLongText(ctx.font(), List.of(stack.getHoverName()));
 			}
 		}
-		ctx.renderItem(stack, (int) ctx.x0(), (int) y);
+		ctx.renderItem(stack, ctx.x0(), y);
 	}
 
-	public void renderSelection(float x, float y, int a, boolean available, boolean selected) {
-		RenderSystem.disableDepthTest();
-		RenderSystem.enableBlend();
-		RenderSystem.defaultBlendFunc();
-		Tesselator tex = Tesselator.getInstance();
-		BufferBuilder builder = tex.getBuilder();
+	public void renderSelection(GuiGraphics g, int x, int y, int a, boolean available, boolean selected) {
 		if (available) {
-			OverlayUtils.fillRect(builder, x, y, 16, 16, 255, 255, 255, a);
+			g.fill(x, y, 16, 16, color(255, 255, 255, a));
 		} else {
-			OverlayUtils.fillRect(builder, x, y, 16, 16, 255, 0, 0, a);
+			g.fill(x, y, 16, 16, color(255, 0, 0, a));
 		}
 		if (selected) {
-			OverlayUtils.drawRect(builder, x, y, 16, 16, 255, 170, 0, 255);
+			g.fill(x, y, 16, 16, color(255, 170, 0, 255));
 		}
-		RenderSystem.enableDepthTest();
+	}
+
+	public static int color(int r, int g, int b, int a) {
+		return a << 24 | r << 16 | g << 8 | b;
 	}
 
 }

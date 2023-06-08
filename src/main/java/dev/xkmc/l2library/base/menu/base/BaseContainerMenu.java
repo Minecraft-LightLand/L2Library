@@ -239,7 +239,7 @@ public class BaseContainerMenu<T extends BaseContainerMenu<T>> extends AbstractC
 
 	@Override
 	public void removed(Player player) {
-		if (isVirtual && !player.level.isClientSide())
+		if (isVirtual && !player.level().isClientSide())
 			clearContainerFiltered(player, container);
 		super.removed(player);
 	}
@@ -276,7 +276,7 @@ public class BaseContainerMenu<T extends BaseContainerMenu<T>> extends AbstractC
 
 	@Override
 	public void slotsChanged(Container cont) {
-		if (inventory.player.level.isClientSide()) {
+		if (inventory.player.level().isClientSide()) {
 			super.slotsChanged(cont);
 		} else {
 			if (!updating) {

@@ -80,11 +80,11 @@ public abstract class SideBar<S extends SideBar.Signature<S>> {
 		return ease_time > 0;
 	}
 
-	protected float getXOffset(int width) {
+	protected int getXOffset(int width) {
 		return 0;
 	}
 
-	protected float getYOffset(int height) {
+	protected int getYOffset(int height) {
 		return 0;
 	}
 

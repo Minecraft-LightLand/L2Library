@@ -56,7 +56,7 @@ public class TeleportTool {
 			if (player.isSleeping()) {
 				player.stopSleepInBed(true, true);
 			}
-			if (level == player.level) {
+			if (level == player.level()) {
 				player.connection.teleport(x, y, z, f, f1, set);
 			} else {
 				player.teleportTo(level, x, y, z, f, f1);
@@ -64,7 +64,7 @@ public class TeleportTool {
 			player.setYHeadRot(f);
 		} else {
 			float f2 = Mth.clamp(f1, -90.0F, 90.0F);
-			if (level == entity.level) {
+			if (level == entity.level()) {
 				entity.moveTo(x, y, z, f, f2);
 				entity.setYHeadRot(f);
 			} else {

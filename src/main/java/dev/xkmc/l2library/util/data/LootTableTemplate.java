@@ -21,6 +21,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.common.Tags;
 
+@SuppressWarnings("unused")
 public class LootTableTemplate {
 
 	public static LootPool.Builder getPool(int roll, int bonus) {
@@ -89,11 +90,11 @@ public class LootTableTemplate {
 	}
 
 	public static LootItemCondition.Builder shearOrSilk(boolean inverted) {
-		AlternativeLootItemCondition.Builder ans = AlternativeLootItemCondition.alternative(
+		var ans = AnyOfCondition.anyOf(
 				MatchTool.toolMatches(ItemPredicate.Builder.item().of(Tags.Items.SHEARS)),
 				MatchTool.toolMatches(ItemPredicate.Builder.item().hasEnchantment(hasEnchantment(Enchantments.SILK_TOUCH, 1)))
 		);
-		return inverted ? InvertedLootItemCondition.invert(ans) : ans;
+		return inverted ? ans.invert() : ans;
 	}
 
 	public static LootItemCondition.Builder silk(boolean inverted) {

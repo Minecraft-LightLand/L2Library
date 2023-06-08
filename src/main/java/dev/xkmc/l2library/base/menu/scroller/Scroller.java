@@ -2,6 +2,7 @@ package dev.xkmc.l2library.base.menu.scroller;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.xkmc.l2library.base.menu.base.MenuLayoutConfig;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
 
 public class Scroller {
@@ -66,12 +67,12 @@ public class Scroller {
 		screen.scrollTo((int) ((percentage * screen.getMenu().getMaxScroll()) + 0.5D));
 	}
 
-	public void render(PoseStack stack, MenuLayoutConfig.ScreenRenderer sr) {
+	public void render(GuiGraphics g, MenuLayoutConfig.ScreenRenderer sr) {
 		if (screen.getMenu().getMaxScroll() == 0) {
-			sr.draw(stack, box, dark);
+			sr.draw(g, box, dark);
 		} else {
 			int off = (int) Math.round((bh - sh) * percentage);
-			sr.draw(stack, box, light, 0, off);
+			sr.draw(g, box, light, 0, off);
 		}
 	}
 }
