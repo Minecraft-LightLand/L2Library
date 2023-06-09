@@ -1,10 +1,11 @@
 package dev.xkmc.l2library.init;
 
+import dev.xkmc.l2library.base.effects.ClientEffectCap;
 import dev.xkmc.l2library.base.effects.EffectToClient;
 import dev.xkmc.l2library.base.menu.base.MenuLayoutConfig;
 import dev.xkmc.l2library.capability.conditionals.ConditionalData;
+import dev.xkmc.l2library.capability.entity.GeneralCapabilityHolder;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
-import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
 import dev.xkmc.l2library.init.events.GeneralEventHandler;
 import dev.xkmc.l2library.serial.config.ConfigTypeEntry;
 import dev.xkmc.l2library.serial.config.PacketHandler;
@@ -58,11 +59,12 @@ public class L2Library {
 		bus.addListener(PacketHandler::setup);
 		L2LibraryConfig.init();
 		ConditionalData.register();
+		ClientEffectCap.register();
 	}
 
 	@SubscribeEvent
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
-		for (PlayerCapabilityHolder<?> holder : PlayerCapabilityHolder.INTERNAL_MAP.values()) {
+		for (GeneralCapabilityHolder<?, ?> holder : GeneralCapabilityHolder.INTERNAL_MAP.values()) {
 			event.register(holder.cls);
 		}
 	}

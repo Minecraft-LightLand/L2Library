@@ -5,9 +5,13 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.datafixers.util.Pair;
+import dev.xkmc.l2library.base.effects.ClientEffectCap;
 import dev.xkmc.l2library.base.effects.EffectToClient;
 import dev.xkmc.l2library.base.effects.api.ClientRenderEffect;
+import dev.xkmc.l2library.base.effects.api.DelayedEntityRender;
 import dev.xkmc.l2library.base.effects.api.FirstPlayerRenderEffect;
+import dev.xkmc.l2library.base.effects.api.IconRenderRegion;
 import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.client.Camera;
@@ -22,6 +26,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,14 +37,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = L2Library.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientEffectRenderEvents {
 
-	public static final Map<UUID, Map<MobEffect, Integer>> EFFECT_MAP = new HashMap<>();
 	private static final ArrayList<DelayedEntityRender> ICONS = new ArrayList<>();
 
 	@SubscribeEvent
@@ -51,8 +54,6 @@ public class ClientEffectRenderEvents {
 					effect.onClientLevelRender(player, entry.getValue());
 				}
 			}
-		} else {
-			EFFECT_MAP.clear();
 		}
 	}
 
@@ -72,7 +73,7 @@ public class ClientEffectRenderEvents {
 
 		RenderSystem.disableDepthTest();
 		for (DelayedEntityRender icon : ICONS) {
-			renderIcon(icon.entity(), stack, buffers, icon.rl(), event.getPartialTick(), camera, renderer.entityRenderDispatcher);
+			renderIcon(stack, buffers, icon, event.getPartialTick(), camera, renderer.entityRenderDispatcher);
 		}
 		buffers.endBatch();
 
@@ -91,19 +92,46 @@ public class ClientEffectRenderEvents {
 	@SubscribeEvent
 	public static void onLivingEntityRender(RenderLivingEvent.Post<?, ?> event) {
 		LivingEntity entity = event.getEntity();
-		if (EFFECT_MAP.containsKey(entity.getUUID())) {
-			Map<MobEffect, Integer> map = EFFECT_MAP.get(entity.getUUID());
-			for (Map.Entry<MobEffect, Integer> entry : map.entrySet()) {
-				if (entry.getKey() instanceof ClientRenderEffect effect) {
-					int lv = entry.getValue();
-					effect.render(entity, lv, rl -> ICONS.add(new DelayedEntityRender(entity, rl)));
-				}
+		if (!ClientEffectCap.HOLDER.isProper(entity)) return;
+		ClientEffectCap cap = ClientEffectCap.HOLDER.get(entity);
+		List<Pair<ClientRenderEffect, Integer>> l0 = new ArrayList<>();
+		for (Map.Entry<MobEffect, Integer> entry : cap.map.entrySet()) {
+			if (entry.getKey() instanceof ClientRenderEffect effect) {
+				l0.add(Pair.of(effect, entry.getValue()));
 			}
 		}
+		if (l0.isEmpty()) return;
+		List<Pair<Integer, DelayedEntityRender>> l1 = new ArrayList<>();
+		int index = 0;
+
+		for (var e : l0) {
+			int lv = e.getSecond();
+			int size = l1.size();
+			int I = index;
+			e.getFirst().render(entity, lv, x -> l1.add(Pair.of(I, x)));
+			if (l1.size() > size) {
+				index++;
+			}
+		}
+
+
+		int n = index;
+		int w = (int) Math.ceil(Math.sqrt(n));
+		int h = (int) Math.ceil(n * 1d / w);
+
+		for (var e : l1) {
+			int i = e.getFirst();
+			int iy = i / w;
+			int iw = Math.min(w, n - iy * w);
+			int ix = i - iy * w;
+			ICONS.add(e.getSecond().resize(IconRenderRegion.of(w, ix, iy, iw, h)));
+		}
+
 	}
 
-	private static void renderIcon(LivingEntity entity, PoseStack matrix, MultiBufferSource buffer, ResourceLocation rl,
+	private static void renderIcon(PoseStack pose, MultiBufferSource buffer, DelayedEntityRender icon,
 								   float partial, Camera camera, EntityRenderDispatcher dispatcher) {
+		LivingEntity entity = icon.entity();
 		float f = entity.getBbHeight() / 2;
 
 		double x0 = Mth.lerp(partial, entity.xOld, entity.getX());
@@ -115,16 +143,26 @@ public class ClientEffectRenderEvents {
 		double d3 = y0 - cam_pos.y + offset.y();
 		double d0 = z0 - cam_pos.z + offset.z();
 
-		matrix.pushPose();
-		matrix.translate(d2, d3 + f, d0);
-		matrix.mulPose(camera.rotation());
-		PoseStack.Pose entry = matrix.last();
-		VertexConsumer ivertexbuilder = buffer.getBuffer(get2DIcon(rl));
-		iconVertex(entry, ivertexbuilder, 0.5f, -0.5f, 0, 1);
-		iconVertex(entry, ivertexbuilder, -0.5f, -0.5f, 1, 1);
-		iconVertex(entry, ivertexbuilder, -0.5f, 0.5f, 1, 0);
-		iconVertex(entry, ivertexbuilder, 0.5f, 0.5f, 0, 0);
-		matrix.popPose();
+		pose.pushPose();
+		pose.translate(d2, d3 + f, d0);
+		pose.mulPose(camera.rotation());
+		PoseStack.Pose entry = pose.last();
+		VertexConsumer ivertexbuilder = buffer.getBuffer(get2DIcon(icon.rl()));
+
+		float ix0 = -0.5f + icon.region().x();
+		float ix1 = ix0 + icon.region().scale();
+		float iy0 = -0.5f + icon.region().y();
+		float iy1 = iy0 + icon.region().scale();
+		float u0 = icon.tx();
+		float v0 = icon.ty();
+		float u1 = icon.tx() + icon.tw();
+		float v1 = icon.ty() + icon.th();
+
+		iconVertex(entry, ivertexbuilder, ix1, iy0, u0, v1);
+		iconVertex(entry, ivertexbuilder, ix0, iy0, u1, v1);
+		iconVertex(entry, ivertexbuilder, ix0, iy1, u1, v0);
+		iconVertex(entry, ivertexbuilder, ix1, iy1, u0, v0);
+		pose.popPose();
 	}
 
 	private static void iconVertex(PoseStack.Pose entry, VertexConsumer builder, float x, float y, float u, float v) {
@@ -149,18 +187,17 @@ public class ClientEffectRenderEvents {
 	}
 
 	public static void sync(EffectToClient eff) {
-		Map<MobEffect, Integer> set = EFFECT_MAP.get(eff.entity);
+		if (Minecraft.getInstance().level == null) return;
+		Entity e = Minecraft.getInstance().level.getEntity(eff.entity);
+		if (!(e instanceof LivingEntity le)) return;
+		if (!ClientEffectCap.HOLDER.isProper(le)) return;
+		ClientEffectCap cap = ClientEffectCap.HOLDER.get(le);
 		if (eff.exist) {
-			if (set == null) {
-				EFFECT_MAP.put(eff.entity, set = new HashMap<>());
-			}
-			set.put(eff.effect, eff.level);
-		} else if (set != null) {
-			set.remove(eff.effect);
+			cap.map.put(eff.effect, eff.level);
+		} else {
+			cap.map.remove(eff.effect);
 		}
 	}
 
-	private record DelayedEntityRender(LivingEntity entity, ResourceLocation rl) {
 
-	}
 }

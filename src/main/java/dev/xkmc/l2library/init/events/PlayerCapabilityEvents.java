@@ -1,13 +1,13 @@
 package dev.xkmc.l2library.init.events;
 
+import dev.xkmc.l2library.capability.entity.GeneralCapabilityHolder;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
 import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2serial.serialization.codec.TagCodec;
 import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -18,10 +18,13 @@ import net.minecraftforge.fml.common.Mod;
 public class PlayerCapabilityEvents {
 
 	@SubscribeEvent
-	public static void onAttachEntityCapabilities(AttachCapabilitiesEvent<Entity> event) {
-		if (event.getObject() instanceof Player player) {
-			for (PlayerCapabilityHolder<?> holder : PlayerCapabilityHolder.INTERNAL_MAP.values()) {
-				event.addCapability(holder.id, holder.generateSerializer(player, player.level()));
+	public static void onAttachEntityCapabilities(AttachCapabilitiesEvent<LivingEntity> event) {
+		for (GeneralCapabilityHolder<?, ?> holder : GeneralCapabilityHolder.INTERNAL_MAP.values()) {
+			LivingEntity e = event.getObject();
+			if (holder.cls.isInstance(e)) {
+				if (holder.shouldHaveCap(Wrappers.cast(e))) {
+					event.addCapability(holder.id, holder.generateSerializer(Wrappers.cast(e)));
+				}
 			}
 		}
 	}

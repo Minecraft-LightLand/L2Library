@@ -89,12 +89,12 @@ public class EffectSyncEvents {
 
 	private static void onEffectAppear(MobEffect eff, LivingEntity e, int lv) {
 		if (e.level().isClientSide()) return;
-		L2Library.PACKET_HANDLER.toTrackingPlayers(new EffectToClient(e.getUUID(), eff, true, lv), e);
+		L2Library.PACKET_HANDLER.toTrackingPlayers(new EffectToClient(e.getId(), eff, true, lv), e);
 	}
 
 	private static void onEffectDisappear(MobEffect eff, LivingEntity e) {
 		if (e.level().isClientSide()) return;
-		L2Library.PACKET_HANDLER.toTrackingPlayers(new EffectToClient(e.getUUID(), eff, false, 0), e);
+		L2Library.PACKET_HANDLER.toTrackingPlayers(new EffectToClient(e.getId(), eff, false, 0), e);
 	}
 
 }

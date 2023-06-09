@@ -1,6 +1,5 @@
 package dev.xkmc.l2library.base.menu.base;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import dev.xkmc.l2library.serial.config.BaseConfig;
 import dev.xkmc.l2serial.serialization.SerialClass;
 import net.minecraft.client.gui.GuiGraphics;
@@ -210,7 +209,6 @@ public class MenuLayoutConfig extends BaseConfig {
 		 * bind texture, draw background color, and GUI background
 		 */
 		public void start(GuiGraphics g) {
-			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			scr.renderBackground(g);
 			g.blit(getTexture(), x, y, 0, 0, w, h);
 		}

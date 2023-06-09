@@ -12,7 +12,7 @@ import java.util.UUID;
 public class EffectToClient extends SerialPacketBase {
 
 	@SerialClass.SerialField
-	public UUID entity;
+	public int entity;
 	@SerialClass.SerialField
 	public MobEffect effect;
 	@SerialClass.SerialField
@@ -20,7 +20,7 @@ public class EffectToClient extends SerialPacketBase {
 	@SerialClass.SerialField
 	public int level;
 
-	public EffectToClient(UUID entity, MobEffect effect, boolean exist, int level) {
+	public EffectToClient(int entity, MobEffect effect, boolean exist, int level) {
 		this.entity = entity;
 		this.effect = effect;
 		this.exist = exist;
