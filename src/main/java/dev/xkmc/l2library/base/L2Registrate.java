@@ -5,6 +5,7 @@ import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.providers.RegistrateLangProvider;
+import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import com.tterrag.registrate.util.nullness.NonnullType;
 import dev.xkmc.l2serial.serialization.custom_handler.RLClassHandler;
@@ -13,7 +14,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.*;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryBuilder;
+import net.minecraftforge.registries.RegistryManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
@@ -33,15 +37,8 @@ public class L2Registrate extends AbstractRegistrate<L2Registrate> {
 		return entry(id, cb -> new GenericBuilder<>(this, id, cb, cls.key(), sup));
 	}
 
-	/*
-	public FluidBuilder<VirtualFluid, L2Registrate> virtualFluid(String name) {
-		return entry(name,
-				c -> new VirtualFluidBuilder<>(self(), self(), name, c, new ResourceLocation(getModid(), "fluid/" + name + "_still"),
-						new ResourceLocation(getModid(), "fluid/" + name + "_flow"), null, VirtualFluid::new));
-	}*/
-
-	public <T extends Recipe<?>> RegistryObject<RecipeType<T>> recipe(DeferredRegister<RecipeType<?>> type, String id) {
-		return type.register(id, () -> new RecipeType<>() {
+	public <T extends Recipe<?>> RegistryEntry<RecipeType<T>> recipe(String id) {
+		return simple(id, ForgeRegistries.Keys.RECIPE_TYPES, () -> new RecipeType<>() {
 		});
 	}
 
