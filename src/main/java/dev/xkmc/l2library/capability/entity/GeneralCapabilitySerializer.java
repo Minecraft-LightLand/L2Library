@@ -5,8 +5,6 @@ import dev.xkmc.l2serial.serialization.codec.TagCodec;
 import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -42,7 +40,7 @@ public class GeneralCapabilitySerializer<E extends ICapabilityProvider, C extend
 
 	@Override
 	public void deserializeNBT(CompoundTag tag) {
-		Wrappers.get(() -> TagCodec.fromTag(tag, holder.cls, handler, f -> true));
+		Wrappers.get(() -> TagCodec.fromTag(tag, holder.holder_class, handler, f -> true));
 	}
 
 }

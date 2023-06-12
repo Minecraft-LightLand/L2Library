@@ -28,7 +28,7 @@ public class PlayerCapabilityHolder<T extends PlayerCapabilityTemplate<T>> exten
 
 	public PlayerCapabilityHolder(ResourceLocation id, Capability<T> capability, Class<T> cls, Supplier<T> sup,
 								  Function<PlayerCapabilityHolder<T>, PlayerCapabilityNetworkHandler<T>> network) {
-		super(id, capability, cls, sup, e -> true);
+		super(id, capability, cls, sup, Player.class, e -> true);
 		this.network = network.apply(this);
 		INTERNAL_MAP.put(id, this);
 	}
@@ -53,7 +53,7 @@ public class PlayerCapabilityHolder<T extends PlayerCapabilityTemplate<T>> exten
 		if (!force && pl != null && pl.getCapability(capability).cast().resolve().isPresent()) {
 			T m = get(pl);
 			m.preInject();
-			Wrappers.run(() -> TagCodec.fromTag(tag, cls, m, f -> true));
+			Wrappers.run(() -> TagCodec.fromTag(tag, holder_class, m, f -> true));
 			m.init();
 		} else revive_cache = tag;
 	}
@@ -77,7 +77,7 @@ public class PlayerCapabilityHolder<T extends PlayerCapabilityTemplate<T>> exten
 		if (player.getCapability(capability).cast().resolve().isPresent()) {
 			T m = get(player);
 			m.preInject();
-			Wrappers.run(() -> TagCodec.fromTag(tag, cls, m, SerialClass.SerialField::toTracking));
+			Wrappers.run(() -> TagCodec.fromTag(tag, holder_class, m, SerialClass.SerialField::toTracking));
 			m.init();
 		}
 	}

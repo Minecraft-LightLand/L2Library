@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * only living entities will be automatically attached by default for efficiency
+ * only entities will be automatically attached by default for efficiency
  */
 public class GeneralCapabilityHolder<E extends ICapabilityProvider, T extends GeneralCapabilityTemplate<E, T>> {
 
@@ -18,15 +18,19 @@ public class GeneralCapabilityHolder<E extends ICapabilityProvider, T extends Ge
 
 	public final Capability<T> capability;
 	public final ResourceLocation id;
-	public final Class<T> cls;
+	public final Class<T> holder_class;
+	public final Class<E> entity_class;
 	public final Supplier<T> sup;
 
 	private final Predicate<E> pred;
 
-	public GeneralCapabilityHolder(ResourceLocation id, Capability<T> capability, Class<T> cls, Supplier<T> sup, Predicate<E> pred) {
+
+	public GeneralCapabilityHolder(ResourceLocation id, Capability<T> capability, Class<T> holder_class, Supplier<T> sup,
+								   Class<E> entity_class, Predicate<E> pred) {
 		this.id = id;
 		this.capability = capability;
-		this.cls = cls;
+		this.holder_class = holder_class;
+		this.entity_class = entity_class;
 		this.sup = sup;
 		this.pred = pred;
 		INTERNAL_MAP.put(id, this);

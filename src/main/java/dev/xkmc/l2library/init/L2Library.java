@@ -65,7 +65,7 @@ public class L2Library {
 	@SubscribeEvent
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
 		for (GeneralCapabilityHolder<?, ?> holder : GeneralCapabilityHolder.INTERNAL_MAP.values()) {
-			event.register(holder.cls);
+			event.register(holder.holder_class);
 		}
 	}
 

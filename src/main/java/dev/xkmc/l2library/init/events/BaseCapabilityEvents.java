@@ -7,7 +7,7 @@ import dev.xkmc.l2serial.serialization.codec.TagCodec;
 import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -15,13 +15,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = L2Library.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class PlayerCapabilityEvents {
+public class BaseCapabilityEvents {
 
 	@SubscribeEvent
-	public static void onAttachEntityCapabilities(AttachCapabilitiesEvent<LivingEntity> event) {
+	public static void onAttachEntityCapabilities(AttachCapabilitiesEvent<Entity> event) {
 		for (GeneralCapabilityHolder<?, ?> holder : GeneralCapabilityHolder.INTERNAL_MAP.values()) {
-			LivingEntity e = event.getObject();
-			if (holder.cls.isInstance(e)) {
+			Entity e = event.getObject();
+			if (holder.entity_class.isInstance(e)) {
 				if (holder.shouldHaveCap(Wrappers.cast(e))) {
 					event.addCapability(holder.id, holder.generateSerializer(Wrappers.cast(e)));
 				}
@@ -53,7 +53,7 @@ public class PlayerCapabilityEvents {
 		for (PlayerCapabilityHolder<?> holder : PlayerCapabilityHolder.INTERNAL_MAP.values()) {
 			CompoundTag tag0 = TagCodec.toTag(new CompoundTag(), holder.get(event.getOriginal()));
 			assert tag0 != null;
-			Wrappers.run(() -> TagCodec.fromTag(tag0, holder.cls, holder.get(event.getEntity()), f -> true));
+			Wrappers.run(() -> TagCodec.fromTag(tag0, holder.holder_class, holder.get(event.getEntity()), f -> true));
 			holder.get(event.getEntity()).onClone(event.isWasDeath());
 			ServerPlayer e = (ServerPlayer) event.getEntity();
 			holder.network.toClientSyncClone(e);

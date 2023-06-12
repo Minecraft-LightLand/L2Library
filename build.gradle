@@ -122,10 +122,10 @@ dependencies {
         jarJar.ranged(it, "[1.2.0,)")
     }
 
-    /*implementation fg.deobf(jarJar("dev.xkmc.l2tabs:l2tabs:0.0.4")) {
+    implementation fg.deobf(jarJar("dev.xkmc.l2tabs:l2tabs:0.1.0-a1")) {
         transitive = false
-        jarJar.ranged(it, "[0.0.4,)")
-    }*/
+        jarJar.ranged(it, "[0.1.0-a0,)")
+    }
 
     /*implementation fg.deobf(jarJar("dev.xkmc.l2screentracker:l2screentracker:0.0.1")) {
         transitive = false

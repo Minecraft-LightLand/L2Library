@@ -23,7 +23,8 @@ public class ClientEffectCap extends GeneralCapabilityTemplate<LivingEntity, Cli
 
 	public static final GeneralCapabilityHolder<LivingEntity, ClientEffectCap> HOLDER =
 			new GeneralCapabilityHolder<>(new ResourceLocation(L2Library.MODID, "effects"),
-					CAPABILITY, ClientEffectCap.class, ClientEffectCap::new, e -> e.level().isClientSide());
+					CAPABILITY, ClientEffectCap.class, ClientEffectCap::new,
+					LivingEntity.class, e -> e.level().isClientSide());
 
 	public final Map<MobEffect, Integer> map = new TreeMap<>(Comparator.comparing(MobEffect::getDescriptionId));
 

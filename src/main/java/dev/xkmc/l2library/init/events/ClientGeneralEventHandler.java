@@ -29,7 +29,7 @@ public class ClientGeneralEventHandler {
 	public static void onPlayerRespawn(ClientPlayerNetworkEvent.Clone event) {
 		for (PlayerCapabilityHolder<?> holder : PlayerCapabilityHolder.INTERNAL_MAP.values()) {
 			CompoundTag tag0 = holder.getCache(event.getOldPlayer());
-			Wrappers.run(() -> TagCodec.fromTag(tag0, holder.cls, holder.get(event.getNewPlayer()), f -> true));
+			Wrappers.run(() -> TagCodec.fromTag(tag0, holder.holder_class, holder.get(event.getNewPlayer()), f -> true));
 			holder.get(event.getNewPlayer());
 		}
 	}
