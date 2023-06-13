@@ -8,9 +8,14 @@ import com.tterrag.registrate.providers.RegistrateLangProvider;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import com.tterrag.registrate.util.nullness.NonnullType;
+import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2serial.serialization.custom_handler.RLClassHandler;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -20,6 +25,7 @@ import net.minecraftforge.registries.RegistryBuilder;
 import net.minecraftforge.registries.RegistryManager;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class L2Registrate extends AbstractRegistrate<L2Registrate> {
@@ -48,6 +54,26 @@ public class L2Registrate extends AbstractRegistrate<L2Registrate> {
 				new RegistryBuilder<E>().onCreate((r, s) ->
 						new RLClassHandler<>((Class<E>) cls, () -> r)));
 		return new RegistryInstance<>(Suppliers.memoize(() -> RegistryManager.ACTIVE.getRegistry(key)), key);
+	}
+
+	public RegistryEntry<CreativeModeTab> buildModCreativeTab(String name, String def, Consumer<CreativeModeTab.Builder> config) {
+		ResourceLocation id = new ResourceLocation(getModid(), name);
+		defaultCreativeTab(ResourceKey.create(Registries.CREATIVE_MODE_TAB, id));
+		return buildCreativeTabImpl(name, this.addLang("itemGroup", id, def), config);
+	}
+
+	public RegistryEntry<CreativeModeTab> buildL2CreativeTab(String name, String def, Consumer<CreativeModeTab.Builder> config) {
+		ResourceLocation id = new ResourceLocation(L2Library.MODID, name);
+		defaultCreativeTab(ResourceKey.create(Registries.CREATIVE_MODE_TAB, id));
+		return L2Library.REGISTRATE.buildCreativeTabImpl(name, this.addLang("itemGroup", id, def), config);
+	}
+
+	private RegistryEntry<CreativeModeTab> buildCreativeTabImpl(String name, Component comp, Consumer<CreativeModeTab.Builder> config) {
+		return this.generic(self(), name, Registries.CREATIVE_MODE_TAB, () -> {
+			var builder = CreativeModeTab.builder().title(comp);
+			config.accept(builder);
+			return builder.build();
+		}).register();
 	}
 
 	public record RegistryInstance<E extends NamedEntry<E>>(Supplier<IForgeRegistry<E>> supplier,

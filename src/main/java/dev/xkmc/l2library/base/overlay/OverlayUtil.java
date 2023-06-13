@@ -78,12 +78,28 @@ public class OverlayUtil implements ClientTooltipPositioner {
 		g.pose().popPose();
 	}
 
-
 	@Override
 	public Vector2ic positionTooltip(int gw, int gh, int x, int y, int tw, int th) {
 		if (x < 0) x = Math.round(gw / 8f);
 		if (y < 0) y = Math.round((gh - th) / 2f);
 		return new Vector2i(x, y);
+	}
+
+	/**
+	 * specifies outer size
+	 */
+	public static void fillRect(GuiGraphics g, int x, int y, int w, int h, int col) {
+		g.fill(x, y, x + w, y + h, col);
+	}
+
+	/**
+	 * specifies inner size
+	 */
+	public static void drawRect(GuiGraphics g, int x, int y, int w, int h, int col) {
+		fillRect(g, x - 1, y - 1, w + 2, 1, col);
+		fillRect(g, x - 1, y - 1, 1, h + 2, col);
+		fillRect(g, x - 1, y + h, w + 2, 1, col);
+		fillRect(g, x + w, y - 1, 1, h + 2, col);
 	}
 
 }

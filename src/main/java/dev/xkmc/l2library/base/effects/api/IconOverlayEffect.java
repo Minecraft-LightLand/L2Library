@@ -8,9 +8,9 @@ public interface IconOverlayEffect extends ClientRenderEffect {
 
 	@Override
 	default void render(LivingEntity entity, int lv, Consumer<DelayedEntityRender> adder) {
-		adder.accept(getIcon());
+		adder.accept(getIcon(entity, lv));
 	}
 
-	DelayedEntityRender getIcon();
+	DelayedEntityRender getIcon(LivingEntity entity, int lv);
 
 }

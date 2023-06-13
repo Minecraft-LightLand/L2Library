@@ -1,5 +1,6 @@
 package dev.xkmc.l2library.init;
 
+import dev.xkmc.l2library.base.L2Registrate;
 import dev.xkmc.l2library.base.effects.ClientEffectCap;
 import dev.xkmc.l2library.base.effects.EffectToClient;
 import dev.xkmc.l2library.base.menu.base.MenuLayoutConfig;
@@ -39,6 +40,7 @@ public class L2Library {
 
 	public static final String MODID = "l2library";
 	public static final Logger LOGGER = LogManager.getLogger();
+	public static final L2Registrate REGISTRATE = new L2Registrate(MODID);
 
 	public static final PacketHandlerWithConfig PACKET_HANDLER = new PacketHandlerWithConfig(new ResourceLocation(MODID, "main"), 1,
 			e -> e.create(SyncPacket.class, PLAY_TO_CLIENT),

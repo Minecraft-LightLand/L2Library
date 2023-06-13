@@ -30,12 +30,12 @@ public abstract class ItemSelSideBar<S extends SideBar.Signature<S>> extends Sel
 
 	public void renderSelection(GuiGraphics g, int x, int y, int a, boolean available, boolean selected) {
 		if (available) {
-			g.fill(x, y, 16, 16, color(255, 255, 255, a));
+			OverlayUtil.fillRect(g, x, y, 16, 16, color(255, 255, 255, a));
 		} else {
-			g.fill(x, y, 16, 16, color(255, 0, 0, a));
+			OverlayUtil.fillRect(g, x, y, 16, 16, color(255, 0, 0, a));
 		}
 		if (selected) {
-			g.fill(x, y, 16, 16, color(255, 170, 0, 255));
+			OverlayUtil.drawRect(g, x, y, 16, 16, color(255, 170, 0, 255));
 		}
 	}
 
