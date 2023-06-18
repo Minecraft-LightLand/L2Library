@@ -14,6 +14,7 @@ public class L2LibraryConfig {
 		public final ForgeConfigSpec.DoubleValue infoMaxWidth;
 
 		public final ForgeConfigSpec.BooleanValue showTabs;
+		public final ForgeConfigSpec.BooleanValue showTabsOnlyCurio;
 
 		Client(ForgeConfigSpec.Builder builder) {
 			infoAlpha = builder.comment("Info background transparency. 1 means opaque.")
@@ -25,6 +26,8 @@ public class L2LibraryConfig {
 
 			showTabs = builder.comment("Show inventory tabs")
 					.define("showTabs", true);
+			showTabsOnlyCurio = builder.comment("Show inventory tabs only in curio page. Only works when showTabs is true and curio is installed.")
+					.define("showTabsOnlyCurio", false);
 		}
 
 	}

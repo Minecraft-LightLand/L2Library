@@ -34,13 +34,7 @@ public class TabManager {
 			return;
 		this.selected = selected;
 		int guiLeft, guiTop;
-		if (screen instanceof InventoryScreen inv) {
-			boolean widthTooNarrow = inv.width < 379;
-			inv.getRecipeBookComponent().init(inv.width, inv.height, Minecraft.getInstance(), widthTooNarrow, Proxy.getClientPlayer().inventoryMenu);
-			int offset = inv.getRecipeBookComponent().updateScreenPosition(inv.width, inv.getXSize()) - (inv.width - 176) / 2;
-			guiLeft = (screen.width - 176) / 2 + offset;
-			guiTop = (screen.height - 166) / 2;
-		} else if (screen instanceof BaseTextScreen tx) {
+		if (screen instanceof BaseTextScreen tx) {
 			guiLeft = tx.leftPos;
 			guiTop = tx.topPos;
 		} else if (screen instanceof AbstractContainerScreen<?> tx) {

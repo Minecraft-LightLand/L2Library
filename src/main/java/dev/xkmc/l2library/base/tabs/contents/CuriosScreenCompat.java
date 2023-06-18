@@ -1,5 +1,6 @@
 package dev.xkmc.l2library.base.tabs.contents;
 
+import dev.xkmc.l2library.init.L2LibraryConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -23,7 +24,11 @@ public class CuriosScreenCompat {
 
 	private static void client() {
 		Predicate<Screen> old = TabInventory.inventoryTest;
-		TabInventory.inventoryTest = screen -> old.test(screen) || screen instanceof CuriosScreen;
+		TabInventory.inventoryTest = screen -> {
+			boolean isCurio = screen instanceof CuriosScreen;
+			boolean onlyCurio = L2LibraryConfig.CLIENT.showTabsOnlyCurio.get();
+			return onlyCurio ? isCurio : old.test(screen) || isCurio;
+		};
 		TabInventory.openInventory = CuriosScreenCompat::openInventory;
 	}
 
