@@ -93,6 +93,7 @@ public class ClientEffectRenderEvents {
 	public static void onLivingEntityRender(RenderLivingEvent.Post<?, ?> event) {
 		LivingEntity entity = event.getEntity();
 		if (!ClientEffectCap.HOLDER.isProper(entity)) return;
+		if (entity.getTags().contains("ClientOnly")) return;
 		ClientEffectCap cap = ClientEffectCap.HOLDER.get(entity);
 		List<Pair<ClientRenderEffect, Integer>> l0 = new ArrayList<>();
 		for (Map.Entry<MobEffect, Integer> entry : cap.map.entrySet()) {

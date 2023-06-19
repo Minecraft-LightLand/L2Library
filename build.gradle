@@ -187,9 +187,9 @@ dependencies {
         jarJar.ranged(it, "[1.2.0,)")
     }
 
-    implementation fg.deobf(jarJar("dev.xkmc.l2tabs:l2tabs:0.1.0")) {
+    implementation fg.deobf(jarJar("dev.xkmc.l2tabs:l2tabs:0.1.1")) {
         transitive = false
-        jarJar.ranged(it, "[0.1.0,)")
+        jarJar.ranged(it, "[0.1.1,)")
     }
 
     implementation fg.deobf(jarJar("dev.xkmc.l2screentracker:l2screentracker:0.1.0")) {
@@ -203,8 +203,8 @@ dependencies {
 
     runtimeOnly fg.deobf("dev.xkmc.l2backpack:l2backpack:2.4.0-a0-slim")
     //runtimeOnly fg.deobf("dev.xkmc.l2artifacts:l2artifacts:2.3.0")
-    //runtimeOnly fg.deobf("dev.xkmc.l2complements:l2complements:2.3.1")
-    //runtimeOnly fg.deobf('dev.xkmc.modulargolems:modulargolems:2.2.2')
+    //runtimeOnly fg.deobf("dev.xkmc.l2complements:l2complements:2.4.0-a0-slim")
+    //runtimeOnly fg.deobf('dev.xkmc.modulargolems:modulargolems:2.4.0-slim')
     //runtimeOnly fg.deobf("dev.xkmc.l2archery:l2archery:2.2.2")
     //runtimeOnly fg.deobf("dev.xkmc.l2weaponry:l2weaponry:2.3.0")
     //runtimeOnly fg.deobf("dev.xkmc.traderefresh:traderefresh:2.1.1-slim")
