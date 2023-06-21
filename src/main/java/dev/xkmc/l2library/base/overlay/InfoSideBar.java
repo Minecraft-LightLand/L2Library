@@ -24,7 +24,7 @@ public abstract class InfoSideBar<S extends SideBar.Signature<S>> extends SideBa
 		int anchor = L2LibraryConfig.CLIENT.infoAnchor.get();
 		int y = height * anchor / 2;
 		int w = (int) (width * L2LibraryConfig.CLIENT.infoMaxWidth.get());
-		new TextBox(g, 0, anchor, (int) getXOffset(width), y, w)
+		new TextBox(g, 0, anchor, getXOffset(width), y, w)
 				.renderLongText(Minecraft.getInstance().font, text);
 	}
 
