@@ -41,7 +41,7 @@ public class PacketHandlerWithConfig extends PacketHandler {
 		}
 	}
 
-	public HashMap<ResourceLocation, ConfigInstance> configs = new HashMap<>();
+	public ArrayList<ConfigInstance> configs = new ArrayList<>();
 
 	public final String config_path;
 
@@ -120,7 +120,7 @@ public class PacketHandlerWithConfig extends PacketHandler {
 		private <T extends BaseConfig> void addConfig(BaseConfigType<T> type, ResourceLocation k, T config) {
 			config.id = k;
 			type.configs.put(k, config);
-			configs.put(k, new ConfigInstance(type.id, k, config));
+			configs.add(new ConfigInstance(type.id, k, config));
 		}
 
 		/**

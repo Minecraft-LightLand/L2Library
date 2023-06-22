@@ -153,10 +153,10 @@ dependencies {
 // project specific
 
 repositories {
+    maven { url 'https://jitpack.io' }
     flatDir {
         dirs 'libs'
     }
-    maven { url 'https://jitpack.io' }
     maven { // Registrate
         url "https://maven.tterrag.com/"
     }
@@ -202,11 +202,13 @@ dependencies {
     runtimeOnly fg.deobf("dev.xkmc.l2itemselector:l2itemselector:0.1.1")
 
     runtimeOnly fg.deobf("dev.xkmc.l2backpack:l2backpack:2.4.1-slim")
-    //runtimeOnly fg.deobf("dev.xkmc.l2artifacts:l2artifacts:2.3.0")
     runtimeOnly fg.deobf("dev.xkmc.l2complements:l2complements:2.4.3-slim")
     runtimeOnly fg.deobf('dev.xkmc.modulargolems:modulargolems:2.4.2-slim')
     runtimeOnly fg.deobf("dev.xkmc.l2archery:l2archery:2.4.1")
     runtimeOnly fg.deobf("dev.xkmc.l2weaponry:l2weaponry:2.4.2")
+
+    //runtimeOnly fg.deobf("dev.xkmc.l2artifacts:l2artifacts:2.3.0")
+
     //runtimeOnly fg.deobf("dev.xkmc.traderefresh:traderefresh:2.1.1-slim")
     //runtimeOnly fg.deobf("dev.xkmc.lasertransport:lasertransport:2.2.0.pre5-slim")
 

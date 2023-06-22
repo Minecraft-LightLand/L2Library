@@ -26,10 +26,10 @@ public class TextButtonHandle {
 		return c1;
 	}
 
-	public void drawText(CellEntry cell, Component text) {
+	public void drawText(CellEntry cell, Component text, boolean shadow) {
 		int x0 = cell.x() + (cell.w() - parent.font.width(text) + 1) / 2;
 		int y0 = cell.y() + (cell.h() + 1) / 2 - parent.font.lineHeight / 2;
-		parent.textList.add(new TextEntry(text, x0, y0, parent.text_color));
+		parent.textList.add(new TextEntry(text, x0, y0, parent.text_color, shadow));
 	}
 
 }

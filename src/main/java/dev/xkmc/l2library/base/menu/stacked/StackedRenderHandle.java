@@ -54,14 +54,14 @@ public class StackedRenderHandle {
 		this.TEXT_HEIGHT = font.lineHeight + ty + 1;
 	}
 
-	public void drawText(Component text) {
+	public void drawText(Component text, boolean shadow) {
 		endCell();
 		int y = current_y + TEXT_Y_OFFSET;
-		textList.add(new TextEntry(text, text_x_offset, y, text_color));
+		textList.add(new TextEntry(text, text_x_offset, y, text_color, shadow));
 		current_y += TEXT_HEIGHT;
 	}
 
-	public void drawTable(Component[][] table, int x_max) {
+	public void drawTable(Component[][] table, int x_max, boolean shadow) {
 		endCell();
 		int w = table[0].length;
 		int w1 = 0;
@@ -82,17 +82,17 @@ public class StackedRenderHandle {
 			for (int i = 0; i < w; i++) {
 				float wi = i == 0 ? w1 : ws;
 				int x = Math.round(x_start);
-				textList.add(new TextEntry(c[i], x, y, text_color));
+				textList.add(new TextEntry(c[i], x, y, text_color, shadow));
 				x_start += wi + space;
 			}
 			current_y += TEXT_HEIGHT;
 		}
 	}
 
-	public TextButtonHandle drawTextWithButtons(Component text) {
+	public TextButtonHandle drawTextWithButtons(Component text, boolean shadow) {
 		endCell();
 		int y = current_y + TEXT_Y_OFFSET;
-		textList.add(new TextEntry(text, text_x_offset, y, text_color));
+		textList.add(new TextEntry(text, text_x_offset, y, text_color, shadow));
 		int x_off = text_x_offset + font.width(text) + BTN_X_OFFSET;
 		TextButtonHandle ans = new TextButtonHandle(this, x_off, y + font.lineHeight / 2);
 		current_y += TEXT_HEIGHT;
@@ -127,7 +127,7 @@ public class StackedRenderHandle {
 	}
 
 	public void flushText() {
-		textList.forEach(e -> g.drawString(font, e.text(), e.x(), e.y(), e.color()));
+		textList.forEach(e -> g.drawString(font, e.text(), e.x(), e.y(), e.color(), e.shadow()));
 	}
 
 }

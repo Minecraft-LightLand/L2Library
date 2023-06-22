@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 @SerialClass
 public class SyncPacket extends SerialPacketBase {
@@ -22,9 +22,9 @@ public class SyncPacket extends SerialPacketBase {
 
 	}
 
-	SyncPacket(PacketHandlerWithConfig handler, HashMap<ResourceLocation, PacketHandlerWithConfig.ConfigInstance> map) {
+	SyncPacket(PacketHandlerWithConfig handler, List<PacketHandlerWithConfig.ConfigInstance> map) {
 		this.id = handler.CHANNEL_NAME;
-		this.map = new ArrayList<>(map.values());
+		this.map = new ArrayList<>(map);
 	}
 
 	@Override
