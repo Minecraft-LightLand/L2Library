@@ -22,6 +22,9 @@ public class MergedConfigType<T extends BaseConfig> extends BaseConfigType<T> {
 	@Override
 	public void afterReload() {
 		result = null;
+		if (cls.isAnnotationPresent(ConfigLoadOnStart.class)) {
+			load();
+		}
 	}
 
 }
