@@ -1,7 +1,9 @@
 package dev.xkmc.l2library.init.events.attack;
 
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -12,6 +14,18 @@ import javax.annotation.Nullable;
 
 @SuppressWarnings("unused")
 public class AttackCache {
+
+	@Nullable
+	public static LivingEntity resolve(Entity entity) {
+		if (entity instanceof LivingEntity le) {
+			return le;
+		}
+		if (entity instanceof PartEntity pe) {
+			if (pe.getParent() == pe) return null;
+			return resolve(pe.getParent());
+		}
+		return null;
+	}
 
 	int recursive = 0;
 
@@ -38,12 +52,14 @@ public class AttackCache {
 		stage = Stage.PLAYER_ATTACK;
 		player = event;
 		strength = event.getEntity().getAttackStrengthScale(1);
+		target = resolve(event.getTarget());
 		AttackEventHandler.LISTENERS.forEach(e -> e.onPlayerAttack(this));
 	}
 
 	void pushCrit(CriticalHitEvent event) {
 		stage = Stage.CRITICAL_HIT;
 		crit = event;
+		target = resolve(event.getTarget());
 		AttackEventHandler.LISTENERS.forEach(e -> e.onCriticalHit(this));
 	}
 
@@ -127,6 +143,7 @@ public class AttackCache {
 		return damage;
 	}
 
+	@Nullable
 	public LivingEntity getAttackTarget() {
 		return target;
 	}

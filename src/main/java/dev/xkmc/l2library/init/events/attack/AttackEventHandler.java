@@ -30,18 +30,23 @@ public class AttackEventHandler {
 		if (event.getTarget().getLevel().isClientSide())
 			return;
 		AttackCache cache = new AttackCache();
-		CACHE.put(event.getTarget().getUUID(), cache);
 		cache.pushPlayer(event);
+		if (cache.getAttackTarget() != null)
+			CACHE.put(cache.getAttackTarget().getUUID(), cache);
 	}
 
 	@SubscribeEvent
 	public static void onCriticalHit(CriticalHitEvent event) {
 		if (event.getTarget().getLevel().isClientSide())
 			return;
-		AttackCache cache = CACHE.get(event.getTarget().getUUID());
+		LivingEntity target = AttackCache.resolve(event.getTarget());
+		if (target == null)
+			return;
+		AttackCache cache = CACHE.get(target.getUUID());
 		if (cache == null) cache = new AttackCache();
-		CACHE.put(event.getTarget().getUUID(), cache);
 		cache.pushCrit(event);
+		if (cache.getAttackTarget() != null)
+			CACHE.put(cache.getAttackTarget().getUUID(), cache);
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
