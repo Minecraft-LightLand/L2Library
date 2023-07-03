@@ -113,22 +113,13 @@ public class AttackEventHandler {
 			cache.pushHurtPost(event);
 	}
 
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public static void onDamagePre(LivingDamageEvent event) {
-		if (event.getEntity().getLevel().isClientSide())
-			return;
-		AttackCache cache = CACHE.get(event.getEntity().getUUID());
-		if (cache != null && cache.getStage() == Stage.ACTUALLY_HURT_POST)
-			cache.pushDamagePre(event);
-	}
-
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onDamagePost(LivingDamageEvent event) {
 		if (event.getEntity().getLevel().isClientSide())
 			return;
 		AttackCache cache = CACHE.get(event.getEntity().getUUID());
-		if (cache != null && cache.getStage() == Stage.DAMAGE_PRE)
-			cache.pushDamagePost(event);
+		if (cache != null && cache.getStage() == Stage.ACTUALLY_HURT_POST)
+			cache.pushDamage(event);
 	}
 
 	@SubscribeEvent

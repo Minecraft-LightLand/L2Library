@@ -92,20 +92,14 @@ public class AttackCache {
 		stage = Stage.ACTUALLY_HURT_POST;
 	}
 
-	void pushDamagePre(LivingDamageEvent event) {
-		stage = Stage.DAMAGE_PRE;
+	void pushDamage(LivingDamageEvent event) {
+		stage = Stage.DAMAGE;
 		damage = event;
 		damage_dealt = event.getAmount();
 		AttackEventHandler.LISTENERS.forEach(e -> e.onDamage(this, weapon));
 		if (damage_dealt != event.getAmount()) {
 			event.setAmount(damage_dealt);
 		}
-	}
-
-	void pushDamagePost(LivingDamageEvent event) {
-		stage = Stage.DAMAGE_POST;
-		damage = event;
-		damage_dealt = event.getAmount();
 		AttackEventHandler.LISTENERS.forEach(e -> e.onDamageFinalized(this, weapon));
 	}
 
@@ -179,13 +173,13 @@ public class AttackCache {
 	}
 
 	public float getDamageDealt() {
-		if (stage.ordinal() < Stage.DAMAGE_PRE.ordinal())
+		if (stage.ordinal() < Stage.DAMAGE.ordinal())
 			throw new IllegalStateException("actual damage not calculated yet");
 		return damage_dealt;
 	}
 
 	public void setDamageDealt(float damage) {
-		if (stage != Stage.DAMAGE_PRE)
+		if (stage != Stage.DAMAGE)
 			throw new IllegalStateException("set actual damage only on onDamage event.");
 		damage_dealt = damage;
 	}
