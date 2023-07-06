@@ -25,6 +25,13 @@ public abstract class BaseIngredient<T extends BaseIngredient<T>> extends Abstra
 		super(Stream.of(new ItemValue(display)));
 	}
 
+	/**
+	 * Value constructor, for ingredients that have some vanilla representation
+	 */
+	protected BaseIngredient(Stream<? extends Value> values) {
+		super(values);
+	}
+
 	protected abstract T validate();
 
 	public abstract boolean test(ItemStack stack);

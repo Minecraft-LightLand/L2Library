@@ -4,6 +4,8 @@ import com.google.common.base.Suppliers;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
+import com.tterrag.registrate.builders.EnchantmentBuilder;
+import com.tterrag.registrate.builders.NoConfigBuilder;
 import com.tterrag.registrate.providers.RegistrateLangProvider;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
@@ -15,9 +17,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -48,6 +54,22 @@ public class L2Registrate extends AbstractRegistrate<L2Registrate> {
 		});
 	}
 
+	@Deprecated
+	@Override
+	public <T extends Enchantment> EnchantmentBuilder<T, L2Registrate> enchantment(String name, EnchantmentCategory type, EnchantmentBuilder.EnchantmentFactory<T> factory) {
+		return super.enchantment(name, type, factory);
+	}
+
+	public <T extends Enchantment> EnchantmentBuilder<T, L2Registrate> enchantment(String name, EnchantmentCategory type, EnchantmentBuilder.EnchantmentFactory<T> factory, String desc) {
+		addRawLang("enchantment." + getModid() + "." + name + ".desc", desc);
+		return super.enchantment(name, type, factory);
+	}
+
+	public <T extends MobEffect> NoConfigBuilder<MobEffect, T, L2Registrate> effect(String name, NonNullSupplier<T> sup, String desc) {
+		addRawLang("effect." + getModid() + "." + name + ".description", desc);
+		return entry(name, cb -> new NoConfigBuilder<>(this, this, name, cb, ForgeRegistries.Keys.MOB_EFFECTS, sup));
+	}
+
 	@SuppressWarnings({"unchecked", "unsafe"})
 	public <E extends NamedEntry<E>> RegistryInstance<E> newRegistry(String id, Class<?> cls) {
 		ResourceKey<Registry<E>> key = makeRegistry(id, () ->
@@ -70,7 +92,8 @@ public class L2Registrate extends AbstractRegistrate<L2Registrate> {
 
 	private RegistryEntry<CreativeModeTab> buildCreativeTabImpl(String name, Component comp, Consumer<CreativeModeTab.Builder> config) {
 		return this.generic(self(), name, Registries.CREATIVE_MODE_TAB, () -> {
-			var builder = CreativeModeTab.builder().title(comp);
+			var builder = CreativeModeTab.builder().title(comp)
+					.withTabsBefore(CreativeModeTabs.SPAWN_EGGS);
 			config.accept(builder);
 			return builder.build();
 		}).register();
