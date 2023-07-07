@@ -1,7 +1,9 @@
 package dev.xkmc.l2library.compat.jeed;
 
 import com.tterrag.registrate.providers.RegistrateRecipeProvider;
+import dev.xkmc.l2library.serial.recipe.ConditionalRecipeWrapper;
 import dev.xkmc.l2library.serial.recipe.RecordRecipeFinished;
+import net.mehvahdjukaar.jeed.Jeed;
 import net.mehvahdjukaar.jeed.forge.JeedImpl;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -40,13 +42,10 @@ public class JeedDataGenerator {
 	}
 
 	public void generate(RegistrateRecipeProvider pvd) {
-		map.forEach((k, v) -> {
-			pvd.accept(new RecordRecipeFinished<>(
-					new ResourceLocation(modid, "jeed/" + ForgeRegistries.MOB_EFFECTS.getKey(k).getPath()),
-					JeedImpl.getEffectProviderSerializer(),
-					new JeedEffectRecipeData(k, new ArrayList<>(v))));
-
-		});
+		map.forEach((k, v) -> ConditionalRecipeWrapper.mod(pvd, Jeed.MOD_ID).accept(new RecordRecipeFinished<>(
+				new ResourceLocation(modid, "jeed/" + ForgeRegistries.MOB_EFFECTS.getKey(k).getPath()),
+				JeedImpl.getEffectProviderSerializer(),
+				new JeedEffectRecipeData(k, new ArrayList<>(v)))));
 	}
 
 }
