@@ -10,6 +10,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -19,8 +20,11 @@ public class JeedDataGenerator {
 
 	private final String modid;
 
-	public JeedDataGenerator(String modid) {
+	private final String[] compat;
+
+	public JeedDataGenerator(String modid, String... compat) {
 		this.modid = modid;
+		this.compat = ArrayUtils.add(compat, Jeed.MOD_ID);
 	}
 
 	public void add(Item item, MobEffect... effects) {
@@ -42,7 +46,7 @@ public class JeedDataGenerator {
 	}
 
 	public void generate(RegistrateRecipeProvider pvd) {
-		map.forEach((k, v) -> ConditionalRecipeWrapper.mod(pvd, Jeed.MOD_ID).accept(new RecordRecipeFinished<>(
+		map.forEach((k, v) -> ConditionalRecipeWrapper.mod(pvd, compat).accept(new RecordRecipeFinished<>(
 				new ResourceLocation(modid, "jeed/" + ForgeRegistries.MOB_EFFECTS.getKey(k).getPath()),
 				JeedImpl.getEffectProviderSerializer(),
 				new JeedEffectRecipeData(k, new ArrayList<>(v)))));

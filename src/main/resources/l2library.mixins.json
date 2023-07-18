@@ -6,7 +6,8 @@
   "refmap": "l2library.refmap.json",
   "mixins": [
 	"AbstractArrowMixin",
-	"EntityMixin"
+	"EntityMixin",
+	"SmithingTransformRecipeMixin"
   ],
   "client": [
 	"ClientLocalPlayerMixin"

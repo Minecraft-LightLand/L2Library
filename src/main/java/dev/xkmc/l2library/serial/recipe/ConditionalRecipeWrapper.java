@@ -10,9 +10,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public record ConditionalRecipeWrapper(FinishedRecipe base, String modid) implements FinishedRecipe {
+public record ConditionalRecipeWrapper(FinishedRecipe base, String[] modid) implements FinishedRecipe {
 
-	public static Consumer<FinishedRecipe> mod(RegistrateRecipeProvider pvd, String modid) {
+	public static Consumer<FinishedRecipe> mod(RegistrateRecipeProvider pvd, String... modid) {
 		return (r) -> pvd.accept(new ConditionalRecipeWrapper(r, modid));
 	}
 
@@ -47,10 +47,12 @@ public record ConditionalRecipeWrapper(FinishedRecipe base, String modid) implem
 	public JsonObject serializeRecipe() {
 		JsonObject ans = base.serializeRecipe();
 		JsonArray conditions = new JsonArray();
-		JsonObject condition = new JsonObject();
-		condition.addProperty("type", "forge:mod_loaded");
-		condition.addProperty("modid", modid);
-		conditions.add(condition);
+		for (String str : modid) {
+			JsonObject condition = new JsonObject();
+			condition.addProperty("type", "forge:mod_loaded");
+			condition.addProperty("modid", str);
+			conditions.add(condition);
+		}
 		ans.add("conditions", conditions);
 		return ans;
 	}
