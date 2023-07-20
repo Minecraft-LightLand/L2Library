@@ -90,7 +90,7 @@ public class L2Registrate extends AbstractRegistrate<L2Registrate> {
 		return L2Library.REGISTRATE.buildCreativeTabImpl(name, this.addLang("itemGroup", id, def), config);
 	}
 
-	private RegistryEntry<CreativeModeTab> buildCreativeTabImpl(String name, Component comp, Consumer<CreativeModeTab.Builder> config) {
+	private synchronized RegistryEntry<CreativeModeTab> buildCreativeTabImpl(String name, Component comp, Consumer<CreativeModeTab.Builder> config) {
 		return this.generic(self(), name, Registries.CREATIVE_MODE_TAB, () -> {
 			var builder = CreativeModeTab.builder().title(comp)
 					.withTabsBefore(CreativeModeTabs.SPAWN_EGGS);
