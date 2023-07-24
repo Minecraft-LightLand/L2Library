@@ -1,17 +1,22 @@
 package dev.xkmc.l2library.base;
 
 import com.google.common.base.Suppliers;
+import com.mojang.serialization.Codec;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.builders.EnchantmentBuilder;
 import com.tterrag.registrate.builders.NoConfigBuilder;
 import com.tterrag.registrate.providers.RegistrateLangProvider;
+import com.tterrag.registrate.util.OneTimeEventReceiver;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import com.tterrag.registrate.util.nullness.NonnullType;
+import dev.xkmc.l2library.base.datapack.DatapackInstance;
+import dev.xkmc.l2library.base.datapack.EntryHolder;
 import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2serial.serialization.custom_handler.RLClassHandler;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -25,13 +30,11 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegistryBuilder;
-import net.minecraftforge.registries.RegistryManager;
+import net.minecraftforge.registries.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class L2Registrate extends AbstractRegistrate<L2Registrate> {
@@ -76,6 +79,12 @@ public class L2Registrate extends AbstractRegistrate<L2Registrate> {
 				new RegistryBuilder<E>().onCreate((r, s) ->
 						new RLClassHandler<>((Class<E>) cls, () -> r)));
 		return new RegistryInstance<>(Suppliers.memoize(() -> RegistryManager.ACTIVE.getRegistry(key)), key);
+	}
+
+	public <T, R extends EntryHolder<T>> DatapackInstance<T, R> datapackRegistry(String id, Class<R> cls, Function<Holder.Reference<T>, R> func, Codec<T> codec) {
+		DatapackInstance<T, R> ans = new DatapackInstance<>(new ResourceLocation(getModid(), id), cls, func);
+		OneTimeEventReceiver.addModListener(this, DataPackRegistryEvent.NewRegistry.class, e -> e.dataPackRegistry(ans.key, codec, codec));
+		return ans;
 	}
 
 	public RegistryEntry<CreativeModeTab> buildModCreativeTab(String name, String def, Consumer<CreativeModeTab.Builder> config) {
