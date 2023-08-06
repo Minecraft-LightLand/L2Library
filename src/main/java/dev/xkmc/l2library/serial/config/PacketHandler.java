@@ -23,7 +23,9 @@ public class PacketHandler extends BasePacketHandler {
 	@SafeVarargs
 	public PacketHandler(ResourceLocation id, int version, Function<BasePacketHandler, LoadedPacket<?>>... values) {
 		super(id, version, values);
-		LIST.add(this);
+		synchronized (LIST) {
+			LIST.add(this);
+		}
 	}
 
 }
