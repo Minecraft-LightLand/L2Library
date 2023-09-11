@@ -56,6 +56,7 @@ public class PacketHandlerWithConfig extends PacketHandler {
 		INTERNAL.put(id, this);
 		config_path = id.getNamespace() + "_config";
 		listener = new ConfigReloadListener(config_path);
+		listener_before.add(configs::clear);
 	}
 
 	public void addBeforeReloadListener(Runnable runnable) {
