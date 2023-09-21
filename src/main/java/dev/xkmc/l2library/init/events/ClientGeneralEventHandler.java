@@ -20,6 +20,7 @@ public class ClientGeneralEventHandler {
 
 	@SubscribeEvent
 	public static void clientTick(TickEvent.ClientTickEvent event) {
+		if (event.phase != TickEvent.Phase.END) return;
 		for (EntityTarget target : EntityTarget.LIST) {
 			target.tickRender();
 		}

@@ -26,6 +26,7 @@ public class GeneralEventHandler {
 
 	@SubscribeEvent
 	public static void serverTick(TickEvent.ServerTickEvent event) {
+		if (event.phase != TickEvent.Phase.END) return;
 		RayTraceUtil.serverTick();
 	}
 

@@ -34,7 +34,10 @@ public record ConditionalRecipeWrapper(FinishedRecipe base, String[] modid) impl
 	@Nullable
 	@Override
 	public JsonObject serializeAdvancement() {
-		return base.serializeAdvancement();
+		JsonObject ans = base.serializeAdvancement();
+		if (ans == null) return null;
+		addCondition(ans);
+		return ans;
 	}
 
 	@Nullable
@@ -46,6 +49,11 @@ public record ConditionalRecipeWrapper(FinishedRecipe base, String[] modid) impl
 	@Override
 	public JsonObject serializeRecipe() {
 		JsonObject ans = base.serializeRecipe();
+		addCondition(ans);
+		return ans;
+	}
+
+	private void addCondition(JsonObject ans) {
 		JsonArray conditions = new JsonArray();
 		for (String str : modid) {
 			JsonObject condition = new JsonObject();
@@ -54,6 +62,6 @@ public record ConditionalRecipeWrapper(FinishedRecipe base, String[] modid) impl
 			conditions.add(condition);
 		}
 		ans.add("conditions", conditions);
-		return ans;
 	}
+
 }

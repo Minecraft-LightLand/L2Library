@@ -47,6 +47,7 @@ public class ClientEffectRenderEvents {
 
 	@SubscribeEvent
 	public static void clientTick(TickEvent.ClientTickEvent event) {
+		if (event.phase != TickEvent.Phase.END) return;
 		AbstractClientPlayer player = Proxy.getClientPlayer();
 		if (player != null) {
 			for (Map.Entry<MobEffect, MobEffectInstance> entry : player.getActiveEffectsMap().entrySet()) {
