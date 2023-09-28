@@ -22,11 +22,13 @@ public class Proxy {
 		return Minecraft.getInstance().player;
 	}
 
+	@Deprecated
 	@Nullable
 	public static Player getPlayer() {
 		return DistExecutor.unsafeRunForDist(() -> Proxy::getClientPlayer, () -> () -> null);
 	}
 
+	@Deprecated
 	@Nullable
 	public static Level getWorld() {
 		return DistExecutor.unsafeRunForDist(() -> Proxy::getClientWorld, () -> () -> Proxy.getServer().map(MinecraftServer::overworld).orElse(null));
