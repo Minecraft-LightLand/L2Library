@@ -80,6 +80,10 @@ public abstract class SideBar<S extends SideBar.Signature<S>> {
 		return ease_time > 0;
 	}
 
+	public boolean isRendering() {
+		return isScreenOn() && ease_time > 0;
+	}
+
 	protected int getXOffset(int width) {
 		return 0;
 	}
