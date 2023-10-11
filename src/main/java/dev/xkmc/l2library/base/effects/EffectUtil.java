@@ -6,6 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
+import net.minecraftforge.eventbus.api.Event;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
@@ -25,6 +26,11 @@ public class EffectUtil {
 	 */
 	private static void forceAddEffect(LivingEntity e, MobEffectInstance ins, @Nullable Entity source) {
 		MobEffectInstance effectinstance = e.getActiveEffectsMap().get(ins.getEffect());
+		var event = new ForceAddEffectEvent(e, ins);
+		MinecraftForge.EVENT_BUS.post(event);
+		if (event.getResult() == Event.Result.DENY) {
+			return;
+		}
 		MinecraftForge.EVENT_BUS.post(new MobEffectEvent.Added(e, effectinstance, ins, source));
 		if (effectinstance == null) {
 			e.getActiveEffectsMap().put(ins.getEffect(), ins);
