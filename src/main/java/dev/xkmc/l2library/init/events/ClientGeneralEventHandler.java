@@ -35,24 +35,4 @@ public class ClientGeneralEventHandler {
 		}
 	}
 
-	private static double scroll;
-
-	@SubscribeEvent
-	public static void scrollEvent(InputEvent.MouseScrollingEvent event) {
-		double scroll_tick = L2LibraryConfig.CLIENT.scrollTick.get();
-		double delta = event.getScrollDelta();
-		scroll += delta;
-		int diff = 0;
-		if (scroll > scroll_tick) {
-			diff = (int) Math.floor(scroll / scroll_tick);
-			scroll -= diff * scroll_tick;
-		} else if (scroll < -scroll_tick) {
-			diff = -(int) Math.floor(-scroll / scroll_tick);
-			scroll -= diff * scroll_tick;
-		}
-		if (MinecraftForge.EVENT_BUS.post(new FineScrollEvent(diff))) {
-			event.setCanceled(true);
-		}
-	}
-
 }

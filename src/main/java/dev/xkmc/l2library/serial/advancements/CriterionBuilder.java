@@ -16,7 +16,7 @@ import net.minecraft.world.level.ItemLike;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CriterionBuilder {
+public class CriterionBuilder implements IAdvBuilder {
 
 	@Deprecated
 	public static CriterionBuilder none() {
@@ -87,7 +87,7 @@ public class CriterionBuilder {
 		return this;
 	}
 
-	void accept(String id, Advancement.Builder builder) {
+	public void modify(String id, Advancement.Builder builder) {
 		int index = 0;
 		if (list.size() > 1) {
 			builder.requirements(req);

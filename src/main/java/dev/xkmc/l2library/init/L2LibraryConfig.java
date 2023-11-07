@@ -16,7 +16,6 @@ public class L2LibraryConfig {
 
 		public final ForgeConfigSpec.BooleanValue selectionDisplayRequireShift;
 		public final ForgeConfigSpec.BooleanValue selectionScrollRequireShift;
-		public final ForgeConfigSpec.DoubleValue scrollTick;
 
 
 		Client(ForgeConfigSpec.Builder builder) {
@@ -27,8 +26,6 @@ public class L2LibraryConfig {
 			infoMaxWidth = builder.comment("Info max width. 0.5 means half screen. default: 0.3")
 					.defineInRange("infoMaxWidth", 0.3, 0, 0.5);
 
-			scrollTick = builder.comment("Scroll sensitivity")
-					.defineInRange("scrollTick", 1, 0.01, 10000);
 			selectionDisplayRequireShift = builder.comment("Render Selection only when pressing shift")
 					.define("selectionDisplayRequireShift", false);
 			selectionScrollRequireShift = builder.comment("Scroll for selection only when pressing shift")

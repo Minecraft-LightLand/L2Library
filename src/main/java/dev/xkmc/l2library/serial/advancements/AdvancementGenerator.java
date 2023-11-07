@@ -1,6 +1,8 @@
 package dev.xkmc.l2library.serial.advancements;
 
 import com.tterrag.registrate.providers.RegistrateAdvancementProvider;
+import dev.xkmc.l2library.base.L2Registrate;
+import dev.xkmc.l2library.compat.patchouli.PatchouliHelper;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.resources.ResourceLocation;
@@ -81,6 +83,13 @@ public class AdvancementGenerator {
 				return sub;
 			}
 
+			public Entry patchouli(L2Registrate reg, CriterionBuilder builder, ResourceLocation book, String title, String desc) {
+				ItemStack stack = PatchouliHelper.getBook(book);
+				return create("patchouli", stack, builder, title, desc)
+						.add(new ModLoadedAdv("patchouli"))
+						.add(new RewardBuilder(reg, 0, book, () -> PatchouliHelper.getBookLoot(book)));
+			}
+
 			public Entry root() {
 				return root;
 			}
@@ -102,6 +111,11 @@ public class AdvancementGenerator {
 				return this;
 			}
 
+			public Entry add(IAdvBuilder builder) {
+				data.builder.add(builder);
+				return this;
+			}
+
 			private void build() {
 				var builder = Advancement.Builder.advancement().display(data.item,
 						pvd.title(modid, "advancements." + tab + "." + data.id, data.title),
@@ -110,9 +124,13 @@ public class AdvancementGenerator {
 				if (parent != null) {
 					builder.parent(parent.result);
 				}
+
 				String uid = modid + ":" + tab + "/" + data.id;
-				data.builder.accept(uid, builder);
-				result = builder.save(pvd, uid);
+				for (var e : data.builder) {
+					e.modify(uid, builder);
+					e.onBuild();
+				}
+				result = builder.save(r -> AdvProviderWrapper.save(pvd, data.builder, r), uid);
 				for (Entry e : children) {
 					e.build();
 				}
@@ -126,7 +144,11 @@ public class AdvancementGenerator {
 
 	}
 
-	private record EntryData(String id, ItemStack item, CriterionBuilder builder, String title, String desc) {
+	private record EntryData(String id, ItemStack item, List<IAdvBuilder> builder, String title, String desc) {
+
+		EntryData(String id, ItemStack item, IAdvBuilder builder, String title, String desc) {
+			this(id, item, new ArrayList<>(List.of(builder)), title, desc);
+		}
 
 	}
 

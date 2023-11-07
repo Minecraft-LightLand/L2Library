@@ -13,6 +13,7 @@ import com.tterrag.registrate.util.nullness.NonnullType;
 import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2serial.serialization.custom_handler.RLClassHandler;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -31,6 +32,9 @@ import net.minecraftforge.registries.RegistryBuilder;
 import net.minecraftforge.registries.RegistryManager;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -71,23 +75,35 @@ public class L2Registrate extends AbstractRegistrate<L2Registrate> {
 	}
 
 	@SuppressWarnings({"unchecked", "unsafe"})
-	public <E extends NamedEntry<E>> RegistryInstance<E> newRegistry(String id, Class<?> cls) {
-		ResourceKey<Registry<E>> key = makeRegistry(id, () ->
-				new RegistryBuilder<E>().onCreate((r, s) ->
-						new RLClassHandler<>((Class<E>) cls, () -> r)));
+	public <E extends NamedEntry<E>> RegistryInstance<E> newRegistry(String id, Class<?> cls, Consumer<RegistryBuilder<E>> cons) {
+		ResourceKey<Registry<E>> key = makeRegistry(id, () -> {
+			var ans = new RegistryBuilder<E>();
+			ans.onCreate((r, s) -> new RLClassHandler<>((Class<E>) cls, () -> r));
+			cons.accept(ans);
+			return ans;
+		});
 		return new RegistryInstance<>(Suppliers.memoize(() -> RegistryManager.ACTIVE.getRegistry(key)), key);
 	}
 
-	public RegistryEntry<CreativeModeTab> buildModCreativeTab(String name, String def, Consumer<CreativeModeTab.Builder> config) {
+	public <E extends NamedEntry<E>> RegistryInstance<E> newRegistry(String id, Class<?> cls) {
+		return newRegistry(id, cls, e -> {
+		});
+	}
+
+	public synchronized RegistryEntry<CreativeModeTab> buildModCreativeTab(String name, String def, Consumer<CreativeModeTab.Builder> config) {
 		ResourceLocation id = new ResourceLocation(getModid(), name);
 		defaultCreativeTab(ResourceKey.create(Registries.CREATIVE_MODE_TAB, id));
 		return buildCreativeTabImpl(name, this.addLang("itemGroup", id, def), config);
 	}
 
-	public RegistryEntry<CreativeModeTab> buildL2CreativeTab(String name, String def, Consumer<CreativeModeTab.Builder> config) {
+	public synchronized RegistryEntry<CreativeModeTab> buildL2CreativeTab(String name, String def, Consumer<CreativeModeTab.Builder> config) {
 		ResourceLocation id = new ResourceLocation(L2Library.MODID, name);
 		defaultCreativeTab(ResourceKey.create(Registries.CREATIVE_MODE_TAB, id));
-		return L2Library.REGISTRATE.buildCreativeTabImpl(name, this.addLang("itemGroup", id, def), config);
+		TabSorter sorter = new TabSorter(getModid() + ":" + name, id);
+		return L2Library.REGISTRATE.buildCreativeTabImpl(name, this.addLang("itemGroup", id, def), b -> {
+			config.accept(b);
+			sorter.sort(b);
+		});
 	}
 
 	private synchronized RegistryEntry<CreativeModeTab> buildCreativeTabImpl(String name, Component comp, Consumer<CreativeModeTab.Builder> config) {
@@ -124,6 +140,65 @@ public class L2Registrate extends AbstractRegistrate<L2Registrate> {
 
 		public GenericBuilder<T, P> defaultLang() {
 			return lang(NamedEntry::getDescriptionId, RegistrateLangProvider.toEnglishName(this.getName()));
+		}
+
+	}
+
+	private static class TabSorter {
+
+		private static final TreeMap<String, TabSorter> MAP = new TreeMap<>();
+		private static final HashSet<ResourceLocation> SET = new HashSet<>();
+
+		private final ResourceLocation id;
+
+		private TabSorter(String str, ResourceLocation id) {
+			MAP.put(str, this);
+			SET.add(id);
+			this.id = id;
+		}
+
+		public void sort(CreativeModeTab.Builder b) {
+			var list = new ArrayList<>(MAP.values());
+			boolean after = false;
+			ResourceLocation before = null;
+			for (var e : list) {
+				if (e == this) {
+					after = true;
+					if (before != null) {
+						b.withTabsBefore(before);
+					}
+					continue;
+				}
+				if (after) {
+					b.withTabsAfter(e.id);
+					return;
+				} else {
+					before = e.id;
+				}
+			}
+			for (var e : BuiltInRegistries.CREATIVE_MODE_TAB.entrySet()) {
+				var id = e.getKey().location();
+				if (known(id) || known(e.getValue())) {
+					continue;
+				}
+				b.withTabsAfter(id);
+			}
+		}
+
+		private static boolean known(ResourceLocation id) {
+			if (id.getNamespace().equals("minecraft")) {
+				return true;
+			}
+			return SET.contains(id);
+		}
+
+		private static boolean known(CreativeModeTab tab) {
+			for (var other : tab.tabsAfter) {
+				if (known(other)) {
+					return true;
+				}
+			}
+			return false;
 		}
 
 	}
