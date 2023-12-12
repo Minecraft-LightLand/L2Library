@@ -34,7 +34,15 @@ public record ConditionalRecipeWrapper(FinishedRecipe base, String modid) implem
 	@Nullable
 	@Override
 	public JsonObject serializeAdvancement() {
-		return base.serializeAdvancement();
+		JsonObject ans = base.serializeAdvancement();
+		if (ans == null) return null;
+		JsonArray conditions = new JsonArray();
+		JsonObject condition = new JsonObject();
+		condition.addProperty("type", "forge:mod_loaded");
+		condition.addProperty("modid", modid);
+		conditions.add(condition);
+		ans.add("conditions", conditions);
+		return ans;
 	}
 
 	@Nullable

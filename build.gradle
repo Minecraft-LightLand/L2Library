@@ -144,6 +144,10 @@ dependencies {
     implementation fg.deobf("curse.maven:quark-243121:4587248")
     implementation fg.deobf("curse.maven:autoreglib-250363:4100299")
     implementation fg.deobf("curse.maven:quark-oddities-301051:3575623")
+    implementation fg.deobf("vazkii.patchouli:Patchouli:1.19.2-76")
+    runtimeOnly fg.deobf("curse.maven:charm-of-undying-316873:4603643")
+    runtimeOnly fg.deobf("curse.maven:caelus-308989:3929284")
+    runtimeOnly fg.deobf("curse.maven:elytra-slot-317716:4519258")
 
 }
 

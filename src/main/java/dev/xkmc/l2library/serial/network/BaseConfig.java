@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 @SerialClass
 public class BaseConfig {
 
-	ResourceLocation id;
+	protected ResourceLocation id;
 
 	public ResourceLocation getID() {
 		return id;

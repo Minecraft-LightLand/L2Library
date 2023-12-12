@@ -1,5 +1,7 @@
 package dev.xkmc.l2library.init;
 
+import com.tterrag.registrate.providers.ProviderType;
+import dev.xkmc.l2library.base.L2Registrate;
 import dev.xkmc.l2library.base.effects.ClientEntityEffectRenderEvents;
 import dev.xkmc.l2library.base.effects.EffectSyncEvents;
 import dev.xkmc.l2library.base.effects.EffectToClient;
@@ -10,9 +12,11 @@ import dev.xkmc.l2library.base.tabs.contents.AttributeEntry;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityEvents;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
+import dev.xkmc.l2library.compat.curio.OpenCuriosPacket;
+import dev.xkmc.l2library.compat.curio.TabCuriosCompat;
 import dev.xkmc.l2library.idea.infmaze.worldgen.MazeDimension;
-import dev.xkmc.l2library.init.events.attack.AttackEventHandler;
 import dev.xkmc.l2library.init.events.GenericEventHandler;
+import dev.xkmc.l2library.init.events.attack.AttackEventHandler;
 import dev.xkmc.l2library.serial.handler.Handlers;
 import dev.xkmc.l2library.serial.network.PacketHandler;
 import dev.xkmc.l2library.serial.network.SyncPacket;
@@ -44,11 +48,14 @@ public class L2Library {
 	public static final String MODID = "l2library";
 	public static final Logger LOGGER = LogManager.getLogger();
 
+	public static final L2Registrate REGISTRATE = new L2Registrate(MODID);
+
 	public static final PacketHandler PACKET_HANDLER = new PacketHandler(new ResourceLocation(MODID, "main"), 1,
 			e -> e.create(SyncPacket.class, PLAY_TO_CLIENT),
 			e -> e.create(EffectToClient.class, PLAY_TO_CLIENT),
 			e -> e.create(PlayerCapToClient.class, PLAY_TO_CLIENT),
-			e -> e.create(TargetSetPacket.class, PLAY_TO_SERVER));
+			e -> e.create(TargetSetPacket.class, PLAY_TO_SERVER),
+			e -> e.create(OpenCuriosPacket.class, PLAY_TO_SERVER));
 
 	public L2Library() {
 		Handlers.register();
@@ -65,6 +72,8 @@ public class L2Library {
 		bus.addListener(L2Library::setup);
 		bus.addListener(L2Library::registerRecipeSerializers);
 		L2LibraryConfig.init();
+		TabCuriosCompat.onStartup();
+		REGISTRATE.addDataGenerator(ProviderType.LANG, L2LibraryLangData::genLang);
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> L2Client.onCtorClient(bus, MinecraftForge.EVENT_BUS));
 	}
 

@@ -18,6 +18,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class L2Registrate extends AbstractRegistrate<L2Registrate> {
@@ -52,6 +53,16 @@ public class L2Registrate extends AbstractRegistrate<L2Registrate> {
 		ResourceKey<Registry<E>> key = makeRegistry(id, () ->
 				new RegistryBuilder<E>().onCreate((r, s) ->
 						new RLClassHandler<>((Class<E>) cls, () -> r)));
+		return new RegistryInstance<>(Suppliers.memoize(() -> RegistryManager.ACTIVE.getRegistry(key)), key);
+	}
+
+	public <E extends NamedEntry<E>> RegistryInstance<E> newRegistry(String id, Class<?> cls, Consumer<RegistryBuilder<E>> cons) {
+		ResourceKey<Registry<E>> key = makeRegistry(id, () -> {
+			var builder = new RegistryBuilder<E>();
+			cons.accept(builder);
+			return builder.onCreate((r, s) ->
+					new RLClassHandler<>((Class<E>) cls, () -> r));
+		});
 		return new RegistryInstance<>(Suppliers.memoize(() -> RegistryManager.ACTIVE.getRegistry(key)), key);
 	}
 

@@ -31,6 +31,10 @@ public abstract class BaseTab<T extends BaseTab<T>> extends Button {
 		manager.getScreen().renderTooltip(stack, getMessage(), x, y);
 	}
 
+	public void renderBackground(PoseStack pose) {
+		token.type.drawIcon(x, y, token.index, Minecraft.getInstance().getItemRenderer(), this.stack);
+	}
+
 	public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 		if (this.visible) {
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -39,7 +43,7 @@ public abstract class BaseTab<T extends BaseTab<T>> extends Button {
 			RenderSystem.setShaderTexture(0, TEXTURE);
 			token.type.draw(stack, manager.getScreen(), x, y, manager.selected == token, token.index);
 			RenderSystem.defaultBlendFunc();
-			token.type.drawIcon(x, y, token.index, Minecraft.getInstance().getItemRenderer(), this.stack);
+			renderBackground(stack);
 		}
 		if (this.token.index == TabRegistry.getTabs().size() - 1) { // draw on last
 			manager.onToolTipRender(stack, mouseX, mouseY);

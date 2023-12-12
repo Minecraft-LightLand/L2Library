@@ -3,6 +3,7 @@ package dev.xkmc.l2library.base.tabs.contents;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.xkmc.l2library.base.tabs.core.TabManager;
 import dev.xkmc.l2library.init.L2Client;
+import dev.xkmc.l2library.init.L2LibraryLangData;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -71,20 +72,20 @@ public class AttributeScreen extends BaseTextScreen {
 		List<Component> ans = new ArrayList<>();
 		ans.add(Component.translatable(attr.getDescriptionId()).withStyle(ChatFormatting.GOLD));
 		boolean shift = Screen.hasShiftDown();
-		ans.add(Component.translatable("menu.tabs.attribute.base", number("%s", base)).withStyle(ChatFormatting.BLUE));
-		ans.add(Component.translatable("menu.tabs.attribute.add", numberSigned("%s", addv)).withStyle(ChatFormatting.BLUE));
+		ans.add(L2LibraryLangData.BASE.get(number("%s", base)).withStyle(ChatFormatting.BLUE));
+		ans.add(L2LibraryLangData.ADD.get(numberSigned("%s", addv)).withStyle(ChatFormatting.BLUE));
 		if (shift) {
 			for (var e : adds) {
 				ans.add(numberSigned("%s", e.getAmount()).append(name(e)));
 			}
 		}
-		ans.add(Component.translatable("menu.tabs.attribute.mult_base", numberSigned("%s%%", m0v * 100)).withStyle(ChatFormatting.BLUE));
+		ans.add(L2LibraryLangData.MULT_BASE.get(numberSigned("%s%%", m0v * 100)).withStyle(ChatFormatting.BLUE));
 		if (shift) {
 			for (var e : m0s) {
 				ans.add(numberSigned("%s%%", e.getAmount() * 100).append(name(e)));
 			}
 		}
-		ans.add(Component.translatable("menu.tabs.attribute.mult_all", number("x%s", m1v)).withStyle(ChatFormatting.BLUE));
+		ans.add(L2LibraryLangData.MULT_TOTAL.get(number("x%s", m1v)).withStyle(ChatFormatting.BLUE));
 		if (shift) {
 			for (var e : m1s) {
 				ans.add(number("x%s", 1 + e.getAmount()).append(name(e)));
