@@ -19,7 +19,6 @@ public class PotionIngredient extends BaseIngredient<PotionIngredient> {
 
 	@Deprecated
 	public PotionIngredient() {
-
 	}
 
 	protected PotionIngredient validate() {
