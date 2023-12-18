@@ -198,9 +198,9 @@ dependencies {
         jarJar.ranged(it, "[1.2.1,)")
     }
 
-    implementation fg.deobf(jarJar("dev.xkmc.l2tabs:l2tabs:0.2.0")) {
+    implementation fg.deobf(jarJar("dev.xkmc.l2tabs:l2tabs:0.2.3")) {
         transitive = false
-        jarJar.ranged(it, "[0.2.0,)")
+        jarJar.ranged(it, "[0.2.3,)")
     }
 
     implementation fg.deobf(jarJar("dev.xkmc.l2screentracker:l2screentracker:0.1.4")) {

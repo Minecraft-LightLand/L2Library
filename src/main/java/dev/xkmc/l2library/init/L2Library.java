@@ -5,6 +5,7 @@ import dev.xkmc.l2library.base.effects.ClientEffectCap;
 import dev.xkmc.l2library.base.effects.EffectToClient;
 import dev.xkmc.l2library.base.menu.base.MenuLayoutConfig;
 import dev.xkmc.l2library.capability.conditionals.ConditionalData;
+import dev.xkmc.l2library.capability.conditionals.TokenToClient;
 import dev.xkmc.l2library.capability.entity.GeneralCapabilityHolder;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.init.events.GeneralEventHandler;
@@ -46,7 +47,8 @@ public class L2Library {
 			e -> e.create(SyncPacket.class, PLAY_TO_CLIENT),
 			e -> e.create(EffectToClient.class, PLAY_TO_CLIENT),
 			e -> e.create(PlayerCapToClient.class, PLAY_TO_CLIENT),
-			e -> e.create(TargetSetPacket.class, PLAY_TO_SERVER)
+			e -> e.create(TargetSetPacket.class, PLAY_TO_SERVER),
+			e -> e.create(TokenToClient.class, PLAY_TO_CLIENT)
 	);
 
 	public static final ConfigTypeEntry<MenuLayoutConfig> MENU_LAYOUT =
