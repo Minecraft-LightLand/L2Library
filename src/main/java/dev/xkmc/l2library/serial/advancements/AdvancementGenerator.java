@@ -50,6 +50,10 @@ public class AdvancementGenerator {
 			return root;
 		}
 
+		public Entry hidden(String id, CriterionBuilder builder) {
+			return new Entry(new EntryData(id, ItemStack.EMPTY, builder, "", ""), null);
+		}
+
 		public class Entry {
 
 			private final List<Entry> children = new ArrayList<>();
@@ -116,11 +120,14 @@ public class AdvancementGenerator {
 				return this;
 			}
 
-			private void build() {
-				var builder = Advancement.Builder.advancement().display(data.item,
-						pvd.title(modid, "advancements." + tab + "." + data.id, data.title),
-						pvd.desc(modid, "advancements." + tab + "." + data.id, data.desc),
-						rl, type, showToast, announce, hidden);
+			public void build() {
+				var builder = Advancement.Builder.advancement();
+				if (!data.item.isEmpty()) {
+					builder.display(data.item,
+							pvd.title(modid, "advancements." + tab + "." + data.id, data.title),
+							pvd.desc(modid, "advancements." + tab + "." + data.id, data.desc),
+							rl, type, showToast, announce, hidden);
+				}
 				if (parent != null) {
 					builder.parent(parent.result);
 				}
