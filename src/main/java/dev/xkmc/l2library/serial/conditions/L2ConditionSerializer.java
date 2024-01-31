@@ -1,5 +1,6 @@
 package dev.xkmc.l2library.serial.conditions;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import dev.xkmc.l2serial.serialization.codec.JsonCodec;
 import net.minecraft.resources.ResourceLocation;
@@ -12,7 +13,11 @@ public record L2ConditionSerializer<T extends ICondition>(
 
 	@Override
 	public void write(JsonObject json, T value) {
-		JsonCodec.toJson(value, cls);
+		JsonElement elem = JsonCodec.toJson(value, cls);
+		assert elem != null;
+		for (var e : elem.getAsJsonObject().entrySet()) {
+			json.add(e.getKey(), e.getValue());
+		}
 	}
 
 	@Override

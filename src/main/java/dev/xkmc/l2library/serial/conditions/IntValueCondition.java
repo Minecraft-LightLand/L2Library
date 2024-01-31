@@ -13,8 +13,8 @@ public record IntValueCondition(String path, ArrayList<String> line, int low, in
 
 	public static final ResourceLocation ID = new ResourceLocation(L2Library.MODID, "int_config");
 
-	private static IntValueCondition of(ModConfig file, ForgeConfigSpec.ConfigValue<Integer> config, int low, int high) {
-		return new IntValueCondition(file.getFileName(), new ArrayList<>(config.getPath()), low, high);
+	public static IntValueCondition of(String file, ForgeConfigSpec.ConfigValue<Integer> config, int low, int high) {
+		return new IntValueCondition(file, new ArrayList<>(config.getPath()), low, high);
 	}
 
 	@Override

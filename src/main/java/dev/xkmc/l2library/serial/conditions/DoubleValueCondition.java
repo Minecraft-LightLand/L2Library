@@ -13,8 +13,8 @@ public record DoubleValueCondition(String path, ArrayList<String> line, double l
 
 	public static final ResourceLocation ID = new ResourceLocation(L2Library.MODID, "double_config");
 
-	private static DoubleValueCondition of(ModConfig file, ForgeConfigSpec.ConfigValue<Double> config, double low, double high) {
-		return new DoubleValueCondition(file.getFileName(), new ArrayList<>(config.getPath()), low, high);
+	public static DoubleValueCondition of(String file, ForgeConfigSpec.ConfigValue<Double> config, double low, double high) {
+		return new DoubleValueCondition(file, new ArrayList<>(config.getPath()), low, high);
 	}
 
 	@Override

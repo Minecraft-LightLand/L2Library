@@ -14,8 +14,8 @@ public record ListStringValueCondition(String path, ArrayList<String> line, Stri
 
 	public static final ResourceLocation ID = new ResourceLocation(L2Library.MODID, "string_list_config");
 
-	private static ListStringValueCondition of(ModConfig file, ForgeConfigSpec.ConfigValue<List<String>> config, String key) {
-		return new ListStringValueCondition(file.getFileName(), new ArrayList<>(config.getPath()), key);
+	public static ListStringValueCondition of(String file, ForgeConfigSpec.ConfigValue<List<String>> config, String key) {
+		return new ListStringValueCondition(file, new ArrayList<>(config.getPath()), key);
 	}
 
 	@Override

@@ -13,8 +13,8 @@ public record BooleanValueCondition(String path, ArrayList<String> line, boolean
 
 	public static final ResourceLocation ID = new ResourceLocation(L2Library.MODID, "boolean_config");
 
-	private static BooleanValueCondition of(ModConfig file, ForgeConfigSpec.ConfigValue<Boolean> config, boolean value) {
-		return new BooleanValueCondition(file.getFileName(), new ArrayList<>(config.getPath()), value);
+	public static BooleanValueCondition of(String file, ForgeConfigSpec.ConfigValue<Boolean> config, boolean value) {
+		return new BooleanValueCondition(file, new ArrayList<>(config.getPath()), value);
 	}
 
 	@Override

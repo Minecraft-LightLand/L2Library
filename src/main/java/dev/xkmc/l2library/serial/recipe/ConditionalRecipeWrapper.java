@@ -6,14 +6,24 @@ import com.tterrag.registrate.providers.RegistrateRecipeProvider;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraftforge.common.crafting.ConditionalRecipe;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.conditions.ICondition;
+import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public record ConditionalRecipeWrapper(FinishedRecipe base, String[] modid) implements FinishedRecipe {
+public record ConditionalRecipeWrapper(FinishedRecipe base, ICondition... conditions) implements FinishedRecipe {
 
 	public static Consumer<FinishedRecipe> mod(RegistrateRecipeProvider pvd, String... modid) {
-		return (r) -> pvd.accept(new ConditionalRecipeWrapper(r, modid));
+		ICondition[] ans = new ICondition[modid.length];
+		for (int i = 0; i < ans.length; i++) ans[i] = new ModLoadedCondition(modid[i]);
+		return (r) -> pvd.accept(new ConditionalRecipeWrapper(r, ans));
+	}
+
+	public static Consumer<FinishedRecipe> of(RegistrateRecipeProvider pvd, ICondition... cond) {
+		return (r) -> pvd.accept(new ConditionalRecipeWrapper(r, cond));
 	}
 
 	@Override
@@ -54,14 +64,7 @@ public record ConditionalRecipeWrapper(FinishedRecipe base, String[] modid) impl
 	}
 
 	private void addCondition(JsonObject ans) {
-		JsonArray conditions = new JsonArray();
-		for (String str : modid) {
-			JsonObject condition = new JsonObject();
-			condition.addProperty("type", "forge:mod_loaded");
-			condition.addProperty("modid", str);
-			conditions.add(condition);
-		}
-		ans.add("conditions", conditions);
+		ans.add("conditions", CraftingHelper.serialize(conditions()));
 	}
 
 }
