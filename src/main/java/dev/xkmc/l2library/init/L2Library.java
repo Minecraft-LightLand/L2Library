@@ -9,6 +9,7 @@ import dev.xkmc.l2library.capability.conditionals.TokenToClient;
 import dev.xkmc.l2library.capability.entity.GeneralCapabilityHolder;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.init.events.GeneralEventHandler;
+import dev.xkmc.l2library.serial.conditions.*;
 import dev.xkmc.l2library.serial.config.ConfigTypeEntry;
 import dev.xkmc.l2library.serial.config.PacketHandler;
 import dev.xkmc.l2library.serial.config.PacketHandlerWithConfig;
@@ -79,6 +80,12 @@ public class L2Library {
 			CraftingHelper.register(EnchantmentIngredient.INSTANCE.id(), EnchantmentIngredient.INSTANCE);
 			CraftingHelper.register(PotionIngredient.INSTANCE.id(), PotionIngredient.INSTANCE);
 			CraftingHelper.register(MobEffectIngredient.INSTANCE.id(), MobEffectIngredient.INSTANCE);
+
+			CraftingHelper.register(new L2ConditionSerializer<>(BooleanValueCondition.ID, BooleanValueCondition.class));
+			CraftingHelper.register(new L2ConditionSerializer<>(IntValueCondition.ID, IntValueCondition.class));
+			CraftingHelper.register(new L2ConditionSerializer<>(DoubleValueCondition.ID, DoubleValueCondition.class));
+			CraftingHelper.register(new L2ConditionSerializer<>(StringValueCondition.ID, StringValueCondition.class));
+			CraftingHelper.register(new L2ConditionSerializer<>(ListStringValueCondition.ID, ListStringValueCondition.class));
 		}
 	}
 

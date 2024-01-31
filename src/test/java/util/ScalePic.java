@@ -14,8 +14,8 @@ public class ScalePic {
 		//scale(16, "sonic_shooter");
 
 		//resize(64, 0,0,"iron");
-		resize(18, 1,1,"gravity");
-		resize(18, 1,1,"moonwalk");
+		scale(25, "curse_of_spell", "curse_of_spell");
+		//resize(18, 1,1,"moonwalk");
 	}
 
 	private static void scale(String name) throws IOException {
