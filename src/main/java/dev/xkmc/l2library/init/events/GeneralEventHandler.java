@@ -4,12 +4,12 @@ import dev.xkmc.l2library.init.explosion.BaseExplosion;
 import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2library.serial.config.PacketHandlerWithConfig;
 import dev.xkmc.l2library.util.raytrace.RayTraceUtil;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.event.OnDatapackSyncEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.level.ExplosionEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.level.ExplosionEvent;
 
 import java.util.ArrayList;
 import java.util.List;

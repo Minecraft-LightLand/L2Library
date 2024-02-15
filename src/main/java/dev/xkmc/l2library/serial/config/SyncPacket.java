@@ -1,34 +1,16 @@
 package dev.xkmc.l2library.serial.config;
 
 import dev.xkmc.l2serial.network.SerialPacketBase;
-import dev.xkmc.l2serial.serialization.SerialClass;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 
-@SerialClass
-public class SyncPacket extends SerialPacketBase {
-
-	@SerialClass.SerialField
-	public ResourceLocation id;
-
-	@SerialClass.SerialField
-	public ArrayList<PacketHandlerWithConfig.ConfigInstance> map;
-
-	@Deprecated
-	public SyncPacket() {
-
-	}
-
-	SyncPacket(PacketHandlerWithConfig handler, List<PacketHandlerWithConfig.ConfigInstance> map) {
-		this.id = handler.CHANNEL_NAME;
-		this.map = new ArrayList<>(map);
-	}
+public record SyncPacket(String id, ArrayList<PacketHandlerWithConfig.ConfigInstance> map)
+		implements SerialPacketBase<SyncPacket> {
 
 	@Override
-	public void handle(NetworkEvent.Context ctx) {
+	public void handle(@Nullable Player player) {
 		if (map != null) {
 			var handler = PacketHandlerWithConfig.INTERNAL.get(id);
 			handler.listener.apply(map);

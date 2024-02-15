@@ -11,7 +11,6 @@ import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.init.events.GeneralEventHandler;
 import dev.xkmc.l2library.serial.conditions.*;
 import dev.xkmc.l2library.serial.config.ConfigTypeEntry;
-import dev.xkmc.l2library.serial.config.PacketHandler;
 import dev.xkmc.l2library.serial.config.PacketHandlerWithConfig;
 import dev.xkmc.l2library.serial.config.SyncPacket;
 import dev.xkmc.l2library.serial.ingredients.EnchantmentIngredient;
@@ -19,21 +18,14 @@ import dev.xkmc.l2library.serial.ingredients.MobEffectIngredient;
 import dev.xkmc.l2library.serial.ingredients.PotionIngredient;
 import dev.xkmc.l2library.util.raytrace.TargetSetPacket;
 import dev.xkmc.l2serial.serialization.custom_handler.Handlers;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegisterEvent;
+import net.minecraft.core.registries.Registries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.crafting.CraftingHelper;
+import net.neoforged.neoforge.common.crafting.IngredientType;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import static net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT;
-import static net.minecraftforge.network.NetworkDirection.PLAY_TO_SERVER;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(L2Library.MODID)
@@ -44,12 +36,12 @@ public class L2Library {
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static final L2Registrate REGISTRATE = new L2Registrate(MODID);
 
-	public static final PacketHandlerWithConfig PACKET_HANDLER = new PacketHandlerWithConfig(new ResourceLocation(MODID, "main"), 1,
-			e -> e.create(SyncPacket.class, PLAY_TO_CLIENT),
-			e -> e.create(EffectToClient.class, PLAY_TO_CLIENT),
-			e -> e.create(PlayerCapToClient.class, PLAY_TO_CLIENT),
-			e -> e.create(TargetSetPacket.class, PLAY_TO_SERVER),
-			e -> e.create(TokenToClient.class, PLAY_TO_CLIENT)
+	public static final PacketHandlerWithConfig PACKET_HANDLER = new PacketHandlerWithConfig(MODID, 1,
+			e -> e.create(SyncPacket.class),
+			e -> e.create(EffectToClient.class),
+			e -> e.create(PlayerCapToClient.class),
+			e -> e.create(TargetSetPacket.class),
+			e -> e.create(TokenToClient.class)
 	);
 
 	public static final ConfigTypeEntry<MenuLayoutConfig> MENU_LAYOUT =
@@ -76,7 +68,8 @@ public class L2Library {
 
 	@SubscribeEvent
 	public static void registerRecipeSerializers(RegisterEvent event) {
-		if (event.getRegistryKey().equals(ForgeRegistries.Keys.RECIPE_SERIALIZERS)) {
+
+		if (event.getRegistryKey().equals(Registries.RECIPE_SERIALIZER)) {
 			CraftingHelper.register(EnchantmentIngredient.INSTANCE.id(), EnchantmentIngredient.INSTANCE);
 			CraftingHelper.register(PotionIngredient.INSTANCE.id(), PotionIngredient.INSTANCE);
 			CraftingHelper.register(MobEffectIngredient.INSTANCE.id(), MobEffectIngredient.INSTANCE);
