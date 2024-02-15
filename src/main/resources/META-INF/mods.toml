@@ -12,6 +12,7 @@ description='''
 A library mod that provides a lot of useful code for lcy0x1's other mods.
 Also adds inventory tabs. Accessible in creative only if you install Curios.
 '''
+accessTransformer
 [[dependencies.l2library]]
     modId="forge"
     mandatory=true

@@ -1,10 +1,10 @@
 package dev.xkmc.l2library.serial.advancements;
 
 import com.tterrag.registrate.providers.RegistrateAdvancementProvider;
-import dev.xkmc.l2library.init.reg.L2Registrate;
 import dev.xkmc.l2library.compat.patchouli.PatchouliHelper;
+import dev.xkmc.l2library.init.reg.L2Registrate;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.FrameType;
+import net.minecraft.advancements.AdvancementType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -61,7 +61,7 @@ public class AdvancementGenerator {
 			private final ResourceLocation rl;
 			private final Entry parent;
 
-			private FrameType type = FrameType.TASK;
+			private AdvancementType type = AdvancementType.TASK;
 			private boolean showToast = true, announce = true, hidden = false;
 			private Advancement result;
 
@@ -102,12 +102,12 @@ public class AdvancementGenerator {
 				return children.get(children.size() - 1);
 			}
 
-			public Entry type(FrameType type) {
+			public Entry type(AdvancementType type) {
 				this.type = type;
 				return this;
 			}
 
-			public Entry type(FrameType type, boolean showToast, boolean announce, boolean hidden) {
+			public Entry type(AdvancementType type, boolean showToast, boolean announce, boolean hidden) {
 				this.type = type;
 				this.showToast = showToast;
 				this.announce = announce;

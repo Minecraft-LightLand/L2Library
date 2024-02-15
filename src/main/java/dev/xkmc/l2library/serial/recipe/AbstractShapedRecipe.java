@@ -1,36 +1,34 @@
 package dev.xkmc.l2library.serial.recipe;
 
-import com.google.gson.JsonObject;
-import dev.xkmc.l2serial.serialization.codec.JsonCodec;
-import dev.xkmc.l2serial.serialization.codec.PacketCodec;
+import com.mojang.serialization.Codec;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public abstract class AbstractShapedRecipe<T extends AbstractShapedRecipe<T>> extends ShapedRecipe {
 
 	public AbstractShapedRecipe(String group, ShapedRecipePattern pattern, ItemStack result) {
-		super( group, CraftingBookCategory.MISC, pattern, result);
+		super(group, CraftingBookCategory.MISC, pattern, result);
 	}
-
+	
 	@Override
 	public abstract Serializer<T> getSerializer();
 
 	@FunctionalInterface
 	public interface RecipeFactory<T extends AbstractShapedRecipe<T>> {
 
-		T create(ResourceLocation rl, String group, int w, int h, NonNullList<Ingredient> ingredients, ItemStack result);
+		T create(String group, ShapedRecipePattern pattern, ItemStack result);
+
+		default T map(ShapedRecipe r) {
+			return create(r.getGroup(), r.pattern, r.result);
+		}
 
 	}
 
@@ -42,47 +40,13 @@ public abstract class AbstractShapedRecipe<T extends AbstractShapedRecipe<T>> ex
 			this.factory = factory;
 		}
 
-		public T fromJson(ResourceLocation id, JsonObject obj) {
-			ShapedRecipe r = super.fromJson(id, obj);
-			return factory.create(r.getId(), r.getGroup(), r.getRecipeWidth(), r.getRecipeHeight(), r.getIngredients(), r.result);
+		@Override
+		public Codec<ShapedRecipe> codec() {
+			return super.codec().xmap(factory::map, e -> e);
 		}
 
 		public T fromNetwork(FriendlyByteBuf obj) {
-			ShapedRecipe r = super.fromNetwork(obj);
-			return factory.create( r.getGroup(), r.getRecipeWidth(), r.getRecipeHeight(), r.getIngredients(), r.result);
-		}
-
-		public void toJson(T recipe, JsonObject obj) {
-
-		}
-
-	}
-
-	public static class SerialSerializer<T extends AbstractShapedRecipe<T>> extends Serializer<T> {
-
-		private final Class<T> cls;
-
-		public SerialSerializer(Class<T> cls, RecipeFactory<T> factory) {
-			super(factory);
-			this.cls = cls;
-		}
-
-		public T fromJson(ResourceLocation id, JsonObject obj) {
-			return Objects.requireNonNull(JsonCodec.from(obj, cls, super.fromJson(id, obj)));
-		}
-
-		@Override
-		public void toNetwork(FriendlyByteBuf buf, ShapedRecipe rec) {
-			super.toNetwork(buf, rec);
-			PacketCodec.to(buf, rec);
-		}
-
-		public T fromNetwork(ResourceLocation id, FriendlyByteBuf obj) {
-			return PacketCodec.from(obj, cls, super.fromNetwork(id, obj));
-		}
-
-		public void toJson(T recipe, JsonObject obj) {
-			JsonCodec.toJsonObject(recipe, obj);
+			return factory.map(super.fromNetwork(obj));
 		}
 
 	}

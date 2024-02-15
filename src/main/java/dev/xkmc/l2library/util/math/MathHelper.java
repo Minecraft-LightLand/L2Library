@@ -3,6 +3,7 @@ package dev.xkmc.l2library.util.math;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -20,6 +21,13 @@ public class MathHelper {
 		long l0 = r.nextLong();
 		long l1 = r.nextLong();
 		return new UUID(l0, l1);
+	}
+
+	@SafeVarargs
+	public static <T> T[] merge(T[] arr, T... vals) {
+		var ans = Arrays.copyOf(arr, arr.length + vals.length);
+		System.arraycopy(vals, 0, ans, arr.length, vals.length);
+		return ans;
 	}
 
 	@Nullable

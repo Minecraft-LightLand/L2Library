@@ -21,6 +21,8 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.neoforged.neoforge.common.Tags;
 
+import java.util.Optional;
+
 @SuppressWarnings("unused")
 public class LootTableTemplate {
 
@@ -58,7 +60,10 @@ public class LootTableTemplate {
 
 	public static LootItemBlockStatePropertyCondition.Builder withBlockState(Block block, Property<Integer> prop, int low, int high) {
 		StatePropertiesPredicate.Builder builder = StatePropertiesPredicate.Builder.properties();
-		builder.matchers.add(new StatePropertiesPredicate.RangedPropertyMatcher(prop.getName(), Integer.toString(low), Integer.toString(high)));
+		builder.matchers.add(new StatePropertiesPredicate.PropertyMatcher(prop.getName(),
+				new StatePropertiesPredicate.RangedMatcher(
+						Optional.of(Integer.toString(low)),
+						Optional.of(Integer.toString(high)))));
 		return LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(builder);
 	}
 

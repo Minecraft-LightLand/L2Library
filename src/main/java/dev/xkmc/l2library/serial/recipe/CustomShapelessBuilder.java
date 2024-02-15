@@ -1,52 +1,44 @@
 package dev.xkmc.l2library.serial.recipe;
 
-import com.google.gson.JsonObject;
-import com.tterrag.registrate.providers.RegistrateRecipeProvider;
-import com.tterrag.registrate.util.DataIngredient;
-import com.tterrag.registrate.util.entry.RegistryEntry;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.ItemLike;
 
-import java.util.function.Consumer;
+import java.util.Objects;
 
-public class CustomShapelessBuilder<T extends AbstractShapelessRecipe<T>> extends ShapelessRecipeBuilder implements IExtendedRecipe {
+public class CustomShapelessBuilder<T extends AbstractShapelessRecipe<T>> extends ShapelessRecipeBuilder {
 
-	private final RegistryEntry<AbstractShapelessRecipe.Serializer<T>> serializer;
+	private final AbstractShapelessRecipe.RecipeFactory<T> factory;
 
-	public CustomShapelessBuilder(RegistryEntry<AbstractShapelessRecipe.Serializer<T>> serializer, ItemLike result, int count) {
+	public CustomShapelessBuilder(AbstractShapelessRecipe.RecipeFactory<T> factory, ItemLike result, int count) {
 		super(RecipeCategory.MISC, result, count);
-		this.serializer = serializer;
-	}
-
-	public void save(Consumer<FinishedRecipe> pvd, ResourceLocation id) {
-		this.ensureValid(id);
-		this.advancement.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(RequirementsStrategy.OR);
-		pvd.accept(new ExtendedRecipeResult(new ShapelessRecipeBuilder.Result(id, this.result, this.count,
-				this.group == null ? "" : this.group, CraftingBookCategory.MISC, this.ingredients, this.advancement,
-				new ResourceLocation(id.getNamespace(), "recipes/" + id.getPath())), this));
-	}
-
-	public CustomShapelessBuilder<T> unlockedBy(RegistrateRecipeProvider pvd, ItemLike item) {
-		this.advancement.addCriterion("has_" + pvd.safeName(item.asItem()),
-				DataIngredient.items(item.asItem()).getCritereon(pvd));
-		return this;
-	}
-
-	public void addAdditional(JsonObject obj) {
-
+		this.factory = factory;
 	}
 
 	@Override
-	public RecipeSerializer<?> getType() {
-		return serializer.get();
+	public void save(RecipeOutput pRecipeOutput, ResourceLocation pId) {
+		this.ensureValid(pId);
+		Advancement.Builder advancement$builder = pRecipeOutput.advancement()
+				.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pId))
+				.rewards(AdvancementRewards.Builder.recipe(pId))
+				.requirements(AdvancementRequirements.Strategy.OR);
+		this.criteria.forEach(advancement$builder::addCriterion);
+		ShapelessRecipe shapelessrecipe = new ShapelessRecipe(
+				Objects.requireNonNullElse(this.group, ""),
+				RecipeBuilder.determineBookCategory(this.category),
+				new ItemStack(this.result, this.count),
+				this.ingredients
+		);
+		pRecipeOutput.accept(pId, factory.map(shapelessrecipe), advancement$builder.build(pId.withPrefix("recipes/" + this.category.getFolderName() + "/")));
 	}
 
 }

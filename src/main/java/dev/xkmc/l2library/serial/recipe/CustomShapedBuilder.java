@@ -1,55 +1,47 @@
 package dev.xkmc.l2library.serial.recipe;
 
-import com.google.gson.JsonObject;
-import com.tterrag.registrate.providers.RegistrateRecipeProvider;
-import com.tterrag.registrate.util.DataIngredient;
-import com.tterrag.registrate.util.entry.RegistryEntry;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.ItemLike;
 
-import java.util.function.Consumer;
+import java.util.Objects;
 
-public class CustomShapedBuilder<T extends AbstractShapedRecipe<T>> extends ShapedRecipeBuilder implements IExtendedRecipe {
+public class CustomShapedBuilder<T extends AbstractShapedRecipe<T>> extends ShapedRecipeBuilder {
 
-	private final RegistryEntry<AbstractShapedRecipe.Serializer<T>> serializer;
+	private final AbstractShapedRecipe.RecipeFactory<T> factory;
 
-	public CustomShapedBuilder(RegistryEntry<AbstractShapedRecipe.Serializer<T>> serializer, ItemLike result, int count) {
+	public CustomShapedBuilder(AbstractShapedRecipe.RecipeFactory<T> factory, ItemLike result, int count) {
 		super(RecipeCategory.MISC, result, count);
-		this.serializer = serializer;
-	}
-
-	public void save(Consumer<FinishedRecipe> pvd, ResourceLocation id) {
-		this.ensureValid(id);
-		this.advancement.parent(new ResourceLocation("recipes/root"))
-				.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
-				.rewards(AdvancementRewards.Builder.recipe(id)).requirements(RequirementsStrategy.OR);
-		pvd.accept(new ExtendedRecipeResult(new ShapedRecipeBuilder.Result(id, result, count,
-				this.group == null ? "" : this.group, CraftingBookCategory.MISC, rows, key, advancement,
-				new ResourceLocation(id.getNamespace(), "recipes/" + id.getPath()), false),
-				this));
-	}
-
-	public CustomShapedBuilder<T> unlockedBy(RegistrateRecipeProvider pvd, ItemLike item) {
-		this.advancement.addCriterion("has_" + pvd.safeName(item.asItem()),
-				DataIngredient.items(item.asItem()).getCritereon(pvd));
-		return this;
-	}
-
-	public void addAdditional(JsonObject obj) {
-
+		this.factory = factory;
 	}
 
 	@Override
-	public RecipeSerializer<?> getType() {
-		return serializer.get();
+	public void save(RecipeOutput pRecipeOutput, ResourceLocation pId) {
+		ShapedRecipePattern shapedrecipepattern = this.ensureValid(pId);
+		Advancement.Builder advancement$builder = pRecipeOutput.advancement()
+				.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pId))
+				.rewards(AdvancementRewards.Builder.recipe(pId))
+				.requirements(AdvancementRequirements.Strategy.OR);
+		this.criteria.forEach(advancement$builder::addCriterion);
+		ShapedRecipe shapedrecipe = new ShapedRecipe(
+				Objects.requireNonNullElse(this.group, ""),
+				RecipeBuilder.determineBookCategory(this.category),
+				shapedrecipepattern,
+				new ItemStack(this.result, this.count),
+				this.showNotification
+		);
+		T rec = factory.map(shapedrecipe);
+		pRecipeOutput.accept(pId, rec, advancement$builder.build(pId.withPrefix("recipes/" + this.category.getFolderName() + "/")));
 	}
 
 }
