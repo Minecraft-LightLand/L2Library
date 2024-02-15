@@ -11,9 +11,6 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 @SerialClass
 public class PotionIngredient extends BaseIngredient<PotionIngredient> {
 
-	public static final BaseIngredient.Serializer<PotionIngredient> INSTANCE =
-			new BaseIngredient.Serializer<>(PotionIngredient.class, new ResourceLocation(L2Library.MODID, "potion"));
-
 	@SerialClass.SerialField
 	public Potion potion;
 
@@ -21,7 +18,7 @@ public class PotionIngredient extends BaseIngredient<PotionIngredient> {
 	public PotionIngredient() {
 	}
 
-	protected PotionIngredient validate() {
+	public PotionIngredient validate() {
 		return new PotionIngredient(potion);
 	}
 
@@ -32,10 +29,6 @@ public class PotionIngredient extends BaseIngredient<PotionIngredient> {
 
 	public boolean test(ItemStack stack) {
 		return PotionUtils.getPotion(stack) == potion;
-	}
-
-	public BaseIngredient.Serializer<PotionIngredient> getSerializer() {
-		return INSTANCE;
 	}
 
 }

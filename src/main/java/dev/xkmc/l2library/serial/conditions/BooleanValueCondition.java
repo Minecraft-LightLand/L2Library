@@ -1,25 +1,17 @@
 package dev.xkmc.l2library.serial.conditions;
 
-import dev.xkmc.l2library.init.L2Library;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.fml.config.ConfigTracker;
-import net.minecraftforge.fml.config.ModConfig;
+import com.mojang.serialization.Codec;
+import dev.xkmc.l2library.init.reg.L2LibraryRegistry;
+import net.neoforged.fml.config.ConfigTracker;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.conditions.ICondition;
 
 import java.util.ArrayList;
 
 public record BooleanValueCondition(String path, ArrayList<String> line, boolean expected) implements ICondition {
 
-	public static final ResourceLocation ID = new ResourceLocation(L2Library.MODID, "boolean_config");
-
-	public static BooleanValueCondition of(String file, ForgeConfigSpec.ConfigValue<Boolean> config, boolean value) {
+	public static BooleanValueCondition of(String file, ModConfigSpec.ConfigValue<Boolean> config, boolean value) {
 		return new BooleanValueCondition(file, new ArrayList<>(config.getPath()), value);
-	}
-
-	@Override
-	public ResourceLocation getID() {
-		return ID;
 	}
 
 	@Override
@@ -31,5 +23,9 @@ public record BooleanValueCondition(String path, ArrayList<String> line, boolean
 		return line instanceof Boolean bool && bool == expected;
 	}
 
+	@Override
+	public Codec<BooleanValueCondition> codec() {
+		return L2LibraryRegistry.CONDITION_BOOL.get();
+	}
 
 }

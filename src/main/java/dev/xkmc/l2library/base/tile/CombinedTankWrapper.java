@@ -1,9 +1,9 @@
 package dev.xkmc.l2library.base.tile;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.wrapper.EmptyHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.wrapper.EmptyHandler;
 
 import java.util.ArrayList;
 import java.util.List;

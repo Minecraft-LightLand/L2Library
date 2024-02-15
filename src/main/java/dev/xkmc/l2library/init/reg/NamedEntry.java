@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.base;
+package dev.xkmc.l2library.init.reg;
 
 import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.network.chat.Component;

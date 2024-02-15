@@ -1,11 +1,12 @@
 package dev.xkmc.l2library.serial.conditions;
 
+import com.mojang.serialization.Codec;
 import dev.xkmc.l2library.init.L2Library;
+import dev.xkmc.l2library.init.reg.L2LibraryRegistry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.fml.config.ConfigTracker;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.fml.config.ConfigTracker;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.conditions.ICondition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +15,8 @@ public record ListStringValueCondition(String path, ArrayList<String> line, Stri
 
 	public static final ResourceLocation ID = new ResourceLocation(L2Library.MODID, "string_list_config");
 
-	public static ListStringValueCondition of(String file, ForgeConfigSpec.ConfigValue<List<String>> config, String key) {
+	public static ListStringValueCondition of(String file, ModConfigSpec.ConfigValue<List<String>> config, String key) {
 		return new ListStringValueCondition(file, new ArrayList<>(config.getPath()), key);
-	}
-
-	@Override
-	public ResourceLocation getID() {
-		return ID;
 	}
 
 	@Override
@@ -32,5 +28,9 @@ public record ListStringValueCondition(String path, ArrayList<String> line, Stri
 		return line instanceof List<?> val && val.contains(key);
 	}
 
+	@Override
+	public Codec<ListStringValueCondition> codec() {
+		return L2LibraryRegistry.CONDITION_LIST_STR.get();
+	}
 
 }

@@ -4,35 +4,15 @@ import dev.xkmc.l2library.init.events.ClientEffectRenderEvents;
 import dev.xkmc.l2serial.network.SerialPacketBase;
 import dev.xkmc.l2serial.serialization.SerialClass;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.UUID;
-
-@SerialClass
-public class EffectToClient extends SerialPacketBase {
-
-	@SerialClass.SerialField
-	public int entity;
-	@SerialClass.SerialField
-	public MobEffect effect;
-	@SerialClass.SerialField
-	public boolean exist;
-	@SerialClass.SerialField
-	public int level;
-
-	public EffectToClient(int entity, MobEffect effect, boolean exist, int level) {
-		this.entity = entity;
-		this.effect = effect;
-		this.exist = exist;
-		this.level = level;
-	}
-
-	@Deprecated
-	public EffectToClient() {
-	}
+public record EffectToClient(int entity, MobEffect effect, boolean exist, int level)
+		implements SerialPacketBase<EffectToClient> {
 
 	@Override
-	public void handle(NetworkEvent.Context context) {
+	public void handle(@Nullable Player player) {
 		ClientEffectRenderEvents.sync(this);
 	}
+
 }

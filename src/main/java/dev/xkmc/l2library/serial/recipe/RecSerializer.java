@@ -1,7 +1,7 @@
 package dev.xkmc.l2library.serial.recipe;
 
-import com.google.gson.JsonObject;
-import dev.xkmc.l2serial.serialization.codec.JsonCodec;
+import com.mojang.serialization.Codec;
+import dev.xkmc.l2serial.serialization.codec.CodecAdaptor;
 import dev.xkmc.l2serial.serialization.codec.PacketCodec;
 import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.network.FriendlyByteBuf;
@@ -10,26 +10,26 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
+import java.util.Objects;
+
 public class RecSerializer<R extends Recipe<I>, I extends Container> implements RecipeSerializer<R> {
 
 	public final Class<R> cls;
+	private final CodecAdaptor<R> codec;
 
 	public RecSerializer(Class<R> cls) {
 		this.cls = cls;
-	}
-
-	@SuppressWarnings("ConstantConditions")
-	@Override
-	public R fromJson(ResourceLocation id, JsonObject json) {
-		return JsonCodec.from(json, cls,
-				Wrappers.get(() -> cls.getConstructor(ResourceLocation.class).newInstance(id)));
-
+		this.codec = new CodecAdaptor<>(cls);
 	}
 
 	@Override
-	public R fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-		return PacketCodec.from(buf, cls,
-				Wrappers.get(() -> cls.getConstructor(ResourceLocation.class).newInstance(id)));
+	public Codec<R> codec() {
+		return codec;
+	}
+
+	@Override
+	public R fromNetwork(FriendlyByteBuf buf) {
+		return Objects.requireNonNull(PacketCodec.from(buf, cls, null));
 	}
 
 	@Override

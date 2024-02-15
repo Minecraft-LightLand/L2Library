@@ -1,7 +1,7 @@
 package dev.xkmc.l2library.serial.advancements;
 
 import com.tterrag.registrate.providers.ProviderType;
-import dev.xkmc.l2library.base.L2Registrate;
+import dev.xkmc.l2library.init.reg.L2Registrate;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.resources.ResourceLocation;

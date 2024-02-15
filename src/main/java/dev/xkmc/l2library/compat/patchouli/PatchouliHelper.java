@@ -2,7 +2,7 @@ package dev.xkmc.l2library.compat.patchouli;
 
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.DataIngredient;
-import dev.xkmc.l2library.base.L2Registrate;
+import dev.xkmc.l2library.init.reg.L2Registrate;
 import dev.xkmc.l2library.serial.recipe.ConditionalRecipeWrapper;
 import net.minecraft.Util;
 import net.minecraft.data.recipes.RecipeBuilder;

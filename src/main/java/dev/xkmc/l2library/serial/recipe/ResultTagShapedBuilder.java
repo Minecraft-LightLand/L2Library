@@ -2,18 +2,23 @@ package dev.xkmc.l2library.serial.recipe;
 
 import com.google.gson.JsonObject;
 import dev.xkmc.l2serial.serialization.custom_handler.StackHelper;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.ShapedRecipePattern;
 
-import java.util.function.Consumer;
+import java.util.Objects;
 
 public class ResultTagShapedBuilder extends ShapedRecipeBuilder implements IExtendedRecipe {
 
@@ -24,15 +29,22 @@ public class ResultTagShapedBuilder extends ShapedRecipeBuilder implements IExte
 		this.stack = stack;
 	}
 
-	public void save(Consumer<FinishedRecipe> pvd, ResourceLocation id) {
-		this.ensureValid(id);
-		this.advancement.parent(new ResourceLocation("recipes/root"))
+	@Override
+	public void save(RecipeOutput pvd, ResourceLocation id) {
+		ShapedRecipePattern pattern = this.ensureValid(id);
+		Advancement.Builder adv = pvd.advancement()
 				.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
-				.rewards(AdvancementRewards.Builder.recipe(id)).requirements(RequirementsStrategy.OR);
-		pvd.accept(new ExtendedRecipeResult(new ShapedRecipeBuilder.Result(id, result, count,
-				this.group == null ? "" : this.group, CraftingBookCategory.MISC, rows, key, advancement,
-				new ResourceLocation(id.getNamespace(), "recipes/" + id.getPath()), false),
-				this));
+				.rewards(AdvancementRewards.Builder.recipe(id))
+				.requirements(AdvancementRequirements.Strategy.OR);
+		this.criteria.forEach(adv::addCriterion);
+		ShapedRecipe rec = new ShapedRecipe(
+				Objects.requireNonNullElse(this.group, ""),
+				RecipeBuilder.determineBookCategory(this.category),
+				pattern,
+				new ItemStack(this.result, this.count),
+				this.showNotification
+		);
+		pvd.accept(id, rec, adv.build(id.withPrefix("recipes/" + this.category.getFolderName() + "/")));
 	}
 
 	@Override

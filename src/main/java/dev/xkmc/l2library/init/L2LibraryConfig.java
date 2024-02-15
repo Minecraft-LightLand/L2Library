@@ -1,24 +1,24 @@
 package dev.xkmc.l2library.init;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.IConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.config.IConfigSpec;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class L2LibraryConfig {
 
 	public static class Client {
 
-		public final ForgeConfigSpec.DoubleValue infoAlpha;
-		public final ForgeConfigSpec.IntValue infoAnchor;
-		public final ForgeConfigSpec.DoubleValue infoMaxWidth;
+		public final ModConfigSpec.DoubleValue infoAlpha;
+		public final ModConfigSpec.IntValue infoAnchor;
+		public final ModConfigSpec.DoubleValue infoMaxWidth;
 
-		public final ForgeConfigSpec.BooleanValue selectionDisplayRequireShift;
-		public final ForgeConfigSpec.BooleanValue selectionScrollRequireShift;
+		public final ModConfigSpec.BooleanValue selectionDisplayRequireShift;
+		public final ModConfigSpec.BooleanValue selectionScrollRequireShift;
 
 
-		Client(ForgeConfigSpec.Builder builder) {
+		Client(ModConfigSpec.Builder builder) {
 			infoAlpha = builder.comment("Info background transparency. 1 means opaque.")
 					.defineInRange("infoAlpha", 0.5, 0, 1);
 			infoAnchor = builder.comment("Info alignment. 0 means top. 1 means middle. 2 means bottom.")
@@ -36,31 +36,31 @@ public class L2LibraryConfig {
 
 	}
 
-	public static class Common {
+	public static class Server {
 
-		public final ForgeConfigSpec.BooleanValue restoreFullHealthOnRespawn;
+		public final ModConfigSpec.BooleanValue restoreFullHealthOnRespawn;
 
-		Common(ForgeConfigSpec.Builder builder) {
+		Server(ModConfigSpec.Builder builder) {
 			restoreFullHealthOnRespawn = builder.comment("Restore full health on respawn")
 					.define("restoreFullHealthOnRespawn", true);
 		}
 
 	}
 
-	public static final ForgeConfigSpec CLIENT_SPEC;
+	public static final ModConfigSpec CLIENT_SPEC;
 	public static final Client CLIENT;
 
-	public static final ForgeConfigSpec COMMON_SPEC;
-	public static final Common COMMON;
+	public static final ModConfigSpec SERVER_SPEC;
+	public static final Server SERVER;
 
 	static {
-		final Pair<Client, ForgeConfigSpec> client = new ForgeConfigSpec.Builder().configure(Client::new);
+		final Pair<Client, ModConfigSpec> client = new ModConfigSpec.Builder().configure(Client::new);
 		CLIENT_SPEC = client.getRight();
 		CLIENT = client.getLeft();
 
-		final Pair<Common, ForgeConfigSpec> common = new ForgeConfigSpec.Builder().configure(Common::new);
-		COMMON_SPEC = common.getRight();
-		COMMON = common.getLeft();
+		final Pair<Server, ModConfigSpec> server = new ModConfigSpec.Builder().configure(Server::new);
+		SERVER_SPEC = server.getRight();
+		SERVER = server.getLeft();
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class L2LibraryConfig {
 	 */
 	public static void init() {
 		register(ModConfig.Type.CLIENT, CLIENT_SPEC);
-		register(ModConfig.Type.COMMON, COMMON_SPEC);
+		register(ModConfig.Type.SERVER, SERVER_SPEC);
 	}
 
 	private static void register(ModConfig.Type type, IConfigSpec<?> spec) {

@@ -12,15 +12,14 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @SerialClass
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public abstract class BaseEntity extends Entity implements IEntityAdditionalSpawnData {
+public abstract class BaseEntity extends Entity implements IEntityWithComplexSpawn {
 
 	public BaseEntity(EntityType<?> type, Level world) {
 		super(type, world);
@@ -36,11 +35,6 @@ public abstract class BaseEntity extends Entity implements IEntityAdditionalSpaw
 		if (!tag.contains("auto-serial"))
 			return;
 		Wrappers.run(() -> TagCodec.fromTag(tag.getCompound("auto-serial"), this.getClass(), this, f -> true));
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 	@Override

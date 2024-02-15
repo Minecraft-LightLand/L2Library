@@ -1,32 +1,20 @@
 package dev.xkmc.l2library.serial.recipe;
 
-import com.tterrag.registrate.util.entry.RegistryEntry;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.RegistryObject;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.function.Supplier;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
-public abstract class BaseRecipe<
-		Rec extends SRec,
-		SRec extends BaseRecipe<?, SRec, Inv>,
-		Inv extends Container>
-		implements Recipe<Inv> {
+public abstract class BaseRecipe<Rec extends SRec, SRec extends BaseRecipe<?, SRec, Inv>, Inv extends Container> implements Recipe<Inv> {
 
 	private final RecType<Rec, SRec, Inv> factory;
-	public ResourceLocation id;
 
-	public BaseRecipe(ResourceLocation id, RecType<Rec, SRec, Inv> fac) {
-		this.id = id;
+	public BaseRecipe(RecType<Rec, SRec, Inv> fac) {
 		factory = fac;
 	}
 
@@ -42,11 +30,6 @@ public abstract class BaseRecipe<
 	public abstract ItemStack getResultItem(RegistryAccess access);
 
 	@Override
-	public final ResourceLocation getId() {
-		return id;
-	}
-
-	@Override
 	public final RecipeSerializer<?> getSerializer() {
 		return factory;
 	}
@@ -60,12 +43,11 @@ public abstract class BaseRecipe<
 
 	}
 
-	public static class RecType<Rec extends SRec, SRec extends BaseRecipe<?, SRec, Inv>, Inv extends Container>
-			extends RecSerializer<Rec, Inv> {
+	public static class RecType<Rec extends SRec, SRec extends BaseRecipe<?, SRec, Inv>, Inv extends Container> extends RecSerializer<Rec, Inv> {
 
-		public final RegistryEntry<RecipeType<SRec>> type;
+		public final Supplier<RecipeType<SRec>> type;
 
-		public RecType(Class<Rec> rec, RegistryEntry<RecipeType<SRec>> type) {
+		public RecType(Class<Rec> rec, Supplier<RecipeType<SRec>> type) {
 			super(rec);
 			this.type = type;
 		}

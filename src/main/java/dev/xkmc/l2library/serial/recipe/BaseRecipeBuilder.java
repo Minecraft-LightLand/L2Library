@@ -1,17 +1,15 @@
 package dev.xkmc.l2library.serial.recipe;
 
 import com.google.gson.JsonObject;
-import dev.xkmc.l2serial.serialization.codec.JsonCodec;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.CriterionTriggerInstance;
-import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -38,57 +36,20 @@ public class BaseRecipeBuilder<T extends BaseRecipeBuilder<T, Rec, SRec, Inv>, R
 	}
 
 	@SuppressWarnings("ConstantConditions")
-	public void save(Consumer<FinishedRecipe> pvd, ResourceLocation id) {
+	public void save(RecipeOutput pvd, ResourceLocation id) {
 		this.ensureValid(id);
 		this.advancement.parent(new ResourceLocation("recipes/root"))
 				.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
 				.rewards(AdvancementRewards.Builder.recipe(id)).requirements(RequirementsStrategy.OR);
-		pvd.accept(new Result<>(type, recipe, id, this.advancement,
-				new ResourceLocation(id.getNamespace(), "recipes/" + ForgeRegistries.RECIPE_SERIALIZERS.getKey(type).getPath() + "/" + id.getPath())));
+		ResourceLocation id = new ResourceLocation(id.getNamespace(), "recipes/" +
+				BuiltInRegistries.RECIPE_SERIALIZER.getKey(type).getPath() + "/" + id.getPath());
+		pvd.accept(id, recipe, advancement);
 	}
 
 	protected void ensureValid(ResourceLocation id) {
 		if (this.advancement.getCriteria().isEmpty()) {
 			throw new IllegalStateException("No way of obtaining recipe " + id);
 		}
-	}
-
-	public record Result<Rec extends SRec, SRec extends BaseRecipe<?, SRec, Inv>, Inv extends Container>(
-			BaseRecipe.RecType<Rec, SRec, Inv> type, Rec recipe,
-			ResourceLocation id, Advancement.Builder advancement,
-			ResourceLocation advancementId) implements FinishedRecipe {
-
-		@Override
-		public void serializeRecipeData(@Nullable JsonObject json) {
-
-		}
-
-		@SuppressWarnings("ConstantConditions")
-		@Override
-		public JsonObject serializeRecipe() {
-			JsonObject jsonobject = JsonCodec.toJson(recipe).getAsJsonObject();
-			jsonobject.addProperty("type", ForgeRegistries.RECIPE_SERIALIZERS.getKey(this.getType()).toString());
-			return jsonobject;
-		}
-
-		@Override
-		public RecipeSerializer<?> getType() {
-			return type;
-		}
-
-		public ResourceLocation getId() {
-			return this.id;
-		}
-
-		public JsonObject serializeAdvancement() {
-			return this.advancement.serializeToJson();
-		}
-
-		@Nullable
-		public ResourceLocation getAdvancementId() {
-			return this.advancementId;
-		}
-
 	}
 
 }

@@ -1,70 +1,43 @@
 package dev.xkmc.l2library.capability.player;
 
-import dev.xkmc.l2library.util.Proxy;
 import dev.xkmc.l2serial.network.SerialPacketBase;
 import dev.xkmc.l2serial.serialization.SerialClass;
-import dev.xkmc.l2serial.serialization.codec.TagCodec;
-import net.minecraft.nbt.CompoundTag;
+import dev.xkmc.l2serial.serialization.codec.PacketCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 @SerialClass
-public class PlayerCapToClient extends SerialPacketBase {
+public record PlayerCapToClient(Action action, ResourceLocation holderID, byte[] data, UUID playerID)
+		implements SerialPacketBase<PlayerCapToClient> {
 
-	@SerialClass.SerialField
-	public Action action;
-
-	@SerialClass.SerialField
-	public ResourceLocation holderID;
-
-	@SerialClass.SerialField
-	public CompoundTag tag;
-
-	@SerialClass.SerialField
-	public UUID playerID;
-
-	@Deprecated
-	public PlayerCapToClient() {
-
+	public static <T extends PlayerCapabilityTemplate<T>> PlayerCapToClient
+	of(Action action, PlayerCapabilityHolder<T> holder, T handler) {
+		return new PlayerCapToClient(action, holder.id,
+				PacketCodec.toBytes(handler, holder.cls(), action.pred),
+				handler.player.getUUID());
 	}
 
-	public <T extends PlayerCapabilityTemplate<T>> PlayerCapToClient(Action action, PlayerCapabilityHolder<T> holder, T handler) {
-		this.action = action;
-		this.holderID = holder.id;
-		this.tag = action.server.apply(handler);
-		this.playerID = handler.player.getUUID();
-	}
-
-	public void handle(NetworkEvent.Context context) {
-		if (action != Action.ALL && action != Action.CLONE && !Proxy.getClientPlayer().isAlive())
-			return;
-		PlayerCapabilityHolder<?> holder = PlayerCapabilityHolder.INTERNAL_MAP.get(holderID);
-		action.client.accept(holder, this);
+	@Override
+	public void handle(@Nullable Player player) {
+		ClientSyncHandler.parse(data, PlayerCapabilityHolder.INTERNAL_MAP.get(holderID), action.pred);
 	}
 
 	public enum Action {
-		ALL((m) -> {
-			return TagCodec.toTag(new CompoundTag(), m);
-		}, (holder, packet) -> holder.cacheSet(packet.tag, false)),
-		CLONE((m) -> {
-			return TagCodec.toTag(new CompoundTag(), m);
-		}, (holder, packet) -> holder.cacheSet(packet.tag, true)),
-		TRACK((m) -> {
-			return TagCodec.toTag(new CompoundTag(), m.getClass(), m, SerialClass.SerialField::toTracking);
-		}, (holder, packet) -> holder.updateTracked(packet.tag, Proxy.getClientWorld().getPlayerByUUID(packet.playerID)));
+		ALL(e -> true),
+		CLIENT(SerialClass.SerialField::toClient),
+		TRACK(SerialClass.SerialField::toTracking),
+		;
+		public final Predicate<SerialClass.SerialField> pred;
 
-		public final Function<Object, CompoundTag> server;
-		public final BiConsumer<PlayerCapabilityHolder<?>, PlayerCapToClient> client;
-
-
-		Action(Function<Object, CompoundTag> server, BiConsumer<PlayerCapabilityHolder<?>, PlayerCapToClient> client) {
-			this.server = server;
-			this.client = client;
+		Action(Predicate<SerialClass.SerialField> pred) {
+			this.pred = pred;
 		}
+
+
 	}
 
 }

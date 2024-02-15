@@ -1,8 +1,6 @@
 package dev.xkmc.l2library.serial.ingredients;
 
-import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2serial.serialization.SerialClass;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.Item;
@@ -13,9 +11,6 @@ import java.util.List;
 
 @SerialClass
 public class MobEffectIngredient extends BaseIngredient<MobEffectIngredient> {
-
-	public static final BaseIngredient.Serializer<MobEffectIngredient> INSTANCE =
-			new BaseIngredient.Serializer<>(MobEffectIngredient.class, new ResourceLocation(L2Library.MODID, "mob_effect"));
 
 	@SerialClass.SerialField
 	public Item item;
@@ -29,7 +24,7 @@ public class MobEffectIngredient extends BaseIngredient<MobEffectIngredient> {
 
 	}
 
-	protected MobEffectIngredient validate() {
+	public MobEffectIngredient validate() {
 		return new MobEffectIngredient(item, effect, min_level, min_time);
 	}
 
@@ -47,11 +42,6 @@ public class MobEffectIngredient extends BaseIngredient<MobEffectIngredient> {
 				e.getEffect() == effect &&
 						e.getAmplifier() >= min_level &&
 						e.getDuration() >= min_time);
-	}
-
-	@Override
-	public Serializer<MobEffectIngredient> getSerializer() {
-		return INSTANCE;
 	}
 
 }

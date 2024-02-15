@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.ShapedRecipePattern;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
@@ -19,8 +20,8 @@ import java.util.Objects;
 @MethodsReturnNonnullByDefault
 public abstract class AbstractShapedRecipe<T extends AbstractShapedRecipe<T>> extends ShapedRecipe {
 
-	public AbstractShapedRecipe(ResourceLocation rl, String group, int w, int h, NonNullList<Ingredient> ingredients, ItemStack result) {
-		super(rl, group, CraftingBookCategory.MISC, w, h, ingredients, result);
+	public AbstractShapedRecipe(String group, ShapedRecipePattern pattern, ItemStack result) {
+		super( group, CraftingBookCategory.MISC, pattern, result);
 	}
 
 	@Override
@@ -46,12 +47,9 @@ public abstract class AbstractShapedRecipe<T extends AbstractShapedRecipe<T>> ex
 			return factory.create(r.getId(), r.getGroup(), r.getRecipeWidth(), r.getRecipeHeight(), r.getIngredients(), r.result);
 		}
 
-		public T fromNetwork(ResourceLocation id, FriendlyByteBuf obj) {
-			ShapedRecipe r = super.fromNetwork(id, obj);
-			if (r == null) {
-				return null;
-			}
-			return factory.create(r.getId(), r.getGroup(), r.getRecipeWidth(), r.getRecipeHeight(), r.getIngredients(), r.result);
+		public T fromNetwork(FriendlyByteBuf obj) {
+			ShapedRecipe r = super.fromNetwork(obj);
+			return factory.create( r.getGroup(), r.getRecipeWidth(), r.getRecipeHeight(), r.getIngredients(), r.result);
 		}
 
 		public void toJson(T recipe, JsonObject obj) {

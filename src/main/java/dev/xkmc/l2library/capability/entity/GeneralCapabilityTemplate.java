@@ -8,8 +8,4 @@ public class GeneralCapabilityTemplate<E, T extends GeneralCapabilityTemplate<E,
 		return Wrappers.cast(this);
 	}
 
-	public T check(){
-		return getThis();
-	}
-
 }

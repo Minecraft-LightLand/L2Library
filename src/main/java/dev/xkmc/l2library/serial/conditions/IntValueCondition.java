@@ -1,11 +1,12 @@
 package dev.xkmc.l2library.serial.conditions;
 
+import com.mojang.serialization.Codec;
 import dev.xkmc.l2library.init.L2Library;
+import dev.xkmc.l2library.init.reg.L2LibraryRegistry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.fml.config.ConfigTracker;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.fml.config.ConfigTracker;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.conditions.ICondition;
 
 import java.util.ArrayList;
 
@@ -13,13 +14,8 @@ public record IntValueCondition(String path, ArrayList<String> line, int low, in
 
 	public static final ResourceLocation ID = new ResourceLocation(L2Library.MODID, "int_config");
 
-	public static IntValueCondition of(String file, ForgeConfigSpec.ConfigValue<Integer> config, int low, int high) {
+	public static IntValueCondition of(String file, ModConfigSpec.ConfigValue<Integer> config, int low, int high) {
 		return new IntValueCondition(file, new ArrayList<>(config.getPath()), low, high);
-	}
-
-	@Override
-	public ResourceLocation getID() {
-		return ID;
 	}
 
 	@Override
@@ -29,6 +25,12 @@ public record IntValueCondition(String path, ArrayList<String> line, int low, in
 		var line = file.getConfigData().get(line());
 		if (line == null) return false;
 		return line instanceof Integer val && low <= val && val <= high;
+	}
+
+
+	@Override
+	public Codec<IntValueCondition> codec() {
+		return L2LibraryRegistry.CONDITION_INT.get();
 	}
 
 

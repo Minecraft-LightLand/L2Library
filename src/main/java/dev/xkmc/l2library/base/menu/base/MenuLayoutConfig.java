@@ -7,8 +7,8 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.Slot;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -209,7 +209,7 @@ public class MenuLayoutConfig extends BaseConfig {
 		 * bind texture, draw background color, and GUI background
 		 */
 		public void start(GuiGraphics g) {
-			scr.renderBackground(g);
+			scr.renderTransparentBackground(g);
 			g.blit(getTexture(), x, y, 0, 0, w, h);
 		}
 
