@@ -12,15 +12,15 @@ public class PlayerCapabilityNetworkHandler<T extends PlayerCapabilityTemplate<T
 	}
 
 	public void toClient(ServerPlayer e) {
-		L2Library.PACKET_HANDLER.toClientPlayer(PlayerCapToClient.of(PlayerCapToClient.Action.CLIENT, holder, holder.get(e)), e);
+		L2Library.PACKET_HANDLER.toClientPlayer(PlayerCapToClient.of(e, PlayerCapToClient.Action.CLIENT, holder, holder.get(e)), e);
 	}
 
 	public void toTracking(ServerPlayer e) {
-		L2Library.PACKET_HANDLER.toTrackingOnly(PlayerCapToClient.of(PlayerCapToClient.Action.TRACK, holder, holder.get(e)), e);
+		L2Library.PACKET_HANDLER.toTrackingOnly(PlayerCapToClient.of(e, PlayerCapToClient.Action.TRACK, holder, holder.get(e)), e);
 	}
 
 	public void startTracking(ServerPlayer tracker, ServerPlayer target) {
-		L2Library.PACKET_HANDLER.toClientPlayer(PlayerCapToClient.of(PlayerCapToClient.Action.TRACK, holder, holder.get(target)), tracker);
+		L2Library.PACKET_HANDLER.toClientPlayer(PlayerCapToClient.of(target, PlayerCapToClient.Action.TRACK, holder, holder.get(target)), tracker);
 	}
 
 }

@@ -1,23 +1,16 @@
 package dev.xkmc.l2library.capability.conditionals;
 
-import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
-import dev.xkmc.l2library.capability.player.PlayerCapabilityNetworkHandler;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityTemplate;
-import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2library.init.L2LibraryConfig;
 import dev.xkmc.l2serial.serialization.SerialClass;
 import dev.xkmc.l2serial.util.Wrappers;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
 
 @SerialClass
 public class ConditionalData extends PlayerCapabilityTemplate<ConditionalData> {
-
-	public static final PlayerCapabilityHolder<ConditionalData> HOLDER = new PlayerCapabilityHolder<>(
-			new ResourceLocation(L2Library.MODID, "conditionals"),
-			ConditionalData.class, ConditionalData::new, PlayerCapabilityNetworkHandler::new);
 
 	@SerialClass.SerialField
 	public HashMap<TokenKey<?>, ConditionalToken> data = new HashMap<>();
@@ -39,7 +32,7 @@ public class ConditionalData extends PlayerCapabilityTemplate<ConditionalData> {
 	}
 
 	@Override
-	public void tick() {
+	public void tick(Player player) {
 		tickSinceDeath++;
 		if (L2LibraryConfig.SERVER.restoreFullHealthOnRespawn.get() &&
 				tickSinceDeath < 60 && player.getHealth() < player.getMaxHealth()) {

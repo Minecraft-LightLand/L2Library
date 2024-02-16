@@ -15,11 +15,11 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 public class BaseCapabilityEvents {
 
 	@SubscribeEvent
-	public static void onPlayerTick(LivingEvent.LivingTickEvent event) {
+	public static void onLivingTick(LivingEvent.LivingTickEvent event) {
 		if (event.getEntity().isAlive()) {
 			for (GeneralCapabilityHolder<?, ?> holder : GeneralCapabilityHolder.INTERNAL_MAP.values()) {
 				if (holder.isFor(event.getEntity()))
-					holder.get(Wrappers.cast(event.getEntity())).tick();
+					holder.get(Wrappers.cast(event.getEntity())).tick(Wrappers.cast(event.getEntity()));
 			}
 		}
 	}
@@ -39,6 +39,7 @@ public class BaseCapabilityEvents {
 		ServerPlayer e = (ServerPlayer) event.getEntity();
 		if (e != null) {
 			for (PlayerCapabilityHolder<?> holder : PlayerCapabilityHolder.INTERNAL_MAP.values()) {
+				holder.get(e).init(e);
 				holder.network.toClient(e);
 				holder.network.toTracking(e);
 			}

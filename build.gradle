@@ -107,8 +107,6 @@ jar {
 
 if (lljij.toBoolean()) {
 
-    tasks.jarJar.finalizedBy('reobfJarJar')
-
     tasks.jarJar.configure {
         archiveClassifier.set('')
     }
@@ -116,6 +114,7 @@ if (lljij.toBoolean()) {
     jar {
         archiveClassifier.set('slim')
     }
+
 }
 
 dependencies {

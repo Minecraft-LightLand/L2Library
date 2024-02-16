@@ -4,6 +4,7 @@ import dev.xkmc.l2serial.network.SerialPacketBase;
 import dev.xkmc.l2serial.serialization.SerialClass;
 import dev.xkmc.l2serial.serialization.codec.PacketCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,10 +16,10 @@ public record PlayerCapToClient(Action action, ResourceLocation holderID, byte[]
 		implements SerialPacketBase<PlayerCapToClient> {
 
 	public static <T extends PlayerCapabilityTemplate<T>> PlayerCapToClient
-	of(Action action, PlayerCapabilityHolder<T> holder, T handler) {
+	of(ServerPlayer player, Action action, PlayerCapabilityHolder<T> holder, T handler) {
 		return new PlayerCapToClient(action, holder.id,
 				PacketCodec.toBytes(handler, holder.cls(), action.pred),
-				handler.player.getUUID());
+				player.getUUID());
 	}
 
 	@Override

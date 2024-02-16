@@ -8,7 +8,7 @@ public class GeneralCapabilityTemplate<E, T extends GeneralCapabilityTemplate<E,
 		return Wrappers.cast(this);
 	}
 
-	public void tick() {
+	public void tick(E e) {
 	}
 
 }

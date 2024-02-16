@@ -8,11 +8,7 @@ import net.minecraft.world.level.Level;
 @SerialClass
 public class PlayerCapabilityTemplate<T extends PlayerCapabilityTemplate<T>> extends GeneralCapabilityTemplate<Player, T> {
 
-	public Player player;
-	public Level world;
-
-	public void init() {
-
+	public void init(Player player) {
 	}
 
 	public void onClone(boolean isWasDeath) {
