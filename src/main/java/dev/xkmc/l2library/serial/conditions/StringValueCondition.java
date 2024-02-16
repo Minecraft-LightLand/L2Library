@@ -2,7 +2,7 @@ package dev.xkmc.l2library.serial.conditions;
 
 import com.mojang.serialization.Codec;
 import dev.xkmc.l2library.init.L2Library;
-import dev.xkmc.l2library.init.reg.L2LibraryRegistry;
+import dev.xkmc.l2library.init.reg.L2LibReg;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.config.ConfigTracker;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -29,7 +29,7 @@ public record StringValueCondition(String path, ArrayList<String> line, String k
 
 	@Override
 	public Codec<StringValueCondition> codec() {
-		return L2LibraryRegistry.CONDITION_STR.get();
+		return L2LibReg.CONDITION_STR.get();
 	}
 
 }

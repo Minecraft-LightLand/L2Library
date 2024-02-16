@@ -1,27 +1,21 @@
-modLoader="javafml"
-loaderVersion="[46,)"
-license="LGPL v2.1"
-[[mods]]
-modId="l2library"
-version="${file.jarVersion}" #mandatory
-displayName="L2 Library" #mandatory
-logoFile="l2library.png" #optional
-credits="Thanks to GalatiCraft for player inventory tab idea" #optional
-authors="lcy0x1 and LightLand team" #optional
-description='''
-A library mod that provides a lot of useful code for lcy0x1's other mods.
-Also adds inventory tabs. Accessible in creative only if you install Curios.
-'''
-accessTransformer
-[[dependencies.l2library]]
-    modId="forge"
-    mandatory=true
-    versionRange="[46.0.0,)"
-    ordering="NONE"
-    side="BOTH"
-[[dependencies.l2library]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.20,1.21)"
-    ordering="NONE"
-    side="BOTH"
+modLoader = "javafml" #mandatory
+loaderVersion = "${loader_version_range}" #mandatory
+license = "${mod_license}"
+[[mods]] #mandatory
+modId = "${mod_id}" #mandatory
+version = "${mod_version}" #mandatory
+displayName = "${mod_name}" #mandatory
+authors = "${mod_authors}" #optional
+description = '''${mod_description}'''
+[[dependencies.${ mod_id }]] #optional
+modId = "neoforge" #mandatory
+type = "required" #mandatory
+versionRange = "${neo_version_range}" #mandatory
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.${ mod_id }]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft_version_range}"
+ordering = "NONE"
+side = "BOTH"

@@ -75,12 +75,12 @@ public class RayTraceUtil {
 	}
 
 	public static void sync(TargetSetPacket packet) {
-		if (packet.target == null) TARGET_MAP.remove(packet.player);
-		else if (TARGET_MAP.containsKey(packet.player)) {
-			ServerTarget target = TARGET_MAP.get(packet.player);
-			target.target = packet.target;
+		if (packet.target() == null) TARGET_MAP.remove(packet.player());
+		else if (TARGET_MAP.containsKey(packet.player())) {
+			ServerTarget target = TARGET_MAP.get(packet.player());
+			target.target = packet.target();
 			target.time = 0;
-		} else TARGET_MAP.put(packet.player, new ServerTarget(packet.target));
+		} else TARGET_MAP.put(packet.player(), new ServerTarget(packet.target()));
 	}
 
 	public static class EnderEntityTarget extends EntityTarget {

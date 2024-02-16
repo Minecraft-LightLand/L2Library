@@ -7,8 +7,13 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 public record IngReg(DeferredRegister<IngredientType<?>> reg) {
+
+	public static IngReg of(Reg reg) {
+		return new IngReg(reg.make(NeoForgeRegistries.INGREDIENT_TYPES));
+	}
 
 	public <R extends Ingredient> IngVal<R> reg(String id, Codec<R> codec) {
 		return new IngValImpl<>(reg.register(id, () -> new IngredientType<>(codec)));

@@ -1,16 +1,17 @@
-package dev.xkmc.l2library.init.explosion;
+package dev.xkmc.l2library.base.explosion;
 
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.event.EventHooks;
 
 public class ExplosionHandler {
 
 	public static void explode(BaseExplosion exp) {
 		if (exp.base.level().isClientSide()) return;
-		if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(exp.base.level(), exp)) return;
+		if (EventHooks.onExplosionStart(exp.base.level(), exp)) return;
 		exp.explode();
 		Level level = exp.base.level();
 		exp.finalizeExplosion(level.isClientSide());
@@ -25,7 +26,9 @@ public class ExplosionHandler {
 		for (Player player : level.players()) {
 			if (player instanceof ServerPlayer serverplayer) {
 				if (serverplayer.distanceToSqr(x, y, z) < 4096.0D) {
-					serverplayer.connection.send(new ClientboundExplodePacket(x, y, z, r, exp.getToBlow(), exp.getHitPlayers().get(serverplayer)));
+					serverplayer.connection.send(new ClientboundExplodePacket(x, y, z, r,
+							exp.getToBlow(), exp.getHitPlayers().get(serverplayer), exp.mc.type(),
+							exp.particle.small(), exp.particle.large(), exp.particle.sound()));
 				}
 			}
 		}

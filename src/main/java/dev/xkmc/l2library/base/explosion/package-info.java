@@ -1,7 +1,7 @@
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 
-package dev.xkmc.l2library.compat.patchouli;
+package dev.xkmc.l2library.base.explosion;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

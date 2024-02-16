@@ -19,9 +19,6 @@ public class ConditionalData extends PlayerCapabilityTemplate<ConditionalData> {
 			new ResourceLocation(L2Library.MODID, "conditionals"),
 			ConditionalData.class, ConditionalData::new, PlayerCapabilityNetworkHandler::new);
 
-	public static void register() {
-	}
-
 	@SerialClass.SerialField
 	public HashMap<TokenKey<?>, ConditionalToken> data = new HashMap<>();
 	@SerialClass.SerialField

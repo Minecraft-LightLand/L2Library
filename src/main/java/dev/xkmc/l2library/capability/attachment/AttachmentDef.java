@@ -3,8 +3,11 @@ package dev.xkmc.l2library.capability.attachment;
 import dev.xkmc.l2serial.serialization.codec.TagCodec;
 import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.attachment.AttachmentHolder;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -49,6 +52,10 @@ public class AttachmentDef<E> implements IAttachmentSerializer<CompoundTag, E> {
 
 	public Supplier<E> sup() {
 		return sup;
+	}
+
+	public boolean isFor(AttachmentHolder holder) {
+		return true;
 	}
 
 }

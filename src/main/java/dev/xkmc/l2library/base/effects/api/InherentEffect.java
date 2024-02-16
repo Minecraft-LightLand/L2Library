@@ -2,9 +2,10 @@ package dev.xkmc.l2library.base.effects.api;
 
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.neoforged.neoforge.common.EffectCure;
 
-import java.util.List;
+import java.util.Set;
 
 public class InherentEffect extends MobEffect {
 
@@ -13,7 +14,7 @@ public class InherentEffect extends MobEffect {
 	}
 
 	@Override
-	public List<ItemStack> getCurativeItems() {
-		return List.of();
+	public void fillEffectCures(Set<EffectCure> cures, MobEffectInstance effectInstance) {
 	}
+
 }

@@ -5,8 +5,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
+import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public abstract class SelectionSideBar<T, S extends SideBar.Signature<S>> extend
 	}
 
 	@Override
-	public void render(ForgeGui gui, GuiGraphics g, float partialTick, int width, int height) {
+	public void render(ExtendedGui gui, GuiGraphics g, float partialTick, int width, int height) {
 		if (!ease(gui.getGuiTicks() + partialTick))
 			return;
 		initRender();
@@ -48,7 +48,7 @@ public abstract class SelectionSideBar<T, S extends SideBar.Signature<S>> extend
 
 	protected abstract void renderEntry(Context ctx, T t, int index, int select);
 
-	public record Context(ForgeGui gui, GuiGraphics g, float pTick, Font font, int x0, int y0) {
+	public record Context(ExtendedGui gui, GuiGraphics g, float pTick, Font font, int x0, int y0) {
 
 		public void renderItem(ItemStack stack, int x, int y) {
 			if (!stack.isEmpty()) {

@@ -1,24 +1,30 @@
 package dev.xkmc.l2library.init.reg.simple;
 
-import com.mojang.serialization.Codec;
 import net.minecraft.core.Registry;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.neoforged.neoforge.common.crafting.IngredientType;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
-public record Reg(String modid) {
+import java.util.ArrayList;
+import java.util.List;
 
-	public <T> SR<T> simple(Registry<T> reg) {
-		return new SR<>(DeferredRegister.create(reg, modid()));
+public final class Reg {
+
+	private final String modid;
+
+	private final List<DeferredRegister<?>> list = new ArrayList<>();
+
+	public Reg(String modid) {
+		this.modid = modid;
 	}
 
-	public <T> CdcReg<T> codec(Registry<Codec<? extends T>> reg) {
-		return new CdcReg<>(DeferredRegister.create(reg, modid()));
+	public <T> DeferredRegister<T> make(Registry<T> reg) {
+		var ans = DeferredRegister.create(reg, modid);
+		list.add(ans);
+		return ans;
 	}
 
-	public IngReg ingredient() {
-		return new IngReg(DeferredRegister.create(NeoForgeRegistries.INGREDIENT_TYPES, modid()));
+	public void register(IEventBus bus) {
+		for (var e : list) e.register(bus);
 	}
 
 }

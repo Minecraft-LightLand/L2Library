@@ -1,6 +1,6 @@
-package dev.xkmc.l2library.capability.entity;
+package dev.xkmc.l2library.capability.attachment;
 
-import dev.xkmc.l2library.capability.attachment.AttachmentDef;
+import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.attachment.AttachmentHolder;
 
@@ -34,12 +34,12 @@ public class GeneralCapabilityHolder<E extends AttachmentHolder, T extends Gener
 		return e.getData(type());
 	}
 
-	public boolean isProper(E entity) {
-		return pred.test(entity);
+	public boolean isFor(AttachmentHolder holder) {
+		return entity_class.isInstance(holder) && isProper(Wrappers.cast(holder));
 	}
 
-	public GeneralCapabilitySerializer<E, T> generateSerializer(E entity) {
-		return new GeneralCapabilitySerializer<>(this);
+	public boolean isProper(E entity) {
+		return pred.test(entity);
 	}
 
 }

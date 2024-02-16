@@ -1,6 +1,6 @@
 package dev.xkmc.l2library.init.events;
 
-import dev.xkmc.l2library.init.explosion.BaseExplosion;
+import dev.xkmc.l2library.base.explosion.BaseExplosion;
 import dev.xkmc.l2library.init.L2Library;
 import dev.xkmc.l2library.serial.config.PacketHandlerWithConfig;
 import dev.xkmc.l2library.util.raytrace.RayTraceUtil;

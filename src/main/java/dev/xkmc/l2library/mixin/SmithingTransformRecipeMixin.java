@@ -2,6 +2,8 @@ package dev.xkmc.l2library.mixin;
 
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SmithingTransformRecipe;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.event.EventHooks;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,7 +26,7 @@ public class SmithingTransformRecipeMixin {
 
 	@Inject(at = @At("HEAD"), method = "isIncomplete", cancellable = true)
 	public void l2library$isIncomplete$fixJEI(CallbackInfoReturnable<Boolean> cir) {
-		cir.setReturnValue(Stream.of(this.base, this.addition).anyMatch(net.minecraftforge.common.ForgeHooks::hasNoElements));
+		cir.setReturnValue(Stream.of(this.base, this.addition).anyMatch(CommonHooks::hasNoElements));
 	}
 
 }

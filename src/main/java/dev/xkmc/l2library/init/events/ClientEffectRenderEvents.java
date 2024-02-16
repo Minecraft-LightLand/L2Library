@@ -13,6 +13,7 @@ import dev.xkmc.l2library.base.effects.api.DelayedEntityRender;
 import dev.xkmc.l2library.base.effects.api.FirstPlayerRenderEffect;
 import dev.xkmc.l2library.base.effects.api.IconRenderRegion;
 import dev.xkmc.l2library.init.L2Library;
+import dev.xkmc.l2library.init.reg.L2LibReg;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -93,9 +94,9 @@ public class ClientEffectRenderEvents {
 	@SubscribeEvent
 	public static void onLivingEntityRender(RenderLivingEvent.Post<?, ?> event) {
 		LivingEntity entity = event.getEntity();
-		if (!ClientEffectCap.HOLDER.isProper(entity)) return;
+		if (!L2LibReg.EFFECT.type().isProper(entity)) return;
 		if (entity.getTags().contains("ClientOnly")) return;
-		ClientEffectCap cap = ClientEffectCap.HOLDER.get(entity);
+		ClientEffectCap cap = L2LibReg.EFFECT.type().get(entity);
 		List<Pair<ClientRenderEffect, Integer>> l0 = new ArrayList<>();
 		for (Map.Entry<MobEffect, Integer> entry : cap.map.entrySet()) {
 			if (entry.getKey() instanceof ClientRenderEffect effect) {
@@ -190,14 +191,14 @@ public class ClientEffectRenderEvents {
 
 	public static void sync(EffectToClient eff) {
 		if (Minecraft.getInstance().level == null) return;
-		Entity e = Minecraft.getInstance().level.getEntity(eff.entity);
+		Entity e = Minecraft.getInstance().level.getEntity(eff.entity());
 		if (!(e instanceof LivingEntity le)) return;
-		if (!ClientEffectCap.HOLDER.isProper(le)) return;
-		ClientEffectCap cap = ClientEffectCap.HOLDER.get(le);
-		if (eff.exist) {
-			cap.map.put(eff.effect, eff.level);
+		if (!L2LibReg.EFFECT.type().isProper(le)) return;
+		ClientEffectCap cap = L2LibReg.EFFECT.type().get(le);
+		if (eff.exist()) {
+			cap.map.put(eff.effect(), eff.level());
 		} else {
-			cap.map.remove(eff.effect);
+			cap.map.remove(eff.effect());
 		}
 	}
 

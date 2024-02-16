@@ -4,8 +4,8 @@ import dev.xkmc.l2library.init.L2LibraryConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
+import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public abstract class InfoSideBar<S extends SideBar.Signature<S>> extends SideBa
 	}
 
 	@Override
-	public void render(ForgeGui gui, GuiGraphics g, float partialTick, int width, int height) {
+	public void render(ExtendedGui gui, GuiGraphics g, float partialTick, int width, int height) {
 		if (!ease(gui.getGuiTicks() + partialTick))
 			return;
 		var text = getText();

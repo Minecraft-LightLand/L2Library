@@ -1,7 +1,7 @@
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 
-package dev.xkmc.l2library.compat.jeed;
+package dev.xkmc.l2library.base.entity;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

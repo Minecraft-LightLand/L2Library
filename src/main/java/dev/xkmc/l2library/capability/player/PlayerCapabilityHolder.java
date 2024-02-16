@@ -1,6 +1,6 @@
 package dev.xkmc.l2library.capability.player;
 
-import dev.xkmc.l2library.capability.entity.GeneralCapabilityHolder;
+import dev.xkmc.l2library.capability.attachment.GeneralCapabilityHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
@@ -15,10 +15,9 @@ public class PlayerCapabilityHolder<T extends PlayerCapabilityTemplate<T>> exten
 
 	public final PlayerCapabilityNetworkHandler<T> network;
 
-	public PlayerCapabilityHolder(ResourceLocation id, Class<T> cls, Supplier<T> sup,
-								  Function<PlayerCapabilityHolder<T>, PlayerCapabilityNetworkHandler<T>> network) {
+	public PlayerCapabilityHolder(ResourceLocation id, Class<T> cls, Supplier<T> sup, NetworkFactory<T> network) {
 		super(id, cls, sup, Player.class, e -> true);
-		this.network = network.apply(this);
+		this.network = network.create(this);
 		INTERNAL_MAP.put(id, this);
 	}
 
@@ -26,8 +25,10 @@ public class PlayerCapabilityHolder<T extends PlayerCapabilityTemplate<T>> exten
 		return true;
 	}
 
-	public PlayerCapabilitySerializer<T> generateSerializer(Player player) {
-		return new PlayerCapabilitySerializer<>(player, this);
+	public interface NetworkFactory<T extends PlayerCapabilityTemplate<T>> {
+
+		PlayerCapabilityNetworkHandler<T> create(PlayerCapabilityHolder<T> holder);
+
 	}
 
 }

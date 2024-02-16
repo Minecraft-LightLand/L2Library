@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.base;
+package dev.xkmc.l2library.base.entity;
 
 import dev.xkmc.l2serial.serialization.SerialClass;
 import dev.xkmc.l2serial.serialization.codec.PacketCodec;

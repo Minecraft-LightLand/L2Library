@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.init.explosion;
+package dev.xkmc.l2library.base.explosion;
 
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -24,17 +24,13 @@ public record VanillaExplosionContext(@Nullable Entity entity, @Nullable DamageS
 	private static Explosion.BlockInteraction getType(Level level, @Nullable Entity entity, Level.ExplosionInteraction type) {
 		return switch (type) {
 			case NONE -> Explosion.BlockInteraction.KEEP;
-			case BLOCK -> getDestroyType(level, GameRules.RULE_BLOCK_EXPLOSION_DROP_DECAY);
+			case BLOCK -> level.getDestroyType(GameRules.RULE_BLOCK_EXPLOSION_DROP_DECAY);
 			case MOB -> EventHooks.getMobGriefingEvent(level, entity instanceof LivingEntity le ? le : null) ?
-					getDestroyType(level, GameRules.RULE_MOB_EXPLOSION_DROP_DECAY) :
+					level.getDestroyType(GameRules.RULE_MOB_EXPLOSION_DROP_DECAY) :
 					Explosion.BlockInteraction.KEEP;
-			case TNT -> getDestroyType(level, GameRules.RULE_TNT_EXPLOSION_DROP_DECAY);
+			case TNT -> level.getDestroyType(GameRules.RULE_TNT_EXPLOSION_DROP_DECAY);
 			case BLOW -> Explosion.BlockInteraction.TRIGGER_BLOCK;
 		};
 	}
 
-
-	private static Explosion.BlockInteraction getDestroyType(Level level, GameRules.Key<GameRules.BooleanValue> pGameRule) {
-		return level.getGameRules().getBoolean(pGameRule) ? Explosion.BlockInteraction.DESTROY_WITH_DECAY : Explosion.BlockInteraction.DESTROY;
-	}
 }

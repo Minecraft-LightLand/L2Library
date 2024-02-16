@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.init.explosion;
+package dev.xkmc.l2library.base.explosion;
 
 import net.minecraft.world.entity.Entity;
 

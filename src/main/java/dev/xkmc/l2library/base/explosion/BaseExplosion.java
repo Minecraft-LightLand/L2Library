@@ -1,7 +1,5 @@
-package dev.xkmc.l2library.init.explosion;
+package dev.xkmc.l2library.base.explosion;
 
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Explosion;
 
@@ -10,15 +8,15 @@ public class BaseExplosion extends Explosion {
 	public final BaseExplosionContext base;
 	public final ModExplosionContext mod;
 	public final VanillaExplosionContext mc;
+	public final ParticleExplosionContext particle;
 
-	public BaseExplosion(BaseExplosionContext base, VanillaExplosionContext mc, ModExplosionContext mod) {
+	public BaseExplosion(BaseExplosionContext base, VanillaExplosionContext mc, ModExplosionContext mod, ParticleExplosionContext particle) {
 		super(base.level(), mc.entity(), mc.source(), mc.calculator(), base.x(), base.y(), base.z(), base.r(), mc.fire(), mc.type(),
-				ParticleTypes.EXPLOSION,
-				ParticleTypes.EXPLOSION_EMITTER,
-				SoundEvents.GENERIC_EXPLODE);//TODO
+				particle.small(), particle.large(), particle.sound());
 		this.base = base;
 		this.mod = mod;
 		this.mc = mc;
+		this.particle = particle;
 	}
 
 	/**
