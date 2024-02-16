@@ -1,4 +1,4 @@
-package dev.xkmc.l2library.init.reg;
+package dev.xkmc.l2library.init.reg.registrate;
 
 /*TODO
 public class L2Registrate extends AbstractRegistrate<L2Registrate> {

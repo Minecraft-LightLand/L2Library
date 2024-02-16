@@ -1,7 +1,7 @@
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 
-package dev.xkmc.l2library.init.reg;
+package dev.xkmc.l2library.init.reg.registrate;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

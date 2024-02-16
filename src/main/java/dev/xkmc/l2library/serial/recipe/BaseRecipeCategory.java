@@ -1,6 +1,12 @@
 package dev.xkmc.l2library.serial.recipe;
 
-/* TODO
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.resources.ResourceLocation;
+
 public abstract class BaseRecipeCategory<T, C extends BaseRecipeCategory<T, C>> implements IRecipeCategory<T> {
 
 	@SuppressWarnings("unchecked")
@@ -40,4 +46,3 @@ public abstract class BaseRecipeCategory<T, C extends BaseRecipeCategory<T, C>> 
 	public abstract void setRecipe(IRecipeLayoutBuilder builder, T recipe, IFocusGroup focuses);
 
 }
- */

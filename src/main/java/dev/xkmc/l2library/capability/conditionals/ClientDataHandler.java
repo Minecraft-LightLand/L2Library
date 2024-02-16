@@ -1,6 +1,6 @@
 package dev.xkmc.l2library.capability.conditionals;
 
-import dev.xkmc.l2library.init.reg.L2LibReg;
+import dev.xkmc.l2library.init.L2LibReg;
 import dev.xkmc.l2library.util.Proxy;
 import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.world.entity.player.Player;

@@ -1,7 +1,7 @@
 package dev.xkmc.l2library.serial.conditions;
 
 import com.mojang.serialization.Codec;
-import dev.xkmc.l2library.init.reg.L2LibReg;
+import dev.xkmc.l2library.init.L2LibReg;
 import net.neoforged.fml.config.ConfigTracker;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.conditions.ICondition;

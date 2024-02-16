@@ -158,8 +158,8 @@ repositories {
 
 dependencies {
     // base dep
-    //implementation fg.deobf("mezz.jei:jei-${jei_minecraft_version}:${jei_version}")
-    //implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
+    implementation "mezz.jei:jei-${jei_minecraft_version}:${jei_version}"
+    implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
     implementation jarJar("dev.xkmc:l2serial:${l2serial_ver}") {
         transitive = false

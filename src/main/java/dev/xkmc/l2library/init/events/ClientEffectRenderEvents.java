@@ -13,7 +13,7 @@ import dev.xkmc.l2library.base.effects.api.DelayedEntityRender;
 import dev.xkmc.l2library.base.effects.api.FirstPlayerRenderEffect;
 import dev.xkmc.l2library.base.effects.api.IconRenderRegion;
 import dev.xkmc.l2library.init.L2Library;
-import dev.xkmc.l2library.init.reg.L2LibReg;
+import dev.xkmc.l2library.init.L2LibReg;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;

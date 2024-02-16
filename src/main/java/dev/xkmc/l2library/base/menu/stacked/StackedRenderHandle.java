@@ -19,7 +19,7 @@ public class StackedRenderHandle {
 
 	final Screen scr;
 	final GuiGraphics g;
-	final MenuLayoutConfig sm;
+	final MenuLayoutConfig.ScreenRenderer sm;
 	final Font font;
 	final int text_color;
 	private final int TEXT_Y_OFFSET;
@@ -31,19 +31,19 @@ public class StackedRenderHandle {
 
 	final List<TextEntry> textList = new ArrayList<>();
 
-	public StackedRenderHandle(Screen scr, GuiGraphics g, MenuLayoutConfig sm) {
+	public StackedRenderHandle(Screen scr, GuiGraphics g, MenuLayoutConfig.ScreenRenderer sm) {
 		this(scr, g, sm, 3);
 	}
 
-	public StackedRenderHandle(Screen scr, GuiGraphics g, MenuLayoutConfig sm, int ty) {
+	public StackedRenderHandle(Screen scr, GuiGraphics g, MenuLayoutConfig.ScreenRenderer sm, int ty) {
 		this(scr, g, 8, 4210752, sm, ty);
 	}
 
-	public StackedRenderHandle(Screen scr, GuiGraphics g, int x_offset, int color, MenuLayoutConfig sm) {
+	public StackedRenderHandle(Screen scr, GuiGraphics g, int x_offset, int color, MenuLayoutConfig.ScreenRenderer sm) {
 		this(scr, g, x_offset, color, sm, 3);
 	}
 
-	public StackedRenderHandle(Screen scr, GuiGraphics g, int x_offset, int color, MenuLayoutConfig sm, int ty) {
+	public StackedRenderHandle(Screen scr, GuiGraphics g, int x_offset, int color, MenuLayoutConfig.ScreenRenderer sm, int ty) {
 		this.font = Minecraft.getInstance().font;
 		this.g = g;
 		this.scr = scr;
@@ -104,7 +104,7 @@ public class StackedRenderHandle {
 		int index = toggled ? 1 : disabled ? 2 : 0;
 		int x = SLOT_X_OFFSET + current_x * SLOT_SIZE;
 		int u = SPRITE_OFFSET + index * SLOT_SIZE;
-		g.blit(sm.getTexture(), x, current_y, u, 0, SLOT_SIZE, SLOT_SIZE);
+		g.blit(MenuLayoutConfig.getTexture(sm.id), x, current_y, u, 0, SLOT_SIZE, SLOT_SIZE);
 		var ans = new CellEntry(x + 1, current_y + 1, 16, 16);
 		current_x++;
 		if (current_x == 9) {

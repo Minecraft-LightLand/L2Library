@@ -3,6 +3,7 @@ package dev.xkmc.l2library.capability.attachment;
 import dev.xkmc.l2serial.util.Wrappers;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.attachment.AttachmentHolder;
+import net.neoforged.neoforge.attachment.IAttachmentHolder;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,7 +13,7 @@ import java.util.function.Supplier;
 /**
  * only entities will be automatically attached by default for efficiency
  */
-public class GeneralCapabilityHolder<E extends AttachmentHolder, T extends GeneralCapabilityTemplate<E, T>> extends AttachmentDef<T> {
+public class GeneralCapabilityHolder<E extends IAttachmentHolder, T extends GeneralCapabilityTemplate<E, T>> extends AttachmentDef<T> {
 
 	public static final Map<ResourceLocation, GeneralCapabilityHolder<?, ?>> INTERNAL_MAP = new ConcurrentHashMap<>();
 
@@ -34,7 +35,7 @@ public class GeneralCapabilityHolder<E extends AttachmentHolder, T extends Gener
 		return e.getData(type());
 	}
 
-	public boolean isFor(AttachmentHolder holder) {
+	public boolean isFor(IAttachmentHolder holder) {
 		return entity_class.isInstance(holder) && isProper(Wrappers.cast(holder));
 	}
 

@@ -1,6 +1,5 @@
 package dev.xkmc.l2library.base.menu.base;
 
-import dev.xkmc.l2library.serial.config.BaseConfig;
 import dev.xkmc.l2serial.serialization.SerialClass;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -15,20 +14,10 @@ import java.util.HashMap;
 
 @SuppressWarnings("unused")
 @SerialClass
-public class MenuLayoutConfig extends BaseConfig {
+public record MenuLayoutConfig(int height, HashMap<String, Rect> side, HashMap<String, Rect> comp) {
 
-	@SerialClass.SerialField
-	public int height;
-	@SerialClass.SerialField
-	public HashMap<String, Rect> side, comp;
-
-	@Deprecated
-	public MenuLayoutConfig() {
-
-	}
-
-	public ResourceLocation getTexture() {
-		return new ResourceLocation(getID().getNamespace(), "textures/gui/container/" + getID().getPath() + ".png");
+	public static ResourceLocation getTexture(ResourceLocation id) {
+		return new ResourceLocation(id.getNamespace(), "textures/gui/container/" + id.getPath() + ".png");
 	}
 
 	/**
@@ -60,13 +49,13 @@ public class MenuLayoutConfig extends BaseConfig {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public ScreenRenderer getRenderer(AbstractContainerScreen<?> gui) {
-		return new ScreenRenderer(gui);
+	public ScreenRenderer getRenderer(ResourceLocation id, AbstractContainerScreen<?> gui) {
+		return new ScreenRenderer(id, gui);
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public ScreenRenderer getRenderer(Screen gui, int x, int y, int w, int h) {
-		return new ScreenRenderer(gui, x, y, w, h);
+	public ScreenRenderer getRenderer(ResourceLocation id, Screen gui, int x, int y, int w, int h) {
+		return new ScreenRenderer(id, gui, x, y, w, h);
 	}
 
 	/**
@@ -134,20 +123,28 @@ public class MenuLayoutConfig extends BaseConfig {
 		private final int x, y, w, h;
 		private final Screen scr;
 
-		public ScreenRenderer(Screen gui, int x, int y, int w, int h) {
+		public final ResourceLocation id;
+
+		public MenuLayoutConfig parent(){
+			return MenuLayoutConfig.this;
+		}
+
+		public ScreenRenderer(ResourceLocation id, Screen gui, int x, int y, int w, int h) {
 			scr = gui;
 			this.x = x;
 			this.y = y;
 			this.w = w;
 			this.h = h;
+			this.id = id;
 		}
 
-		private ScreenRenderer(AbstractContainerScreen<?> scrIn) {
+		private ScreenRenderer(ResourceLocation id, AbstractContainerScreen<?> scrIn) {
 			x = scrIn.getGuiLeft();
 			y = scrIn.getGuiTop();
 			w = scrIn.getXSize();
 			h = scrIn.getYSize();
 			scr = scrIn;
+			this.id = id;
 		}
 
 		/**
@@ -156,7 +153,7 @@ public class MenuLayoutConfig extends BaseConfig {
 		public void draw(GuiGraphics g, String c, String s) {
 			Rect cr = getComp(c);
 			Rect sr = getSide(s);
-			g.blit(getTexture(), x + cr.x, y + cr.y, sr.x, sr.y, sr.w, sr.h);
+			g.blit(getTexture(id), x + cr.x, y + cr.y, sr.x, sr.y, sr.w, sr.h);
 		}
 
 		/**
@@ -165,7 +162,7 @@ public class MenuLayoutConfig extends BaseConfig {
 		public void draw(GuiGraphics g, String c, String s, int xoff, int yoff) {
 			Rect cr = getComp(c);
 			Rect sr = getSide(s);
-			g.blit(getTexture(), x + cr.x + xoff, y + cr.y + yoff, sr.x, sr.y, sr.w, sr.h);
+			g.blit(getTexture(id), x + cr.x + xoff, y + cr.y + yoff, sr.x, sr.y, sr.w, sr.h);
 		}
 
 		/**
@@ -178,7 +175,7 @@ public class MenuLayoutConfig extends BaseConfig {
 			Rect cr = getComp(c);
 			Rect sr = getSide(s);
 			int dh = sr.h * prog / max;
-			g.blit(getTexture(), x + cr.x, y + cr.y + sr.h - dh, sr.x, sr.y + sr.h - dh, sr.w, dh);
+			g.blit(getTexture(id), x + cr.x, y + cr.y + sr.h - dh, sr.x, sr.y + sr.h - dh, sr.w, dh);
 		}
 
 		/**
@@ -191,7 +188,7 @@ public class MenuLayoutConfig extends BaseConfig {
 			Rect cr = getComp(c);
 			Rect sr = getSide(s);
 			int dw = sr.w * prog / max;
-			g.blit(getTexture(), x + cr.x, y + cr.y, sr.x, sr.y, dw, sr.h);
+			g.blit(getTexture(id), x + cr.x, y + cr.y, sr.x, sr.y, dw, sr.h);
 		}
 
 		/**
@@ -210,7 +207,7 @@ public class MenuLayoutConfig extends BaseConfig {
 		 */
 		public void start(GuiGraphics g) {
 			scr.renderTransparentBackground(g);
-			g.blit(getTexture(), x, y, 0, 0, w, h);
+			g.blit(getTexture(id), x, y, 0, 0, w, h);
 		}
 
 		private void circularBlit(GuiGraphics g, int sx, int sy, int ix, int iy, int w, int h, int iw, int ih) {
@@ -224,7 +221,7 @@ public class MenuLayoutConfig extends BaseConfig {
 				int y0 = yb, y1 = h, y2 = sy;
 				while (y1 > 0) {
 					int dy = Math.min(y1, ih - y0);
-					g.blit(getTexture(), x2, y2, x0, y0, x1, y1);
+					g.blit(getTexture(id), x2, y2, x0, y0, x1, y1);
 					y1 -= dy;
 					y0 += dy;
 					y2 += dy;

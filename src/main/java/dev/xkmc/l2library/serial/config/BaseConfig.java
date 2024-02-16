@@ -8,6 +8,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@Deprecated(forRemoval = true)
 @SerialClass
 public class BaseConfig {
 
