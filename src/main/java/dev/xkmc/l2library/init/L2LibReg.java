@@ -4,7 +4,7 @@ import dev.xkmc.l2library.base.effects.ClientEffectCap;
 import dev.xkmc.l2library.base.menu.base.MenuLayoutConfig;
 import dev.xkmc.l2library.capability.conditionals.ConditionalData;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityNetworkHandler;
-import dev.xkmc.l2library.init.reg.datapack.DatapackRegistryInstance;
+import dev.xkmc.l2library.init.reg.datapack.DatapackReg;
 import dev.xkmc.l2library.init.reg.simple.*;
 import dev.xkmc.l2library.serial.conditions.*;
 import dev.xkmc.l2library.serial.ingredients.EnchantmentIngredient;
@@ -40,7 +40,7 @@ public class L2LibReg {
 	public static final AttVal.PlayerVal<ConditionalData> CONDITIONAL = ATTACHMENT.player("conditionals",
 			ConditionalData.class, ConditionalData::new, PlayerCapabilityNetworkHandler::new);
 
-	public static final DatapackRegistryInstance<MenuLayoutConfig> MENU_LAYOUT = REG.datapack("menu_layout", MenuLayoutConfig.class);
+	public static final DatapackReg<MenuLayoutConfig> MENU_LAYOUT = REG.dataReg("menu_layout", MenuLayoutConfig.class);
 
 	public static void register(IEventBus bus) {
 		REG.register(bus);
