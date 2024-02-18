@@ -24,3 +24,10 @@ Also adds inventory tabs. Accessible in creative only if you install Curios.
     versionRange="[1.19.1,1.20)"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.l2library]]
+    modId="curios"
+    mandatory=false
+    versionRange="[5.1.5,)"
+    ordering="NONE"
+    side="BOTH"

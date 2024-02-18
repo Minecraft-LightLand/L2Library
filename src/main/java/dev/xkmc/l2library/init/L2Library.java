@@ -12,6 +12,7 @@ import dev.xkmc.l2library.base.tabs.contents.AttributeEntry;
 import dev.xkmc.l2library.capability.player.PlayerCapToClient;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityEvents;
 import dev.xkmc.l2library.capability.player.PlayerCapabilityHolder;
+import dev.xkmc.l2library.compat.curio.CuriosEventHandler;
 import dev.xkmc.l2library.compat.curio.OpenCuriosPacket;
 import dev.xkmc.l2library.compat.curio.TabCuriosCompat;
 import dev.xkmc.l2library.idea.infmaze.worldgen.MazeDimension;
@@ -30,6 +31,7 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -72,6 +74,8 @@ public class L2Library {
 		bus.addListener(L2Library::setup);
 		bus.addListener(L2Library::registerRecipeSerializers);
 		L2LibraryConfig.init();
+		if (ModList.get().isLoaded("curios"))
+			MinecraftForge.EVENT_BUS.register(CuriosEventHandler.class);
 		TabCuriosCompat.onStartup();
 		REGISTRATE.addDataGenerator(ProviderType.LANG, L2LibraryLangData::genLang);
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> L2Client.onCtorClient(bus, MinecraftForge.EVENT_BUS));
