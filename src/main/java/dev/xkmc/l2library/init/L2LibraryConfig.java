@@ -1,5 +1,6 @@
 package dev.xkmc.l2library.init;
 
+import dev.xkmc.l2core.util.ConfigInit;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.config.IConfigSpec;
 import net.neoforged.fml.config.ModConfig;
@@ -8,54 +9,21 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class L2LibraryConfig {
 
-	public static class Client {
-
-		Client(ModConfigSpec.Builder builder) {
-
-		}
-
-	}
-
-	public static class Server {
+	public static class Server extends ConfigInit {
 
 		public final ModConfigSpec.BooleanValue restoreFullHealthOnRespawn;
 
-		Server(ModConfigSpec.Builder builder) {
-			restoreFullHealthOnRespawn = builder.comment("Restore full health on respawn")
+		Server(Builder builder) {
+			markL2();
+			restoreFullHealthOnRespawn = builder.text("Restore full health on respawn")
 					.define("restoreFullHealthOnRespawn", true);
 		}
 
 	}
 
-	public static final ModConfigSpec CLIENT_SPEC;
-	public static final Client CLIENT;
+	public static final Server SERVER = L2Library.REGISTRATE.registerSynced(Server::new);
 
-	public static final ModConfigSpec SERVER_SPEC;
-	public static final Server SERVER;
-
-	static {
-		final Pair<Client, ModConfigSpec> client = new ModConfigSpec.Builder().configure(Client::new);
-		CLIENT_SPEC = client.getRight();
-		CLIENT = client.getLeft();
-
-		final Pair<Server, ModConfigSpec> server = new ModConfigSpec.Builder().configure(Server::new);
-		SERVER_SPEC = server.getRight();
-		SERVER = server.getLeft();
-	}
-
-	/**
-	 * Registers any relevant listeners for config
-	 */
 	public static void init() {
-		register(ModConfig.Type.CLIENT, CLIENT_SPEC);
-		register(ModConfig.Type.SERVER, SERVER_SPEC);
 	}
-
-	private static void register(ModConfig.Type type, IConfigSpec<?> spec) {
-		var mod = ModLoadingContext.get().getActiveContainer();
-		String path = "l2_configs/" + mod.getModId() + "-" + type.extension() + ".toml";
-		mod.registerConfig(type, spec, path);
-	}
-
 
 }
