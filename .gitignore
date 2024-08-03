@@ -29,3 +29,4 @@ run
 .DS_Store
 /temp/
 runs/
+secrets.properties

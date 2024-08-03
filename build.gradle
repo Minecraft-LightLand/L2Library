@@ -127,7 +127,7 @@ repositories {
         dirs 'libs'
     }
     maven { // Registrate
-        url "https://maven.tterrag.com/"
+        url "https://maven.ithundxr.dev/snapshots"
     }
     maven {
         url = "https://maven.theillusivec4.top/"
@@ -169,13 +169,6 @@ dependencies {
     implementation jarJar(group: 'dev.xkmc', name: 'l2menustacker', version: "[${l2menustacker_ver},)")
     implementation jarJar(group: 'dev.xkmc', name: 'l2itemselector', version: "[${l2itemselector_ver},)")
 
-    //runtimeOnly fg.deobf("dev.xkmc.l2damagetracker:l2damagetracker:0.2.4")
-    //runtimeOnly fg.deobf("dev.xkmc.l2backpack:l2backpack:2.4.12-slim")
-    //runtimeOnly fg.deobf("dev.xkmc.l2complements:l2complements:2.4.18-slim")
-    //runtimeOnly fg.deobf('dev.xkmc.modulargolems:modulargolems:2.4.16-slim')
-    //runtimeOnly fg.deobf("dev.xkmc.l2archery:l2archery:2.4.9")
-    //runtimeOnly fg.deobf("dev.xkmc.l2weaponry:l2weaponry:2.4.18")
-    //runtimeOnly fg.deobf("dev.xkmc.l2artifacts:l2artifacts:2.4.8-slim")
 
     //runtimeOnly fg.deobf("curse.maven:create-328085:4626108")
     //implementation fg.deobf("curse.maven:just-enough-effect-descriptions-jeed-532286:4599236")
@@ -197,7 +190,7 @@ dependencies {
 
 tasks.register('publishCurseForge', TaskPublishCurseForge) {
     apiToken = secrets.get("curseforge_token")
-    def mainFile = upload(project.curseforge_project, new File("./build/libs/${mod_id}-${mod_version}.jar"))
+    def mainFile = upload(curseforge_project, new File("./build/libs/${mod_id}-${mod_version}.jar"))
     mainFile.changelog = new File('./changelog.txt')
     mainFile.addEnvironment("Client", "Server")
     mainFile.addGameVersion("1.21")
