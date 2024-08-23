@@ -160,6 +160,7 @@ dependencies {
     // base dep
     implementation "mezz.jei:jei-${jei_minecraft_version}:${jei_version}"
     implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    implementation "vazkii.patchouli:Patchouli:${patchouli_ver}"
 
     implementation jarJar(group: 'com.tterrag.registrate', name: 'Registrate', version: "[${registrate_version},)")
     implementation jarJar(group: 'dev.xkmc', name: 'l2serial', version: "[${l2serial_ver},)")
@@ -169,23 +170,19 @@ dependencies {
     implementation jarJar(group: 'dev.xkmc', name: 'l2menustacker', version: "[${l2menustacker_ver},)")
     implementation jarJar(group: 'dev.xkmc', name: 'l2itemselector', version: "[${l2itemselector_ver},)")
 
+    implementation "dev.xkmc:l2magic:${l2magic_ver}"
+    implementation "dev.xkmc:fast_projectile_api:${fast_projectile_api_ver}"
+    implementation "dev.xkmc:danmaku_api:${danmaku_api_ver}"
+    implementation "dev.xkmc:l2damagetracker:${l2damagetracker_ver}"
+    implementation "dev.xkmc:l2backpack:${l2backpack_ver}"
+    implementation "dev.xkmc:l2complements:${l2complements_ver}"
+    implementation "dev.xkmc:modulargolems:${modulargolems_ver}"
+    implementation "dev.xkmc:l2weaponry:${l2weaponry_ver}"
+    implementation "dev.xkmc:glimmeringtales:${glimmeringtales_ver}"
 
-    //runtimeOnly fg.deobf("curse.maven:create-328085:4626108")
-    //implementation fg.deobf("curse.maven:just-enough-effect-descriptions-jeed-532286:4599236")
+    runtimeOnly "dev.xkmc:better_creative_tabs:0.1.2"
 
-    //runtimeOnly fg.deobf("curse.maven:badpackets-615134:4438956")
-    //runtimeOnly fg.deobf("curse.maven:wthit-forge-455982:4596739")
-    //runtimeOnly fg.deobf("curse.maven:attributefix-280510:4588114")
-    //runtimeOnly fg.deobf("curse.maven:bookshelf-228525:4581675")
-    //runtimeOnly fg.deobf("curse.maven:enchantment-descriptions-250419:4587429")
-    //runtimeOnly fg.deobf("curse.maven:appleskin-248787:4605078")
-    //implementation fg.deobf("curse.maven:patchouli-306770:4636277")
 
-    //runtimeOnly fg.deobf("dev.xkmc.traderefresh:traderefresh:2.1.1-slim")
-    //runtimeOnly fg.deobf("dev.xkmc.lasertransport:lasertransport:2.2.0.pre5-slim")
-
-    //runtimeOnly fg.deobf('curse.maven:max-health-fix-492246:4447240')
-    //runtimeOnly fg.deobf('curse.maven:the-twilight-forest-227639:4516391')
 }
 
 tasks.register('publishCurseForge', TaskPublishCurseForge) {
@@ -198,7 +195,7 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
     mainFile.addOptional(
             "curios",
             "geckolib")
-    mainFile.releaseType = "release"
+    mainFile.releaseType = "beta"
     disableVersionDetection()
 }
 
@@ -207,7 +204,7 @@ modrinth {
     projectId = project.modrinth_project
     versionName = "L2 Library ${project.mod_version}"
     versionNumber = project.mod_version
-    versionType = "release"
+    versionType = "beta"
     uploadFile = new File("./build/libs/${mod_id}-${mod_version}.jar")
     gameVersions = ["1.21"]
     loaders = ["neoforge"]
