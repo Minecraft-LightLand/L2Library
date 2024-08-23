@@ -1,2 +1,5 @@
+3.0.2+2
+- Fix L2Complements effect icon not showing when cloud is turned off
+
 3.0.2+1
-- Fix L2Complemets effect rendering
+- Fix L2Complements effect rendering
