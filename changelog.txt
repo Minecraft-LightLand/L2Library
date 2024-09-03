@@ -1,3 +1,8 @@
+3.0.2+3
+- Fix rare crash when exiting the game
+- Fix rare crash on startup
+- Update compat with Accessories
+
 3.0.2+2
 - Fix L2Complements effect icon not showing when cloud is turned off
 
