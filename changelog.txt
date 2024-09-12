@@ -1,3 +1,6 @@
+3.0.2+4
+- Prepare for L2Archery
+
 3.0.2+3
 - Fix rare crash when exiting the game
 - Fix rare crash on startup
