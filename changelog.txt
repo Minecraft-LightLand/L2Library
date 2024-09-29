@@ -1,5 +1,13 @@
+3.0.2+6
+- Fix compat with Enchantment Description
+
+3.0.2+5
+- Fix crash with Sinytra in some cases
+- Fix tab support for Adorned curios inventory
+
 3.0.2+4
 - Prepare for L2Archery
+- Update Registrate to 1.3.0+55
 
 3.0.2+3
 - Fix rare crash when exiting the game
