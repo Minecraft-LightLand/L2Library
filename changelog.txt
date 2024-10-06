@@ -1,3 +1,7 @@
+3.0.2+7
+- Fix server crash with L2Archery (requires updated L2Archery)
+- Prepare for L2Artifacts
+
 3.0.2+6
 - Fix compat with Enchantment Description
 

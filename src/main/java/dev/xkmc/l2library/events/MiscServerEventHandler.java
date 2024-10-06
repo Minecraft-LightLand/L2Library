@@ -4,11 +4,13 @@ import dev.xkmc.l2library.content.explosion.BaseExplosion;
 import dev.xkmc.l2library.content.raytrace.RayTraceUtil;
 import dev.xkmc.l2library.init.FlagMarker;
 import dev.xkmc.l2library.init.L2Library;
+import dev.xkmc.l2library.util.PlayerTracker;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 @EventBusSubscriber(modid = L2Library.MODID, bus = EventBusSubscriber.Bus.GAME)
@@ -17,6 +19,13 @@ public class MiscServerEventHandler {
 	@SubscribeEvent
 	public static void serverTick(ServerTickEvent.Post event) {
 		RayTraceUtil.serverTick(event.getServer());
+	}
+
+	@SubscribeEvent
+	public static void onPlayerTick(PlayerTickEvent.Pre event) {
+		if (event.getEntity().tickCount < 5) {
+			PlayerTracker.get(event.getEntity());
+		}
 	}
 
 	@SubscribeEvent
