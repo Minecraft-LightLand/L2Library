@@ -1,3 +1,16 @@
+3.0.3+2
+- Disable effect icon rendering on camera entity
+- Prevent potential crash when entity use immutable map for effects
+
+3.0.3+1
+- Prepare for L2Hostility
+
+3.0.2+9
+- Fix serialization conflict with EdmOps used by Accessories 1.1.0-beta.7+
+
+3.0.2+8
+- Fix tab conflict with Accessories 1.1.0+ (If Accessories is installed, it needs to be 1.1.0+ as well)
+
 3.0.2+7
 - Fix server crash with L2Archery (requires updated L2Archery)
 - Prepare for L2Artifacts
