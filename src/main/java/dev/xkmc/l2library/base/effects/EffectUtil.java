@@ -3,13 +3,16 @@ package dev.xkmc.l2library.base.effects;
 import dev.xkmc.l2library.base.effects.api.ForceEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public class EffectUtil {
@@ -20,11 +23,14 @@ public class EffectUtil {
 
 	private static final ThreadLocal<AddReason> REASON = new ThreadLocal<>();
 
+	private static final Set<EntityType<?>> INVALID = new HashSet<>();
+
 	/**
 	 * force add effect, make hard not override
 	 * for icon use only, such as Arcane Mark on Wither and Ender Dragon
 	 */
 	private static void forceAddEffect(LivingEntity e, MobEffectInstance ins, @Nullable Entity source) {
+		if (INVALID.contains(e.getType())) return;
 		MobEffectInstance effectinstance = e.getActiveEffectsMap().get(ins.getEffect());
 		var event = new ForceAddEffectEvent(e, ins);
 		MinecraftForge.EVENT_BUS.post(event);
@@ -33,7 +39,12 @@ public class EffectUtil {
 		}
 		MinecraftForge.EVENT_BUS.post(new MobEffectEvent.Added(e, effectinstance, ins, source));
 		if (effectinstance == null) {
-			e.getActiveEffectsMap().put(ins.getEffect(), ins);
+			try {
+				e.getActiveEffectsMap().put(ins.getEffect(), ins);
+			} catch (Exception ignored) {
+				INVALID.add(e.getType());
+				return;
+			}
 			e.onEffectAdded(ins, source);
 		} else if (effectinstance.update(ins)) {
 			e.onEffectUpdated(effectinstance, true, source);

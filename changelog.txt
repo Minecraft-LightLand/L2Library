@@ -1,3 +1,12 @@
+2.4.31
+- Fix previous version cause mobs to be immune to effects
+
+2.4.30
+- Fix crash when modded entity has immutable effect map
+
+2.4.29
+- Fix client crash when closing game in Sinytra environment
+
 2.4.28
 - Fix Curios compat for 5.9.x
 - Fix tab flashing when switching tabs
