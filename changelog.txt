@@ -1,38 +1,23 @@
-3.0.3+2
+3.0.4
+- Fix server fetch
+
+3.0.3+x
 - Disable effect icon rendering on camera entity
 - Prevent potential crash when entity use immutable map for effects
-
-3.0.3+1
 - Prepare for L2Hostility
 
-3.0.2+9
+3.0.2+x
 - Fix serialization conflict with EdmOps used by Accessories 1.1.0-beta.7+
-
-3.0.2+8
 - Fix tab conflict with Accessories 1.1.0+ (If Accessories is installed, it needs to be 1.1.0+ as well)
-
-3.0.2+7
 - Fix server crash with L2Archery (requires updated L2Archery)
 - Prepare for L2Artifacts
-
-3.0.2+6
 - Fix compat with Enchantment Description
-
-3.0.2+5
 - Fix crash with Sinytra in some cases
 - Fix tab support for Adorned curios inventory
-
-3.0.2+4
 - Prepare for L2Archery
 - Update Registrate to 1.3.0+55
-
-3.0.2+3
 - Fix rare crash when exiting the game
 - Fix rare crash on startup
 - Update compat with Accessories
-
-3.0.2+2
 - Fix L2Complements effect icon not showing when cloud is turned off
-
-3.0.2+1
 - Fix L2Complements effect rendering
