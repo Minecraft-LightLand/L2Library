@@ -1,5 +1,6 @@
 package dev.xkmc.l2library.init;
 
+import com.tterrag.registrate.providers.ProviderType;
 import dev.xkmc.l2library.base.L2Registrate;
 import dev.xkmc.l2library.base.effects.ClientEffectCap;
 import dev.xkmc.l2library.base.effects.EffectToClient;
@@ -69,6 +70,7 @@ public class L2Library {
 		L2LibraryConfig.init();
 		ConditionalData.register();
 		ClientEffectCap.register();
+		REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, L2TagGen::onItemTagGen);
 		REGISTRATE.addDataGenerator(L2TagGen.EFF_TAGS, L2TagGen::onEffectTagGen);
 	}
 

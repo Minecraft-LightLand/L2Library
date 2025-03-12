@@ -1,13 +1,17 @@
 package dev.xkmc.l2library.init.data;
 
 import com.tterrag.registrate.providers.ProviderType;
+import com.tterrag.registrate.providers.RegistrateItemTagsProvider;
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
 import dev.xkmc.l2library.init.L2Library;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -30,7 +34,12 @@ public class L2TagGen {
 							e.getExistingFileHelper()));
 
 
+	public static final TagKey<Item> SMITHING_TEMPLATE = ItemTags.create(new ResourceLocation(L2Library.MODID, "dummy_smithing_template"));
 	public static final TagKey<MobEffect> TRACKED_EFFECTS = effectTag(new ResourceLocation(L2Library.MODID, "tracked_effects"));
+
+	public static void onItemTagGen(RegistrateItemTagsProvider pvd) {
+		pvd.addTag(SMITHING_TEMPLATE).add(Items.PAPER);
+	}
 
 	public static void onEffectTagGen(RegistrateTagsProvider.IntrinsicImpl<MobEffect> pvd) {
 		pvd.addTag(TRACKED_EFFECTS);

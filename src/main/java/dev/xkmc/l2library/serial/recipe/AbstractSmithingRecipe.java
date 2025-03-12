@@ -1,6 +1,7 @@
 package dev.xkmc.l2library.serial.recipe;
 
 import com.google.gson.JsonObject;
+import dev.xkmc.l2library.init.data.L2TagGen;
 import dev.xkmc.l2serial.serialization.codec.JsonCodec;
 import dev.xkmc.l2serial.serialization.codec.PacketCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -17,7 +18,7 @@ import java.util.Objects;
 @MethodsReturnNonnullByDefault
 public abstract class AbstractSmithingRecipe<T extends AbstractSmithingRecipe<T>> extends SmithingTransformRecipe {
 
-	public static final Ingredient TEMPLATE_PLACEHOLDER = Ingredient.EMPTY;
+	public static final Ingredient TEMPLATE_PLACEHOLDER = Ingredient.of(L2TagGen.SMITHING_TEMPLATE);
 
 	public AbstractSmithingRecipe(ResourceLocation rl, Ingredient left, Ingredient right, ItemStack result) {
 		super(rl, TEMPLATE_PLACEHOLDER, left, right, result);

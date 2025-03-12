@@ -1,3 +1,7 @@
+2.5.0
+- Add dummy smithing template for use case where no smithing template should be required
+
+
 2.4.31
 - Fix previous version cause mobs to be immune to effects
 
