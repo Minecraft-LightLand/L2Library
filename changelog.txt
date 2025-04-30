@@ -1,3 +1,6 @@
+3.0.5
+- Fix opening quick-access blocks in sophisticated backpack and returning crashing client
+
 3.0.4
 - Fix server fetch
 
@@ -5,6 +8,7 @@
 - Disable effect icon rendering on camera entity
 - Prevent potential crash when entity use immutable map for effects
 - Prepare for L2Hostility
+
 
 3.0.2+x
 - Fix serialization conflict with EdmOps used by Accessories 1.1.0-beta.7+
