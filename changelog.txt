@@ -1,3 +1,6 @@
+2.5.1
+- Skip icon rendering when there are no icons to render
+
 2.5.0
 - Add dummy smithing template for use case where no smithing template should be required
 

@@ -61,6 +61,7 @@ public class ClientEffectRenderEvents {
 	@SubscribeEvent
 	public static void levelRenderLast(RenderLevelStageEvent event) {
 		if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_WEATHER) return;
+		if (ICONS.isEmpty()) return;
 		LevelRenderer renderer = event.getLevelRenderer();
 		MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
 		Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
