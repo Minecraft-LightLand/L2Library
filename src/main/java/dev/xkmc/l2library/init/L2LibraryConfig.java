@@ -17,6 +17,8 @@ public class L2LibraryConfig {
 		public final ForgeConfigSpec.BooleanValue selectionDisplayRequireShift;
 		public final ForgeConfigSpec.BooleanValue selectionScrollRequireShift;
 
+		public final ForgeConfigSpec.BooleanValue renderOverlayIcons;
+
 
 		Client(ForgeConfigSpec.Builder builder) {
 			infoAlpha = builder.comment("Info background transparency. 1 means opaque.")
@@ -30,6 +32,8 @@ public class L2LibraryConfig {
 					.define("selectionDisplayRequireShift", false);
 			selectionScrollRequireShift = builder.comment("Scroll for selection only when pressing shift")
 					.define("selectionScrollRequireShift", true);
+			renderOverlayIcons = builder.comment("Render overlay icons on entities")
+					.define("renderOverlayIcons", true);
 
 
 		}

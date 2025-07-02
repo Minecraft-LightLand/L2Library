@@ -13,6 +13,7 @@ import dev.xkmc.l2library.base.effects.api.DelayedEntityRender;
 import dev.xkmc.l2library.base.effects.api.FirstPlayerRenderEffect;
 import dev.xkmc.l2library.base.effects.api.IconRenderRegion;
 import dev.xkmc.l2library.init.L2Library;
+import dev.xkmc.l2library.init.L2LibraryConfig;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -62,6 +63,10 @@ public class ClientEffectRenderEvents {
 	public static void levelRenderLast(RenderLevelStageEvent event) {
 		if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_WEATHER) return;
 		if (ICONS.isEmpty()) return;
+		if (!L2LibraryConfig.CLIENT.renderOverlayIcons.get()) {
+			ICONS.clear();
+			return;
+		}
 		LevelRenderer renderer = event.getLevelRenderer();
 		MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
 		Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();

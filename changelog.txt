@@ -1,3 +1,6 @@
+2.5.2
+- Add config to cancel icon rendering
+
 2.5.1
 - Skip icon rendering when there are no icons to render
 
