@@ -1,3 +1,10 @@
+3.0.7
+- Fix Curse of Pandora disconnection at extremely high attack speed
+
+3.0.6
+- Fix GlimmeringTales research sync after respawn
+- Add toggle for client entity icon rendering
+
 3.0.5
 - Fix opening quick-access blocks in sophisticated backpack and returning crashing client
 
