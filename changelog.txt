@@ -1,3 +1,6 @@
+3.0.8
+- Fix L2Backpack selection hold keybind still use shift after rebind
+
 3.0.7
 - Fix Curse of Pandora disconnection at extremely high attack speed
 
