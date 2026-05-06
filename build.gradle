@@ -14,7 +14,7 @@ buildscript {
 
 plugins {
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
-    id 'net.darkhax.curseforgegradle' version '[1.1.24,)'
+    id 'net.darkhax.curseforgegradle' version '[1.1.24,1.2)'
     id "at.stnwtr.gradle-secrets-plugin" version "1.0.1"
     id "com.modrinth.minotaur" version "2.+"
 
@@ -246,6 +246,9 @@ dependencies {
     implementation fg.deobf("curse.maven:geckolib-388172:5021668")
     runtimeOnly fg.deobf("curse.maven:ars-nouveau-401955:4751471")
 
+    //runtimeOnly fg.deobf("curse.maven:better-mods-button-541584:4665757")
+    //runtimeOnly fg.deobf("curse.maven:catalogue-459701:4766090")
+    //runtimeOnly fg.deobf("curse.maven:config-menus-forge-544048:4672356")
     //runtimeOnly fg.deobf("dev.xkmc.traderefresh:traderefresh:2.1.1-slim")
     //runtimeOnly fg.deobf("dev.xkmc.lasertransport:lasertransport:2.2.0.pre5-slim")
 

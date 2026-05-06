@@ -8,6 +8,15 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class L2LibraryConfig {
 
+	public enum IconRenderMode {
+		DEFAULT,
+		HALO,
+		GROUND,
+		ORBIT,
+		OVERHEAD,
+		OFF
+	}
+
 	public static class Client {
 
 		public final ForgeConfigSpec.DoubleValue infoAlpha;
@@ -17,8 +26,8 @@ public class L2LibraryConfig {
 		public final ForgeConfigSpec.BooleanValue selectionDisplayRequireShift;
 		public final ForgeConfigSpec.BooleanValue selectionScrollRequireShift;
 
-		public final ForgeConfigSpec.BooleanValue renderOverlayIcons;
-
+		public final ForgeConfigSpec.EnumValue<IconRenderMode> iconRenderMode;
+		public final ForgeConfigSpec.BooleanValue renderSelfEffects;
 
 		Client(ForgeConfigSpec.Builder builder) {
 			infoAlpha = builder.comment("Info background transparency. 1 means opaque.")
@@ -32,10 +41,12 @@ public class L2LibraryConfig {
 					.define("selectionDisplayRequireShift", false);
 			selectionScrollRequireShift = builder.comment("Scroll for selection only when pressing shift")
 					.define("selectionScrollRequireShift", true);
-			renderOverlayIcons = builder.comment("Render overlay icons on entities")
-					.define("renderOverlayIcons", true);
 
+			iconRenderMode = builder.comment("Render mode for entity overlay icons.")
+					.defineEnum("iconRenderMode", IconRenderMode.DEFAULT);
 
+			renderSelfEffects = builder.comment("Render overlay icons for self. If false, hide own effect icons.")
+					.define("renderSelfEffects", true);
 		}
 
 	}
