@@ -4,13 +4,8 @@
   "package": "dev.xkmc.l2library.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-	"AbstractArrowMixin",
-	"EntityMixin",
-	"LightningBoltMixin",
-	"SmithingTransformRecipeMixin"
   ],
   "client": [
-	"ClientLocalPlayerMixin"
   ],
   "injectors": {
 	"defaultRequire": 1
