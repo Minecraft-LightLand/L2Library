@@ -211,7 +211,8 @@ test {
     enabled = false
 }
 
-tasks.register('publishCurseForge', TaskPublishCurseForge) {
+tasks.register('publishCurseForge', net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    group = 'publishing'
     apiToken = secrets.get("curseforge_token")
     def mainFile = upload(curseforge_project, new File("./build/libs/${mod_id}-${mod_version}.jar"))
     mainFile.changelog = new File('./changelog.txt')
