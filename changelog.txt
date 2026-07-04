@@ -1,2 +1,6 @@
+26.1.2.1
+- Fix keybind category
+- Fix tab crash on server
+
 26.1.2.0
 - Port to 26.1.2
