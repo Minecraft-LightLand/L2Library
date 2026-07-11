@@ -194,7 +194,7 @@ dependencies {
     implementation jarJar("dev.xkmc:l2tabs:[${l2tabs_ver},)")
     implementation jarJar("dev.xkmc:l2itemselector:[${l2itemselector_ver},)")
     implementation jarJar("dev.xkmc:l2damagetracker:[${l2damagetracker_ver},)")
-    implementation jarJar("com.tterrag.registrate:Registrate:[${registrate_ver},)")
+    implementation jarJar("com.tterrag.registrate:Registrate:[${registrate_ver},MC26.2)")
 
     // JEI
     compileOnly "mezz.jei:jei-${jei_minecraft_version}-api:${jei_version}"
