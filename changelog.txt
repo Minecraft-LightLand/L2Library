@@ -1,3 +1,6 @@
+26.1.2.1+2
+- Fix occasional missing block entity data in structure
+
 26.1.2.1+1
 - Fix Registrate crash
 
