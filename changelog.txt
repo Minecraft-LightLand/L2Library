@@ -1,3 +1,6 @@
+2.5.4
+- Fix buffer leak (a Forge bug) from my mods.
+
 2.5.3
 - Prepare for Modular Golem new update
 
