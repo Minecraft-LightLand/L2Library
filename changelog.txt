@@ -1,3 +1,6 @@
+3.0.9
+- Fix network concurrency issue, player capability sync
+
 3.0.8
 - Fix L2Backpack selection hold keybind still use shift after rebind
 
