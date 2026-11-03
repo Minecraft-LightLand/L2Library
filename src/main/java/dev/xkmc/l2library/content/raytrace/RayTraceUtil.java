@@ -149,6 +149,7 @@ public class RayTraceUtil {
 		UUID tid = RayTraceUtil.TARGET_MAP.get(id).target;
 		if (tid == null)
 			return null;
-		return (LivingEntity) (((ServerLevel) player.level()).getEntity(tid));
+		var ans = (((ServerLevel) player.level()).getEntity(tid));
+		return ans instanceof LivingEntity le ? le : null;
 	}
 }

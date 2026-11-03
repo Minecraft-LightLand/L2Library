@@ -1,3 +1,6 @@
+3.0.10
+- fix crash with create power grid, add damage tracker jar here.
+
 3.0.9
 - Fix network concurrency issue, player capability sync
 
