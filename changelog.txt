@@ -1,3 +1,6 @@
+2.5.6
+- Fix potential crash with some mods (port fix from 3.0.10)
+
 2.5.5
 - Fix serialization concurrency issue.
 
