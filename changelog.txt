@@ -1,3 +1,9 @@
+2.5.7
+- Fix Curios compat for 5.10.x (menu V2 and L2 Tabs curio slot)
+- Update L2 Serial to 1.2.8
+- Require Curios 5.8.0+ when present (new curio menu was added in 5.8.0)
+
+
 2.5.6
 - Fix potential crash with some mods (port fix from 3.0.10)
 
