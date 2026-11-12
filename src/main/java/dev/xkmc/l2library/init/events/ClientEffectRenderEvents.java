@@ -103,9 +103,11 @@ public class ClientEffectRenderEvents {
 	}
 
 	public static void onLivingRenderEvents(LivingEntity entity) {
-		if (!ClientEffectCap.HOLDER.isProper(entity)) return;
+		var capability = entity.getCapability(ClientEffectCap.HOLDER.capability);
+		if (!capability.isPresent()) return;
 		if (entity.getTags().contains("ClientOnly")) return;
-		ClientEffectCap cap = ClientEffectCap.HOLDER.get(entity);
+		ClientEffectCap cap = capability.resolve().get().check();
+		if (cap.map.isEmpty()) return;
 		List<Pair<ClientRenderEffect, Integer>> l0 = new ArrayList<>();
 		for (Map.Entry<MobEffect, Integer> entry : cap.map.entrySet()) {
 			if (entry.getKey() instanceof ClientRenderEffect effect) {
