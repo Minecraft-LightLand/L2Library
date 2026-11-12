@@ -60,17 +60,6 @@ public class EffectSyncEvents {
 	}
 
 	@SubscribeEvent
-	public static void onPlayerStopTracking(PlayerEvent.StopTracking event) {
-		if (!(event.getTarget() instanceof LivingEntity le))
-			return;
-		for (MobEffect eff : le.getActiveEffectsMap().keySet()) {
-			if (tracked(eff)) {
-				onEffectDisappear(eff, le);
-			}
-		}
-	}
-
-	@SubscribeEvent
 	public static void onServerPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
 		ServerPlayer e = (ServerPlayer) event.getEntity();
 		if (e != null) {
